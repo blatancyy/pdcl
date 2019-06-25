@@ -51,7 +51,7 @@ exports.run = async(client, message, args) => {
     .setDescription("A member has been banned.")
     .addField("Target:", target.user.tag, true)
     .addField("Reason:", reason, true)
-    .addField("Time:", time, true)
+    .addField("Time:", client.time(time), true)
     .setColor("RED")
     .setFooter("PDCL Bot v2.0")
     .setTimestamp();
@@ -60,7 +60,7 @@ exports.run = async(client, message, args) => {
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
     .setDescription(`You have been **banned** in **${message.guild.name}**.`)
     .addField("Reason:", reason, true)
-    .addField("Time:", time, true)
+    .addField("Time:", client.time(time), true)
     .addField("Global ?", global ? "True" : "False", true)
     .setColor("RED")
     .setFooter("PDCL Bot v2.0")
