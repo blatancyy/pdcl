@@ -27,12 +27,12 @@ module.exports = async(client, message) => {
     // If we are continuing with levels, will have to do that here:
     // :D
 
-    // 100% an easier way to do this, not like I can be bothered....
-    let prefix;
-    if (!(message.content.startsWith(client.config.prefixes[0]) || message.content.startsWith(client.config.prefixes[1]) || message.content.startsWith(client.config.prefixes[2]))) return;
-    if (message.content.startsWith(client.config.prefixes[0])) prefix = client.config.prefixes[0];
-    if (message.content.startsWith(client.config.prefixes[1])) prefix = client.config.prefixes[1];
-    if (message.content.startsWith(client.config.prefixes[2])) prefix = client.config.prefixes[2];
+    // Cute way to enable multiple prefixes:
+    let prefixes = client.config.prefixes;
+    let prefix = false;
+
+    for (const p of prefixes) if (message.content.startsWith(p)) prefix = p;
+    if (!prefix) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
