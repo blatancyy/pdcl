@@ -44,7 +44,7 @@ exports.run = async(client, message, args) => {
     .addField("Created", formatDate(createdDate), true)
     .addField("Joined", formatDate(joinedDate), true)
     .addField("Roles", roles)
-    .addField("Last Message", cached ? lmessage.content : "Last message is not cached.") 
+    .addField("Last Message", `Content: ${cached ? lmessage.content : "Message not cached."}`) 
     .setColor(colour)
     .setFooter(`ID: ${user.id}`)
     .setTimestamp();
