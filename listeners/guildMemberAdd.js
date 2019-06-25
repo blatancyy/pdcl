@@ -17,8 +17,8 @@ module.exports = async(client, member) => {
         // Log:
         const joinMutedEmbed = new client.djs.RichEmbed()
         .setAuthor(user.tag, user.displayAvatarURL)
-        .setDescription(`A member has joined the guild. Current Guild Size: ${guild.members.size}.`)
-        .addField("Mute Information", "Member has been automatically muted because the account joined the guild on the same day as creation.")
+        .setDescription(`A member has joined the guild. Current Guild Size: ${guild.members.size} members.`)
+        .addField("Additional Information:", "Member has been automatically muted because the account joined the guild on the same day as creation.")
         .setColor("RED")
         .setFooter("Automatic Mute on Join")
         .setTimestamp();
@@ -27,10 +27,22 @@ module.exports = async(client, member) => {
         if (!channel) return console.log(`[PDCL v3] Failed to find 'join-log' in ${guild.name}.`);
 
         channel.send({embed: joinMutedEmbed});
+
+        const dmEmbed = new client.djs.RichEmbed()
+        .setAuthor(client.user.tag, client.user.displayAvatarURL)
+        .setDescription(`You have been **muted** in **${guild.name}**.`)
+        .addField("Reason:", "Automatic - Your account creation is the same day as the day you joined the guild. This is to prevent people bypassing mutes. If you are a legitimate new account, contact a member of the league's management team.")
+        .addField("Time:", "N/A")
+        .setColor("LUMINOUS_VIVID_PINK")
+        .setFooter("Automatic on User Join")
+        .setTimestamp();
+
+        user.send({embed: dmEmbed}).catch(console.error);
     } else {
         const joinEmbed = new client.djs.RichEmbed()
         .setAuthor(user.tag, user.displayAvatarURL)
-        .setDescription("A user has joined the guild.")
+        .setDescription(`A user has joined the guild. Current Guild Size: ${guild.members.size} members.`)
+        .addField("Additonal Information:", "None")
         .setColor("GREEN")
         .setFooter("Join Logs")
         .setTimestamp()
@@ -66,8 +78,8 @@ module.exports = async(client, member) => {
         const dmEmbed = new client.djs.RichEmbed()
         .setAuthor(client.user.tag, client.user.displayAvatarURL)
         .setDescription(`You have been **muted** in **${guild.name}**.`)
-        .addField("Reason:", "Automatic - You have an existing mute.", true)
-        .addField("Time:", "N/A", true)
+        .addField("Reason:", "Automatic - You have an existing mute.")
+        .addField("Time:", "N/A")
         .setColor("LUMINOUS_VIVID_PINK")
         .setFooter("Automatic on User Join")
         .setTimestamp();
