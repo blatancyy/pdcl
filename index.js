@@ -9,6 +9,7 @@ class Bot extends Client {
         this.mysql = require("mysql");
         this.fs = require("fs");
         this.keyvPackage = require("keyv");
+        this.request = require("request");
 
         // Emojis for rosters: Don't change the index values, leaguerank stored as int in db.
         this.teamRankMap = new Map().set(0, "").set(1, " 👑").set(2, " 👑");
