@@ -1,8 +1,13 @@
 exports.run = async(client) => {
-    client.config.leagues.forEach((league) => {
+    client.config.leagues.forEach(async(league) => {
         let name = league.config.name;
         let players = client.players[name];
-        let db = client.databases.get(name);
+
+        // Make a new db connection to not exceed connectionLimit:
+        let db = await createNewConnection(client, name, league.config.database);
+        if (!db) return console.log(`[PDCL v3][UPDATE USERNAMES] Failed to create new connection for ${name}.`);
+
+        console.log(`[PDCL v3][UPDATE USERNAMES] Failed to create new database for: ${name}.`);
 
         players.forEach((player) => {
             let current = player.displayname;
@@ -29,6 +34,23 @@ exports.run = async(client) => {
 const clean = (uuid) => {
     if (typeof(uuid) !== "string") return false;
     return uuid.replace(/-/g, "");
+}
+
+const createNewConnection = async (client, name, database) => {
+    return new Promise((resolve) => {
+        const connection = client.mysql.createPool({
+            connectionLimit: 200,
+            host: "localhost",
+            user: client.config.credentials.mysql.username,
+            password: client.credentials.mysql.password,
+            database: database
+        });
+
+        connection.getConnection((e) => {
+            if (e) return console.log(`[PDCL v3][UPDATE USERNAMES] Failed to establish new connection: \n${e}`);
+            resolve(connection);
+        });
+    })
 }
 
 exports.time = 60000 * 60 * 8;
