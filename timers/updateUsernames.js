@@ -16,7 +16,8 @@ exports.run = async(client) => {
 
             client.request.get({url: `https://api.mojang.com/user/profiles/${uuid}/names`, json: true}, (e, r, b) => {
                 if (!b) return console.log(`[PDCL v3][UPDATE USERNAMES] Didn't receive a response w/ UUID: ${uuid}.`);
-                
+                if (b.constructor.name !== "Array") return console.log(`[PDCL v3][UPDATE USERNAMES] Response is not an array: ${b}`);
+
                 let updated = b.pop().name;
                 if (current == updated) return;
 
