@@ -7,7 +7,7 @@ exports.run = async(client) => {
         let db = await createNewConnection(client, league.config.database);
         if (!db) return console.log(`[PDCL v3][UPDATE USERNAMES] Failed to create new connection for ${name}.`);
 
-        console.log(`[PDCL v3][UPDATE USERNAMES] Failed to create new database for: ${name}.`);
+        console.log(`[PDCL v3][UPDATE USERNAMES] Created new database for: ${name}.`);
 
         players.forEach((player) => {
             let current = player.displayname;
@@ -39,7 +39,7 @@ const clean = (uuid) => {
 const createNewConnection = async (client, database) => {
     return new Promise((resolve) => {
         const connection = client.mysql.createPool({
-            connectionLimit: 200,
+            connectionLimit: 100,
             host: "localhost",
             user: client.config.credentials.mysql.username,
             password: client.config.credentials.mysql.password,
