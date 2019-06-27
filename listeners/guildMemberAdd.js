@@ -41,7 +41,7 @@ module.exports = async(client, member) => {
     } else {
         const joinEmbed = new client.djs.RichEmbed()
         .setAuthor(user.tag, user.displayAvatarURL)
-        .setDescription(`A user has joined the guild. Current Guild Size: ${guild.members.size} members.`)
+        .setDescription(`A user has joined the guild. Current Guild Size: ${guild.memberCount} members.`)
         .addField("Additonal Information:", "None")
         .setColor("GREEN")
         .setFooter("Join Logs")

@@ -41,7 +41,7 @@ exports.run = async(client, message, args) => {
 
             // Using guild#fetchMember in case they aren't cached in guild#members, it takes a UserResolvable arg.
             let user = target.user;
-            let member = await guild.fetchMember(user).catch((e) => console.log(`[PDCL v3][Global Mutes] Member not in guild ${guid.name}.`));
+            let member = await guild.fetchMember(user).catch((e) => console.log(`[PDCL v3][Global Mutes] Member not in guild ${guild.name}.`));
 
             if (!member) return;
             if (!member.roles.has(role.id)) return;
