@@ -30,3 +30,18 @@ exports.run = async(client, message, args) => {
         message.channel.send("✅ Reset slowmode.");
     }
 }
+
+exports.help = (client, message, args) => {
+    if (message.hub) return;
+
+    const helpEmbed = new client.djs.RichEmbed()
+    .setAuthor(client.user.tag, client.user.displayAvatarURL)
+    .addField("Description:", "Sets/Resets the slowmode of the channel.")
+    .addField("Usage:", "`!slowmode (<timeinseconds>)`", true)
+    .addField("Example:", "`!slowmode 5`", true)
+    .setColor("DARK_AQUA")
+    .setFooter("!slowmode")
+    .setTimestamp();
+
+    message.channel.send({embed: helpEmbed});
+}
