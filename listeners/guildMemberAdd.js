@@ -17,7 +17,7 @@ module.exports = async(client, member) => {
         // Log:
         const joinMutedEmbed = new client.djs.RichEmbed()
         .setAuthor(user.tag, user.displayAvatarURL)
-        .setDescription(`A member has joined the guild. Current Guild Size: ${guild.members.size} members.`)
+        .setDescription(`A member has joined the guild. Current Guild Size: ${guild.memberCount} members.`)
         .addField("Additional Information:", "Member has been automatically muted because the account joined the guild on the same day as creation.")
         .setColor("RED")
         .setFooter("Automatic Mute on Join")
