@@ -1,0 +1,90 @@
+{
+    "leagues": [
+        {
+            "config": {
+                "database": "ccl-db-name",
+                "name": "ccl",
+                "id": "542778736857317386",
+                "ranked": {
+                    "status": false,
+                    "category": "ranked dom",
+                    "role": "ranked"
+                }
+            }
+        },
+        {
+            "config": {
+                "database": "bcl-db-name",
+                "name": "bcl",
+                "id": "542797505058963467",
+                "ranked": {
+                    "status": false,
+                    "category": null,
+                    "role": null
+                }
+            }
+        },
+        {
+            "config": {
+                "database": "cwcl-db-name",
+                "name": "cwcl",
+                "id": "542804030531960842",
+                "ranked": {
+                    "status": false,
+                    "category": null,
+                    "role": null
+                }
+            }
+        },
+        {
+            "config": {
+                "database": "mscl-db-name",
+                "name": "mscl",
+                "id": "542795537985044491",
+                "ranked": {
+                    "status": true,
+                    "category": "ranked ms",
+                    "role": "rankedms"
+                }
+            }
+        },
+        {
+            "config": {
+                "database": "swcl-db-name",
+                "name": "swcl",
+                "id": "542865040873881612",
+                "ranked": {
+                    "status": false,
+                    "category": null,
+                    "role": null
+                }
+            }
+        },
+        {
+            "config": {
+                "database": "cotc-db-name",
+                "name": "tourney",
+                "id": "542871352042848264",
+                "ranked": {
+                    "status": false,
+                    "category": null,
+                    "role": null
+                }
+            }
+        } 
+    ],
+    
+    "credentials": {
+        "mysql": {
+            "username": "username-to-db",
+            "password": "password-to-db"
+        },
+        "token": "mfa.NkO_TzzA--RE--ffAL_T--ObytKE--bveN--4U--tG0"
+    },
+
+    "prefixes": ["!", "<@276485094674399233>", "?"],
+    "homeGuilds": ["542871352042848264", "542865040873881612", "542795537985044491", "542804030531960842", "542797505058963467", "542778736857317386", "542848649202499584"],
+    "hubs": ["542783650706620436", "542799689649618984", "542916966504071200", "542804030531960842", "542865040873881612", "542795537985044491", "542795537985044493", "542804031555502100"],
+    "eval": ["id1", ...],
+    "guildDb": "discord-db-name"
+}
