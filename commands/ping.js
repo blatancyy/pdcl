@@ -1,3 +1,4 @@
+exports.aliases = ['pong']
 exports.run = (client, message, args) => {
     if (message.hub) return;
     return message.channel.send("Pong!");

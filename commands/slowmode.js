@@ -1,4 +1,4 @@
-exports.aliases = ['slow', 'sm'];
+exports.aliases = ['slow', 'sm', 'slowchat', 'cooldown'];
 exports.run = async (client, message, args) => {
     if (!message.home) return;
 

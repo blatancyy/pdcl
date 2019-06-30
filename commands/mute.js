@@ -1,4 +1,5 @@
-exports.run = async(client, message, args) => {
+exports.aliases = ['m']
+exports.run = async (client, message, args) => {
     if (!message.home) return;
     
     // Check permissions using role names:

@@ -1,3 +1,4 @@
+exports.aliases = ['i', 'bot']
 exports.run = (client, message, args) => {
     if (message.hub) return;
     

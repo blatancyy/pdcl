@@ -1,4 +1,5 @@
-exports.run = async(client, message, args) => {
+exports.aliases = ['configure', 'setup'];
+exports.run = async (client, message, args) => {
     let validLeagues = ["ccl", "bcl", "mscl", "swcl", "cwcl"];
 
     if (!message.member.hasPermission("ADMINISTRATOR") && message.author.id !== "207896400539680778") return message.channel.send("You need to be an administrator to do this!");

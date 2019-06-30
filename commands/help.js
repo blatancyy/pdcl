@@ -1,4 +1,5 @@
-exports.run = async(client, message, args) => {
+exports.aliases = ['h']
+exports.run = async (client, message, args) => {
     let commands = [];    
     for (const command of client.commands.keys()) {
         commands.push(command);   

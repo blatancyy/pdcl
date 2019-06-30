@@ -1,3 +1,4 @@
+exports.aliases = ['l', 'info']
 exports.run = (client, message, args) => { 
     const league = client.guildData.get(message.guild.id);
     const links = `🔹 [Discord](https://pdcr.sh/${league})\n🔹 [Rules](https://${league}.mpcleague.com/rules)\n🔹 [Staff](

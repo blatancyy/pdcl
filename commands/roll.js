@@ -1,5 +1,5 @@
 // By LifeStrike™
-
+exports.aliases = ['dice']
 exports.run = (client, message, args) => {
     if (message.hub) return;
     

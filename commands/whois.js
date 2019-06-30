@@ -1,4 +1,4 @@
-exports.aliases = ['who', 'profile'];
+exports.aliases = ['who', 'profile', 'discord'];
 exports.run = async (client, message, args) => {
     if (message.hub) return;
 

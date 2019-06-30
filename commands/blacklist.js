@@ -1,4 +1,4 @@
-exports.aliases = ['bl', 'blist'];
+exports.aliases = ['bl'];
 exports.run = async (client, message, args) => {
     if (message.hub) return;
     if (!message.home) return;

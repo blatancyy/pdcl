@@ -1,3 +1,4 @@
+exports.aliases = ['repo', 'source']
 exports.run = (client, message, args) => {
     if (message.hub) return;
     message.channel.send("This is a new build of the PDCL Bot, released 02:45 BST 31/05. Our discord bot is now open source and you can view the official repository here: <https://github.com/blatancyy/pdcl>. A changelog is included!");
