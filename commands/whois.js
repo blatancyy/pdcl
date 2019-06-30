@@ -1,4 +1,5 @@
-exports.run = async(client, message, args) => {
+exports.aliases = ['who', 'profile'];
+exports.run = async (client, message, args) => {
     if (message.hub) return;
 
     // https://discord.js.org/#/docs/main/stable/typedef/ColorResolvable

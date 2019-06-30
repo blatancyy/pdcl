@@ -1,3 +1,4 @@
+exports.aliases = ['r'];
 exports.run = (client, message, args) => {
     if (message.hub) return;
     if (!args.length) return message.channel.send("Please provide a team name.");

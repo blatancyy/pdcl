@@ -42,9 +42,15 @@ class Bot extends Client {
                 if (!file.endsWith(".js")) return;
                 let path = require(`./commands/${file}`);
                 let name = file.split(".")[0];
-            
+				let aliases = path.aliases;
+
                 console.log(`[PDCL V3] Attatching command: ${name}.`);
-                this.commands.set(name, path);
+				this.commands.set(name, path);
+				
+				if (aliases) for (var a of aliases) {
+					if (this.commands.get(a)) return console.log(`Error: alias ${a} has already been registered.`);
+					else this.commands.set(a, path);
+				}
             });
         });
     }

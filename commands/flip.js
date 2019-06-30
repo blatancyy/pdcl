@@ -1,3 +1,4 @@
+exports.aliases = ['coin', 'coinflip'];
 exports.run = (client, message, args) => {
     if (message.hub) return;
     let random = Math.random();
