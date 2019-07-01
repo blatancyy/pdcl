@@ -25,10 +25,14 @@ class Bot extends Client {
         this.timers = new Map();
         this.teamPools = new Map();
         this.databases = new this.djs.Collection();
-        this.spamWatch = new this.djs.Collection();
-        this.guildData = new this.djs.Collection();
+		this.spamWatch = new this.djs.Collection();
+		this.globalCooldowns = new this.djs.Collection();
+		this.guildData = new this.djs.Collection();
         this.config = require("./config.json");
 
+		this.levelUpdates = [];
+
+		this.levels = {};
         this.players = {};
         this.teams = {};
     }
@@ -165,8 +169,39 @@ class Bot extends Client {
 
             console.log(`[PDCL v3] Successfully loaded player and roster data for: ${name.toUpperCase()}.`);
         });
-    }
-
+	}
+	
+	async loadLevelData () {
+		const db = this.databases.get("discord");
+	
+		// League Discords:
+		this.config.leagues.forEach((league) => {
+			let table = league.config.level_table;
+			let name = league.config.name;
+	
+			console.log(`[PDCL v3] Beginning to load local xp data for league: ${name}.`)
+	
+			db.query(`SELECT * FROM ${table}`, (e, rows) => {
+				if (e) console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`);
+	
+				this.levels[name] = [];
+				for (const row of rows) row.level = this.calculateLevel(xp);
+					
+				this.levels[name] = rows;
+				this.levels[name].sort((a, b) => b.xp - a.xp);
+			});
+		});    
+	
+		db.query('SELECT * FROM global_levels', (e, rows) => {
+			if (e) console.log(`[PDCL v3] Error whilst loading global. \nError: ${e}`);
+	
+			this.levels.global = [];
+			for (const row of rows) row.level = this.calculateLevel(xp);
+				
+			this.levels.global = rows;
+			this.levels.global.sort((a, b) => b.xp - a.xp);
+		});
+	}
     /*
     async loadGuildData() {
         // keyv extends map. there's documentation online.
@@ -232,7 +267,32 @@ class Bot extends Client {
 
         if(isNaN(number)) return 0;
         return number;
-    }
+	}
+	
+	calculateLevel (totalXP) {
+		let level = 0;
+		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
+		let prevXPNeeded = 0;
+
+		while (totalXP >= totalToNext) {
+			level++;
+			prevXPNeeded = totalToNext;
+			totalXP -= totalToNext;
+			totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
+		}
+
+		return level;
+	}
+
+	insertNewUser = (id, leagueName) => {
+		const db = this.databases.get("discord");
+		let table = this.config.leagues[leagueName].config.level_table;
+	
+		db.query(`INSERT INTO ${leagueName === "global" ? 'global_levels' : table} VALUES ("${id}", ${Math.floor(Math.random() * 10) + 15})`, (e) => {
+			if (e) console.log(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
+			// ***** ALSO WRITE ALL UPDATES IN CACHE TO DB, then reload everything *****
+		});
+	}
 }
 
 // This wrapper function can be used if you want to use promises instead of callbacks.

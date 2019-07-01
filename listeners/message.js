@@ -25,7 +25,39 @@ module.exports = async(client, message) => {
     }
     
     // If we are continuing with levels, will have to do that here:
-    // :D
+	// :D
+	// Add XP
+	if (message.author.bot) return;
+	const leagueName = message.guild.id == "542848649202499584" ? "global" : message.league;
+	const levelData = client.levels[message.league];
+
+	let userData = levelData.find((u) => u.id == message.author.id);
+	if (!userData) await client.insertNewUser(message.author.id, leagueName);
+	
+	let memberCd = client.globalCooldowns.get(userData.id);
+	if (!memberCd) return client.globalCooldowns.set(userData.id, Date.now() + 60000);
+
+	if (memberCd > Date.now()) return;
+	
+	
+	// Push to updates
+	let oldLevel = client.levels.find((u) => u.id == message.author.id && u.guildID == leagueName).level;
+	let tableName = client.config.leagues[leagueName].config.level_table;
+
+	let entry = levelUpdates.find(entry => entry.id === userData.id && entry.table === tableName);
+	if (!entry) {
+		client.levelUpdates.push({
+			id: userData.id,
+			xp: userData.xp + (Math.floor(Math.random() * 10) + 15),
+			table: client.config.leagues[leagueName].config.level_table
+		});
+	} else entry.xp = userData.xp + (Math.floor(Math.random() * 10) + 15);
+
+	client.globalCooldowns.set(userData.id, Date.now() + 60000);
+
+	let newLevel = client.memberUpdates.level;
+	if (oldLevel < newLevel) message.channel.send(`Congrats ${message.author}! You reached level ${newLevel}`);
+	
 
     // Cute way to enable multiple prefixes:
     let prefixes = client.config.prefixes;
@@ -49,5 +81,5 @@ module.exports = async(client, message) => {
         cmd.help(client, message, args);
     } else {
         cmd.run(client, message, args);
-    }
+	}
 }
