@@ -5,6 +5,7 @@
                 "database": "ccl-db-name",
                 "name": "ccl",
                 "id": "542778736857317386",
+                "level_table": "ccl-level-table",
                 "ranked": {
                     "status": false,
                     "category": "ranked dom",
@@ -17,6 +18,7 @@
                 "database": "bcl-db-name",
                 "name": "bcl",
                 "id": "542797505058963467",
+                "level_table": "bcl-level-table",
                 "ranked": {
                     "status": false,
                     "category": null,
@@ -29,6 +31,7 @@
                 "database": "cwcl-db-name",
                 "name": "cwcl",
                 "id": "542804030531960842",
+                "level_table": "cwcl-level-table",
                 "ranked": {
                     "status": false,
                     "category": null,
@@ -41,6 +44,7 @@
                 "database": "mscl-db-name",
                 "name": "mscl",
                 "id": "542795537985044491",
+                "level_table": "mscl-level-table",
                 "ranked": {
                     "status": true,
                     "category": "ranked ms",
@@ -53,6 +57,7 @@
                 "database": "swcl-db-name",
                 "name": "swcl",
                 "id": "542865040873881612",
+                "level_table": "swcl-level-table",
                 "ranked": {
                     "status": false,
                     "category": null,
@@ -65,6 +70,7 @@
                 "database": "cotc-db-name",
                 "name": "tourney",
                 "id": "542871352042848264",
+                "level_table": "global-level-table",
                 "ranked": {
                     "status": false,
                     "category": null,
