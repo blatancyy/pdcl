@@ -65,7 +65,7 @@ module.exports = async(client, message) => {
                 
                 if (!entry) {
                     client.levelUpdates.push({
-                        id: userData.id,
+                        id: message.author.id,
                         xp: globalXPData.xp + randXP,
                         table: "global_levels"
                     });
