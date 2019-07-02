@@ -40,7 +40,7 @@ module.exports = async(client, message) => {
             client.globalCooldowns.set(message.author.id, Date.now() + 60000);		
             
             // Add to cached updates in client#levelUpdates.
-			let oldLevel = levelData.find((u) => u.id == message.author.id).level;
+			let oldLevel = levelData.find((u) => u.id == message.author.id) ? levelData.find((u) => u.id == message.author.id).level : 0;
 			let entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
             
             // League Specific Update:
