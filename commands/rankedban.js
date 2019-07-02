@@ -60,7 +60,7 @@ exports.run = async(client, message, args) => {
     .setFooter("Ranked Bans")
     .setTimestamp();
 
-    let rankedLog = message.guild.channels.find((c) => c.name.toLowerCase() == "ranked-banned-log");
+    let rankedLog = message.guild.channels.find((c) => c.name.toLowerCase() == "ranked-ban-log");
     rankedLog.send({embed: logEmbed});
     member.user.send({embed: dmEmbed}).catch(console.error);
 }
