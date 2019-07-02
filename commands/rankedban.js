@@ -18,9 +18,13 @@ exports.run = async(client, message, args) => {
     let role = message.guild.roles.find((r) => r.name.toLowerCase() == league.config.ranked.banRole);
     if (!role) return message.channel.send(`Did not find 'Ranked Banned' role in this guild. - Config includes ${client.config.ranked.banRole}.`);
 
-    // The weird caching has bugged in the past so: (Takes UserResolvable arg).
-    let member = message.member;
-    if (!member) member = await message.guild.fetchMember(message.author);
+    // Input validation: !mute id 2h reason
+    if (!args.length > 0) return message.channel.send("Please provide a discord id.");
+    let user = await client.fetchUser(args[0]).catch((e) => console.log("Someone provided an invalid id in moderation."));
+    if (!user) return message.channel.send(`Did not find a user with the id: ${args[0]}.`);
+
+    let member = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when ranked banning."));
+    if (!member) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
     if (member.roles.has(role.id)) {
         member.removeRole(role).catch(console.error);
