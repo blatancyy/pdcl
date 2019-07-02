@@ -27,33 +27,36 @@ exports.run = async(client, message, args) => {
     if (!member) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
     let reason = args.slice(1).join(" ");
+    var banned = true;
 
     if (member.roles.has(role.id)) {
         member.removeRole(role).catch(console.error);
         message.channel.send("✅ (Remove)");
+        banned = false;
     } else {
-      message.member.addRole(role).catch(console.error);
-      message.channel.send("✅ (Add)");
-    }
+        message.member.addRole(role).catch(console.error);
+        message.channel.send("✅ (Add)");
+        banned = true;
+    }       
 
     // Logging and DM's:
     const logEmbed = new client.djs.RichEmbed()
     .setAuthor(member.user.tag, member.user.displayAvatarURL)
-    .setDescription("A member has been banned from ranked.")
+    .setDescription(`A member has been ${banned ? "" : "un"}banned from ranked.`)
     .addField("Member:", member.user.tag, true)
-    .addField("Banned By:", message.author.tag, true)
+    .addField(`${banned ? "Banned" : "Unbanned"} By:`, message.author.tag, true)
     .addField("Reason:", reason)
-    .setColor("BLACK")
+    .setColor(banned ? "BLACK" : "WHITE")
     .setFooter("Ranked Bans")
     .setTimestamp();
 
     const dmEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
-    .setDescription(`You have been **banned from ranked** in **${message.guild.name}**.`)
-    .addField("Banned By:", message.author.tag)
+    .setDescription(`You have been **${banned ? "" : "un"}banned from ranked** in **${message.guild.name}**.`)
+    .addField(`${banned ? "Banned" : "Unbanned"} By:`, message.author.tag)
     .addField("Reason:", reason)
     .setColor("BLACK")
-    .setColor("ORANGE")
+    .setColor(banned ? "BLACK" : "WHITE")
     .setFooter("Ranked Bans")
     .setTimestamp();
 
