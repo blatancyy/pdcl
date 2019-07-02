@@ -27,7 +27,6 @@ module.exports = async(client, message) => {
     
 	// Add XP - Extract this to its own util function?
 	if (home) {
-        console.log(`#1 Updating user xp for user ${message.author.tag} in league ${message.guild.name}.`);
 		let table = client.config.leagues.find((l) => l.config.name == league).config.level_table;
         const levelData = league == "community" ? client.levels["global"] : client.levels[league]; 
 
@@ -37,7 +36,6 @@ module.exports = async(client, message) => {
         if (!memberCd) memberCd = 0;
 
 		if (Date.now() > memberCd) {	
-            console.log(`#2 Updating user xp for user ${message.author.tag} in league ${message.guild.name}.`);
             client.globalCooldowns.set(message.author.id, Date.now() + 60000);		
             
             // Add to cached updates in client#levelUpdates.
@@ -51,6 +49,8 @@ module.exports = async(client, message) => {
 					xp: (Math.floor(Math.random() * 10) + 15),
 					table: table
                 });
+
+                entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
 			} else {
                 entry.xp += (Math.floor(Math.random() * 10) + 15);
             }
@@ -66,6 +66,8 @@ module.exports = async(client, message) => {
                         xp: globalXPData.xp + (Math.floor(Math.random() * 10) + 15),
                         table: "global_levels"
                     });
+
+                    entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
                 } else {
                     entry.xp += (Math.floor(Math.random() * 10) + 15);
                 }
