@@ -68,7 +68,7 @@ module.exports = async(client, message) => {
             }
 
             // I have no idea what you meant by these two lines btw:
-			let newLevel = client.calculateLevelData(entry.xp);
+			let newLevel = client.calculateLevelData(entry.xp).level;
 			if (oldLevel < newLevel) message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
 		}
     }

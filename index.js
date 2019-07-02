@@ -186,7 +186,7 @@ class Bot extends Client {
 				if (e) console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`);
 	
 				this.levels[name] = [];
-				for (const row of rows) row.level = this.calculateLevelData(row.xp);
+				for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
 					
 				this.levels[name] = rows;
 				this.levels[name].sort((a, b) => b.xp - a.xp);
@@ -197,7 +197,7 @@ class Bot extends Client {
 			if (e) console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`);
 	
 			this.levels.global = [];
-			for (const row of rows) row.level = this.calculateLevelData(row.xp);
+			for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
 				
 			this.levels.global = rows;
 			this.levels.global.sort((a, b) => b.xp - a.xp);
