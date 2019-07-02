@@ -44,7 +44,7 @@ module.exports = async(client, message) => {
             if (!entry) {                
                 client.levelUpdates.push({
 					id: userData.id,
-					xp: userData.xp + (Math.floor(Math.random() * 10) + 15),
+					xp: (Math.floor(Math.random() * 10) + 15),
 					table: table
                 });
 
