@@ -26,6 +26,8 @@ exports.run = async(client, message, args) => {
     let member = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when ranked banning."));
     if (!member) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
+    let reason = args.slice(1).join(" ");
+
     if (member.roles.has(role.id)) {
         member.removeRole(role).catch(console.error);
         message.channel.send("✅ (Remove)");
@@ -33,6 +35,31 @@ exports.run = async(client, message, args) => {
       message.member.addRole(role).catch(console.error);
       message.channel.send("✅ (Add)");
     }
+
+    // Logging and DM's:
+    const logEmbed = new client.djs.RichEmbed()
+    .setAuthor(member.user.tag, member.user.displayAvatarURL)
+    .setDescription("A member has been banned from ranked.")
+    .addField("Member:", member.user.tag, true)
+    .addField("Banned By:", message.author.tag, true)
+    .addField("Reason:", reason)
+    .setColor("BLACK")
+    .setFooter("Ranked Bans")
+    .setTimestamp();
+
+    const dmEmbed = new client.djs.RichEmbed()
+    .setAuthor(client.user.tag, client.user.displayAvatarURL)
+    .setDescription(`You have been **banned from ranked** in **${message.guild.name}**.`)
+    .addField("Banned By:", message.author.tag)
+    .addField("Reason:", reason)
+    .setColor("BLACK")
+    .setColor("ORANGE")
+    .setFooter("Ranked Bans")
+    .setTimestamp();
+
+    let rankedLog = message.guild.channels.find((c) => c.name.toLowerCase() == "ranked-banned-log");
+    rankedLog.send({embed: logEmbed});
+    member.user.send({embed: dmEmbed}).catch(console.error);
 }
 
 exports.help = (client, message, args) => {
