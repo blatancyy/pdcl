@@ -1,4 +1,4 @@
-exports.aliases = ["rban"];
+exports.aliases = ["ruban"];
 exports.run = async(client, message, args) => {
     if (!message.home) return;
 
@@ -30,28 +30,28 @@ exports.run = async(client, message, args) => {
     if (!role) return message.channel.send(`Did not find 'Ranked Banned' role in this guild. - Config includes ${client.config.ranked.banRole}.`);
 
     let isBanned = member.roles.has(role.id);
-    if (isBanned) return message.channel.send("This member is already banned.");
+    if (!isBanned) return message.channel.send("This member is not banned from ranked.");
 
-    await member.addRole(role).catch(console.error);
-    message.channel.send(`✅ Banned ${member.user.tag} from ranked.`);
+    await member.removeRole(role).catch(console.error);
+    message.channel.send(`✅ Unbanned ${member.user.tag} from ranked.`);
 
     // Logging and DM's:
     const logEmbed = new client.djs.RichEmbed()
     .setAuthor(member.user.tag, member.user.displayAvatarURL)
-    .setDescription(`A member has been banned from ranked.`)
+    .setDescription(`A member has been unbanned from ranked.`)
     .addField("Member:", member.user.tag, true)
-    .addField(`Banned By:`, message.author.tag, true)
+    .addField(`Unbanned By:`, message.author.tag, true)
     .addField("Reason:", reason)
-    .setColor("BLACK")
+    .setColor("WHITE")
     .setFooter("Ranked Bans")
     .setTimestamp();
 
     const dmEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
-    .setDescription(`You have been **banned from ranked** in **${message.guild.name}**.`)
-    .addField(`Banned By:`, message.author.tag)
+    .setDescription(`You have been **unbanned from ranked** in **${message.guild.name}**.`)
+    .addField(`Unbanned By:`, message.author.tag)
     .addField("Reason:", reason)
-    .setColor("BLACK")
+    .setColor("WHITE")
     .setFooter("Ranked Bans")
     .setTimestamp();
 
@@ -65,11 +65,11 @@ exports.help = (client, message, args) => {
 
     const helpEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
-    .addField("Description:", "Ban the user from ranked, using the Ranked Banned role.")
-    .addField("Usage:", "`!rankedban <id> <reason>`", true)
-    .addField("Example", "`!rankedban 207896400539680778 bot`", true)
+    .addField("Description:", "Unban the user from ranked, using the Ranked Banned role.")
+    .addField("Usage:", "`!rankedunban <id> <reason>`", true)
+    .addField("Example", "`!rankedunban 207896400539680778 no longer a bot`", true)
     .setColor("DARK_AQUA")
-    .setFooter("!rankedban")
+    .setFooter("!rankedunban")
     .setTimestamp();
 
     message.channel.send({embed: helpEmbed});
