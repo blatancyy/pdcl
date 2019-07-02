@@ -31,7 +31,7 @@ module.exports = async(client, message) => {
         const levelData = league == "community" ? client.levels["global"] : client.levels[league]; 
 
 		let userData = levelData.find((u) => u.id == message.author.id);
-		if (!userData) userData = client.insertNewUser(message.author.id, league);
+		if (!userData) userData = await client.insertNewUser(message.author.id, league);
 		let memberCd = client.globalCooldowns.get(message.author.id);
         if (!memberCd) memberCd = 0;
 
@@ -57,8 +57,8 @@ module.exports = async(client, message) => {
 
             // Global Update: Ignore 'Community' levels as will have already been added above.
             if (league !== "community") {
-                let entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === "global_levels");
-                let globalXPData = client.levels["global"].find((u) => u.id === message.author.id);
+                let entry = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
+                let globalXPData = client.levels["global"].find((u) => u.id == message.author.id);
                 
                 if (!entry) {
                     client.levelUpdates.push({

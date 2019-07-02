@@ -292,17 +292,17 @@ class Bot extends Client {
 	}
 
 	insertNewUser(id, league) {
-		const db = this.databases.get("discord");
-	
-		db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, (e) => {
-			if (e) console.log(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
-            
-            // I've decied to just set them in cache and not reload everything. 
-            let levelData = league == "community" ? this.levels["global"] : this.levels[league];
-            levelData.push({id: id, xp: 0, level: 0});
-            return levelData.find((u) => u.id == id);
-		});
-	}
+        const db = this.databases.get("discord");
+        
+        db.query(`INSERT INTO ${league == "community" ? "global_levels" : `${league}_levels`} VALUES ("${id}", 0)`, (e) => {
+            if (e) Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
+                
+                // I've decied to just set them in cache and not reload everything. 
+                let levelData = league == "community" ? this.levels["global"] : this.levels[league];
+                levelData.push({id: id, xp: 0, level: 0});
+                return Promise.resolve(levelData.find((u) => u.id == id));
+        });
+    }
 }
 
 // This wrapper function can be used if you want to use promises instead of callbacks.
