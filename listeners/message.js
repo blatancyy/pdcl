@@ -47,7 +47,6 @@ module.exports = async(client, message) => {
 					xp: userData.xp + (Math.floor(Math.random() * 10) + 15),
 					table: table
                 });
-
 			} else {
                 entry.xp += (Math.floor(Math.random() * 10) + 15);
             }
@@ -69,7 +68,7 @@ module.exports = async(client, message) => {
             }
 
             // I have no idea what you meant by these two lines btw:
-			let newLevel = client.memberUpdates.level;
+			let newLevel = client.calculateLevel(entry.xp);
 			if (oldLevel < newLevel) message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
 		}
     }
