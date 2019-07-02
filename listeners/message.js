@@ -46,7 +46,7 @@ module.exports = async(client, message) => {
             // League Specific Update:
             if (!entry) {                
                 client.levelUpdates.push({
-					id: userData.id,
+					id: message.author.id,
 					xp: randXP,
 					table: table
                 });
