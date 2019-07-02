@@ -9,8 +9,9 @@ exports.run = (client, message, args) => {
     let levels = client.levels[league];
 
     let levelData = levels.find((u) => u.id == user.id);
-    let xp = levelData.xp;
-    let level = client.calculateLevel(xp).level;
+	let xp = levelData.xp;
+	let XPData = client.calculateLevelData(xp);
+    let level = XPData.level;
     let rank = levelData.sort((a, b) => b.xp - a.xp).indexOf(levelData) + 1;
 
     // Format Embed:
@@ -19,7 +20,7 @@ exports.run = (client, message, args) => {
     .setDescription(`Showing ${league == "global" ? "global" : "local"} level data.`)
     .addField("Rank:", `#${rank}/${levelData.length}`, true)
     // Can easily format the level and total xp, how to calculate the xp until the next level?
-    .addField("Level Info", `Level ${level} | XP ${}/xxxx`)
+    .addField("Level Info", `Level ${level} | ${XPData.totalXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${(XPData.totalToNext - XPData.prevTotalToNext) - XPData.totalXP} XP to next level`)
     .setColor("BLUE")
     .setTimestamp();
 
