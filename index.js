@@ -284,11 +284,10 @@ class Bot extends Client {
 		return level;
 	}
 
-	insertNewUser = (id, leagueName) => {
+	insertNewUser = (id, leagueTableName) => {
 		const db = this.databases.get("discord");
-		let table = this.config.leagues[leagueName].config.level_table;
 	
-		db.query(`INSERT INTO ${leagueName === "global" ? 'global_levels' : table} VALUES ("${id}", ${Math.floor(Math.random() * 10) + 15})`, (e) => {
+		db.query(`INSERT INTO ${leagueName === "global" ? 'global_levels' : leagueTableName} VALUES ("${id}", ${Math.floor(Math.random() * 10) + 15})`, (e) => {
 			if (e) console.log(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
 			// ***** ALSO WRITE ALL UPDATES IN CACHE TO DB, then reload everything *****
 		});
