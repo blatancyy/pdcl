@@ -27,6 +27,7 @@ module.exports = async(client, message) => {
     
 	// Add XP - Extract this to its own util function?
 	if (home) {
+        let randXP = (Math.floor(Math.random() * 10) + 15);
 		let table = client.config.leagues.find((l) => l.config.name == league).config.level_table;
         const levelData = league == "community" ? client.levels["global"] : client.levels[league]; 
 
@@ -46,13 +47,13 @@ module.exports = async(client, message) => {
             if (!entry) {                
                 client.levelUpdates.push({
 					id: userData.id,
-					xp: (Math.floor(Math.random() * 10) + 15),
+					xp: randXP,
 					table: table
                 });
 
                 entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
 			} else {
-                entry.xp += (Math.floor(Math.random() * 10) + 15);
+                entry.xp += randXP;
             }
 
             // Global Update: Ignore 'Community' levels as will have already been added above.
@@ -63,18 +64,22 @@ module.exports = async(client, message) => {
                 if (!entry) {
                     client.levelUpdates.push({
                         id: userData.id,
-                        xp: globalXPData.xp + (Math.floor(Math.random() * 10) + 15),
+                        xp: globalXPData.xp + randXP,
                         table: "global_levels"
                     });
 
                     entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
                 } else {
-                    entry.xp += (Math.floor(Math.random() * 10) + 15);
+                    entry.xp += randXP;
                 }
             }
 
+            // Update client#levels:
+            userData.xp += randXP;
+            if (league !== "community") client.levels.global.find((u) => u.id == message.author.id).xp += randXP;
+
             // I have no idea what you meant by these two lines btw:
-			let newLevel = client.calculateLevelData(entry.xp).level;
+			let newLevel = client.calculateLevelData(userData.xp).level;
 			if (oldLevel < newLevel) message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
 		}
     }
