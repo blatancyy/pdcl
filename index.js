@@ -294,7 +294,7 @@ class Bot extends Client {
 	insertNewUser(id, league) {
         const db = this.databases.get("discord");
         
-        db.query(`INSERT INTO ${league == "community" ? "global_levels" : `${league}_levels`} (id, xp) VALUES ("${id}", 0)`, (e) => {
+        db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, (e) => {
             if (e) Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
                 
                 // I've decied to just set them in cache and not reload everything. 
