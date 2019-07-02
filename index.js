@@ -291,7 +291,7 @@ class Bot extends Client {
 		};
 	}
 
-	insertNewUser(id, league) {
+	async insertNewUser(id, league) {
         const db = this.databases.get("discord");
         
         db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, (e) => {
