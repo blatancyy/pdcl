@@ -60,6 +60,8 @@ module.exports = async(client, message) => {
             if (league !== "community") {
                 let entry = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
                 let globalXPData = client.levels["global"].find((u) => u.id == message.author.id);
+                if (!globalXPData) globalXPData = await client.insertNewUser(message.author.id, "community");
+
                 
                 if (!entry) {
                     client.levelUpdates.push({
@@ -76,7 +78,7 @@ module.exports = async(client, message) => {
 
             // Update client#levels:
             userData.xp += randXP;
-            if (league !== "community") client.levels.global.find((u) => u.id == message.author.id).xp += randXP;
+            if (league !== "community") client.levels["global"].find((u) => u.id == message.author.id).xp += randXP;
 
             // I have no idea what you meant by these two lines btw:
 			let newLevel = client.calculateLevelData(userData.xp).level;
