@@ -4,7 +4,7 @@ module.exports = async(client) => {
     
     client.loadGuildData();
     client.loadRosterData();
-
+	client.loadLevelData();
     
     const message = await client.channels.get("554150703392620558").fetchMessage("554444085717630977");
     console.log(`[PDCL v3] Successfully cached message for league roles : ${message.content}.`);

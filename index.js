@@ -284,6 +284,7 @@ class Bot extends Client {
 		}
 
 		return {
+			totalXP,
 			level,
 			prevTotalToNext,
 			totalToNext
