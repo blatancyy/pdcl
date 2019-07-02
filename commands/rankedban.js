@@ -27,6 +27,7 @@ exports.run = async(client, message, args) => {
     if (!member) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
     let reason = args.slice(1).join(" ");
+    if (!reason) return message.channel.send("provide a reason kthx");
     var banned = true;
 
     if (member.roles.has(role.id)) {
@@ -71,7 +72,7 @@ exports.help = (client, message, args) => {
     const helpEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
     .addField("Description:", "Ban the user from ranked, using the Ranked Banned role.")
-    .addField("Usage:", "`!rankedban <id>`", true)
+    .addField("Usage:", "`!rankedban <id> <reason>`", true)
     .addField("Example", "`!rankedban 207896400539680778`", true)
     .setColor("DARK_AQUA")
     .setFooter("!rankedban")
