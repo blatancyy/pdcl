@@ -6,6 +6,7 @@ module.exports = async(client, message) => {
     // Absence of prefix check for spamwatch:
     let home = client.config.homeGuilds.includes(message.guild.id);
     let hub = client.config.hubs.includes(message.channel.id);
+    let league = await client.guildData.get(message.guild.id);
     if (home && (message.mentions.members.size || message.mentions.roles.size)) {
         let user = client.spamWatch.get(message.author.id);
         if (!user) client.spamWatch.set(message.author.id, {m: message.member, c: 2});
@@ -23,60 +24,72 @@ module.exports = async(client, message) => {
             setTimeout(() => user.c--, 5000);
         }
 	}
-	
-	const league = await client.guildData.get(message.guild.id);
-    if (!league && command !== "setleague") return message.channel.send("Please configure a league for this guild first. Use !setleague.");
-    message.home = home;
-    message.league = league;
-    message.hub = hub;
     
-    // If we are continuing with levels, will have to do that here:
-	// :D
 	// Add XP - Extract this to its own util function?
-	if (message.author.bot) return;
-	const leagueName = message.guild.id == "542848649202499584" ? "global" : message.league;
-	if (leagueName) {
-		const leagueTableName = client.config.leagues.find(l => l.name === leagueName).config.level_table;
-		const levelData = client.levels[message.league];
+	if (home) {
+		let table = client.config.leagues.find((l) => l.config.name == league).config.level_table;
+        const levelData = league == "community" ? client.levels["global"] : client.levels[league]; 
 
 		let userData = levelData.find((u) => u.id == message.author.id);
-		if (!userData) await client.insertNewUser(message.author.id, leagueName);
-		
-		let memberCd = client.globalCooldowns.get(userData.id);
-		if (!memberCd) client.globalCooldowns.set(userData.id, Date.now() + 60000);
-		else if (memberCd < Date.now()) {
-			
-			// Push to updates
-			let oldLevel = client.levels.find((u) => u.id == message.author.id && u.guildID == leagueName).level;
-
-			let entry = levelUpdates.find(entry => entry.id === userData.id && entry.table === leagueTableName);
-			if (!entry) {
-				client.levelUpdates.push({
+		if (!userData) userData = await client.insertNewUser(message.author.id, league);
+		let memberCd = client.globalCooldowns.get(message.author.id);
+        
+		if (Date.now() > memberCd) {	
+            client.globalCooldowns.set(userData.id, Date.now() + 60000);		
+			// Add to cached updates in client#levelUpdates.
+			let oldLevel = levelData.find((u) => u.id == message.author.id).level;
+			let entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
+            
+            // League Specific Update:
+            if (!entry) {                
+                client.levelUpdates.push({
 					id: userData.id,
 					xp: userData.xp + (Math.floor(Math.random() * 10) + 15),
-					table: leagueTableName
-				});
-			} else entry.xp = userData.xp + (Math.floor(Math.random() * 10) + 15);
+					table: table
+                });
 
-			client.globalCooldowns.set(userData.id, Date.now() + 60000);
+			} else {
+                entry.xp += (Math.floor(Math.random() * 10) + 15);
+            }
 
+            // Global Update: Ignore 'Community' levels as will have already been added above.
+            if (league !== "community") {
+                let entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === "global_levels");
+                let globalXPData = client.levels["global"].find((u) => u.id === message.author.id);
+                
+                if (!entry) {
+                    client.levelUpdates.push({
+                        id: userData.id,
+                        xp: globalXPData.xp + (Math.floor(Math.random() * 10) + 15),
+                        table: "global_levels"
+                    });
+                } else {
+                    entry.xp += (Math.floor(Math.random() * 10) + 15);
+                }
+            }
+
+            // I have no idea what you meant by these two lines btw:
 			let newLevel = client.memberUpdates.level;
-			if (oldLevel < newLevel) message.channel.send(`Congrats ${message.author}! You reached level ${newLevel}`);
+			if (oldLevel < newLevel) message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
 		}
-	}
+    }
+    
     // Cute way to enable multiple prefixes:
     let prefixes = client.config.prefixes;
     let prefix = false;
 
     for (const p of prefixes) if (message.content.startsWith(p)) prefix = p;
     if (!prefix) return;
-
+    
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
     const command = args.shift().toLowerCase();
     const cmd = client.commands.get(command);
     if (!cmd) return;
 
-	// Moved message.league stuff above xp/level addition
+    if (!league && command !== "setleague") return message.channel.send("Please configure a league for this guild first. Use !setleague.");
+    message.home = home;
+    message.league = league;
+    message.hub = hub;
 
     if (prefix == "?") {
         cmd.help(client, message, args);

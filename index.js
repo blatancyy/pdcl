@@ -29,9 +29,8 @@ class Bot extends Client {
 		this.globalCooldowns = new this.djs.Collection();
 		this.guildData = new this.djs.Collection();
         this.config = require("./config.json");
-
-		this.levelUpdates = [];
-
+    
+        this.levelUpdates = [];
 		this.levels = {};
         this.players = {};
         this.teams = {};
@@ -170,14 +169,16 @@ class Bot extends Client {
             console.log(`[PDCL v3] Successfully loaded player and roster data for: ${name.toUpperCase()}.`);
         });
 	}
-	
-	async loadLevelData () {
+    
+    // Called in ./listeners/ready.js 
+	async loadLevelData() {
 		const db = this.databases.get("discord");
 	
 		// League Discords:
 		this.config.leagues.forEach((league) => {
 			let table = league.config.level_table;
-			let name = league.config.name;
+            let name = league.config.name;
+            if (name == "community") return;
 	
 			console.log(`[PDCL v3] Beginning to load local xp data for league: ${name}.`)
 	
@@ -185,7 +186,7 @@ class Bot extends Client {
 				if (e) console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`);
 	
 				this.levels[name] = [];
-				for (const row of rows) row.level = this.calculateLevel(xp);
+				for (const row of rows) row.level = this.calculateLevel(row.xp);
 					
 				this.levels[name] = rows;
 				this.levels[name].sort((a, b) => b.xp - a.xp);
@@ -193,15 +194,16 @@ class Bot extends Client {
 		});    
 	
 		db.query('SELECT * FROM global_levels', (e, rows) => {
-			if (e) console.log(`[PDCL v3] Error whilst loading global. \nError: ${e}`);
+			if (e) console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`);
 	
 			this.levels.global = [];
-			for (const row of rows) row.level = this.calculateLevel(xp);
+			for (const row of rows) row.level = this.calculateLevel(row.xp);
 				
 			this.levels.global = rows;
 			this.levels.global.sort((a, b) => b.xp - a.xp);
 		});
-	}
+    }
+    
     /*
     async loadGuildData() {
         // keyv extends map. there's documentation online.
@@ -269,7 +271,7 @@ class Bot extends Client {
         return number;
 	}
 	
-	calculateLevel (totalXP) {
+	calculateLevel(totalXP) {
 		let level = 0;
 		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
 		let prevXPNeeded = 0;
@@ -284,12 +286,16 @@ class Bot extends Client {
 		return level;
 	}
 
-	insertNewUser = (id, leagueTableName) => {
+	insertNewUser(id, league) {
 		const db = this.databases.get("discord");
 	
-		db.query(`INSERT INTO ${leagueName === "global" ? 'global_levels' : leagueTableName} VALUES ("${id}", ${Math.floor(Math.random() * 10) + 15})`, (e) => {
+		db.query(`INSERT INTO ${league == "community" ? "global_levels" : `${league}_levels`} VALUES ("${id}", 0)`, (e) => {
 			if (e) console.log(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
-			// ***** ALSO WRITE ALL UPDATES IN CACHE TO DB, then reload everything *****
+            
+            // I've decied to just set them in cache and not reload everything. 
+            let levelData = league == "community" ? this.levels["global"] : this.levels[league];
+            levelData.push({id: id, xp: 0, level: 0});
+            return levelData.find((u) => u.id == id);
 		});
 	}
 }

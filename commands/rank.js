@@ -1,4 +1,3 @@
-// !rank
 exports.run = (client, message, args) => {
     if (message.hub) return;
     
@@ -11,7 +10,7 @@ exports.run = (client, message, args) => {
 
     let levelData = levels.find((u) => u.id == user.id);
     let xp = levelData.xp;
-    let level = levelData.level;
+    let level = client.calculateLevel(xp);
     let rank = levelData.sort((a, b) => b.xp - a.xp).indexOf(levelData) + 1;
 
     // Format Embed:
@@ -21,25 +20,10 @@ exports.run = (client, message, args) => {
     .addField("Rank:", `#${rank}/${levelData.length}`, true)
     // Can easily format the level and total xp, how to calculate the xp until the next level?
     .addField("Level Info", `Level ${level} | XP xxx/xxxx`)
-    .setColor("Your first choice of colours, make it a good one.")
+    .setColor("BLUE")
     .setTimestamp();
 
     message.channel.send({embed: rankEmbed});
-}
-
-const calculateLevel = (xp) => {
-    let level = 0;
-    let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
-    let prevXPNeeded = 0;
-
-    while (totalXP >= totalToNext) {
-        level++;
-        prevXPNeeded = totalToNext;
-        totalXP -= totalToNext;
-        totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
-    }
-
-    return level;
 }
 
 exports.help = (client, message, args) => {
