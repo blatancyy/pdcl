@@ -280,7 +280,7 @@ class Bot extends Client {
 		while (totalXP >= totalToNext) {
 			level++;
 			prevTotalToNext = totalToNext;
-			levelXP -= totalToNext;
+			levelXP = totalXP - totalToNext;
 			totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
 		}
 
