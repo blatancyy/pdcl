@@ -22,8 +22,7 @@ exports.run = (client, message, args) => {
     .setAuthor(user.tag, user.displayAvatarURL)
     .setDescription(`Showing ${league == "global" ? "global" : "local"} level data.`)
     .addField("Rank:", `#${rank}/${levels.length}`, true)
-    // Can easily format the level and total xp, how to calculate the xp until the next level?
-    .addField("Level Info", `Level ${level} | ${XPData.totalXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${(XPData.totalToNext - XPData.prevTotalToNext) - XPData.totalXP} XP to next level`)
+    .addField("Level Info", `Level ${level} | ${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${(XPData.totalToNext - XPData.prevTotalToNext) - XPData.levelXP} XP to next level`)
     .setColor("BLUE")
     .setTimestamp();
 
