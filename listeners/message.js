@@ -95,7 +95,7 @@ module.exports = async(client, message) => {
 			console.log(newLevel)
 			console.log(oldLevel < newLevel)
 			console.log(userLevelData.xp)
-			if (oldLevel < newLevel || userLevelData.xp - randXP) {
+			if (oldLevel < newLevel) {
                 message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
                 userLevelData.level = newLevel;
             }
