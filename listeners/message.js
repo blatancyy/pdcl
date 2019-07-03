@@ -1,4 +1,4 @@
-module.exports = async(client, message) => {
+module.exports = async (client, message) => {
     // Disable DM's: Saves a lot of time in other commands.
     if (message.author.bot) return;
     if (message.channel.type !== "text") return;
@@ -96,7 +96,8 @@ module.exports = async(client, message) => {
 			console.log(oldLevel < newLevel)
 			console.log(userLevelData.xp)
 			if (oldLevel < newLevel) {
-                message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
+				console.log(`${message.author.id}/${message.author.username} Leveled up from ${oldLevel} to ${newLevel}`);
+                // message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
                 userLevelData.level = newLevel;
             }
 		}

@@ -310,7 +310,10 @@ class Bot extends Client {
 			// I've decied to just set them in cache and not reload everything.
 			leagueLevelData.push({ id: id, xp: 0, level: 0 });
 			console.log('created user!')
-            return Promise.resolve(leagueLevelData.find((u) => u.id == id));
+			let newEntry = leagueLevelData.find((u) => u.id == id);
+			if (!newEntry) return Promise.reject(`Couldn't get newEntry!`);
+			console.log(newEntry)
+            return Promise.resolve(newEntry);
         });
     }
 }
