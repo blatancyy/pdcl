@@ -39,7 +39,7 @@ module.exports = async(client, message) => {
 		let userLevelData = leagueLevelData.find((u) => u.id == message.author.id);
 		// If the user is not in the cache, this must be their first message, so create them in cache
 		if (!userLevelData) {
-			userLevelData = await client.insertNewUser(message.author.id, league);
+			userLevelData = await client.insertNewUser(message.author.id, league).catch(e => console.log(e));
 			console.log('after creating user')
 		}
 		let userCooldown = client.globalCooldowns.get(message.author.id);
@@ -72,7 +72,7 @@ module.exports = async(client, message) => {
             if (league !== "community") {
                 let entry = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
                 let userLevelData_g = client.levels["global"].find((u) => u.id == message.author.id);
-                if (!userLevelData_g) userLevelData_g = await client.insertNewUser(message.author.id, "community");
+                if (!userLevelData_g) userLevelData_g = await client.insertNewUser(message.author.id, "community").catch(e => console.log(e));
                 
                 if (!entry) {
                     client.levelUpdates.push({
