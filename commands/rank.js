@@ -22,7 +22,7 @@ exports.run = (client, message, args) => {
     .setAuthor(user.tag, user.displayAvatarURL)
     .setDescription(`Showing ${league == "global" ? "global" : "local"} level data.`)
     .addField("Rank:", `#${rank}/${levels.length}`, true)
-    .addField("Level Info", `Level ${level} | ${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${(XPData.totalToNext - XPData.prevTotalToNext) - XPData.levelXP} XP to next level`)
+    .addField("Level Info", `Level ${level} | ${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${(XPData.totalToNext - XPData.prevTotalToNext) - XPData.levelXP} XP to next level | ${XPData.totalXP} total XP`)
     .setColor("BLUE")
     .setTimestamp();
 

@@ -277,7 +277,7 @@ class Bot extends Client {
 		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
 		let prevTotalToNext = 0;
 
-		while (levelXP >= totalToNext) {
+		while (totalXP >= totalToNext) {
 			level++;
 			prevTotalToNext = totalToNext;
 			levelXP -= totalToNext;
