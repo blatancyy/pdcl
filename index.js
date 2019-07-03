@@ -293,7 +293,7 @@ class Bot extends Client {
 		};
 	}
 
-	insertNewUser(id, league) {
+	async insertNewUser(id, league) {
         const db = this.databases.get("discord");
 		
 		let leagueLevelData = league == "community" ? this.levels["global"] : this.levels[league];
