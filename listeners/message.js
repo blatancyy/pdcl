@@ -80,9 +80,12 @@ module.exports = async(client, message) => {
             userData.xp += randXP;
             if (league !== "community") client.levels["global"].find((u) => u.id == message.author.id).xp += randXP;
 
-            // I have no idea what you meant by these two lines btw:
+            // Check for level updates AND UPDATE if true
 			let newLevel = client.calculateLevelData(userData.xp).level;
-			if (oldLevel < newLevel) message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
+			if (oldLevel < newLevel) {
+                message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
+                userData.level = newLevel;
+            }
 		}
     }
     
