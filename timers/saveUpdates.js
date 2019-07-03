@@ -6,7 +6,8 @@ exports.run = (client) => {
 		db.query(`UPDATE ${entry.table} SET xp = xp + ${entry.xp} WHERE id = "${entry.id}";`, (e) => {
 			if (e) console.log(`[PDCL v3] Failed to update someone's XP | ID: ${entry.id} , XP: ${entry.xp}. \nError: ${e}.`);
 		});
+		console.log('iteration saveUpdates.js loop')
 	}
-
+	console.log('outside loop saveUpdates.js')
 	client.levelUpdates = [];
 }

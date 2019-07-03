@@ -291,16 +291,24 @@ class Bot extends Client {
 		};
 	}
 
-	async insertNewUser(id, league) {
+	insertNewUser(id, league) {
         const db = this.databases.get("discord");
-        
+		
+		let leagueLevelData = league == "community" ? this.levels["global"] : this.levels[league];
+		console.log(!leagueLevelData)
+		// If a user by the ID already exists, reject.
+		if (leagueLevelData.some(userObj => userObj.id === id))
+			return Promise.reject(`[PDCL v3] User ${id} already exists in cache.`);
+		
         db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, (e) => {
-            if (e) Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
-                
-                // I've decied to just set them in cache and not reload everything. 
-                let levelData = league == "community" ? this.levels["global"] : this.levels[league];
-                levelData.push({id: id, xp: 0, level: 0});
-                return Promise.resolve(levelData.find((u) => u.id == id));
+            if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
+			db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, (e) => {
+				if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
+			});
+			// I've decied to just set them in cache and not reload everything.
+			leagueLevelData.push({ id: id, xp: 0, level: 0 });
+			console.log('created user!')
+            return Promise.resolve(leagueLevelData.find((u) => u.id == id));
         });
     }
 }
