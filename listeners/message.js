@@ -42,6 +42,7 @@ module.exports = async(client, message) => {
 			userLevelData = await client.insertNewUser(message.author.id, league).catch(e => console.log(e));
 			console.log('after creating user')
 		}
+		console.log(userLevelData.xp)
 		let userCooldown = client.globalCooldowns.get(message.author.id);
         if (!userCooldown) userCooldown = 0;
 
@@ -93,7 +94,8 @@ module.exports = async(client, message) => {
 			console.log(oldLevel)
 			console.log(newLevel)
 			console.log(oldLevel < newLevel)
-			if (oldLevel < newLevel) {
+			console.log(userLevelData.xp)
+			if (oldLevel < newLevel || userLevelData.xp - randXP) {
                 message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
                 userLevelData.level = newLevel;
             }

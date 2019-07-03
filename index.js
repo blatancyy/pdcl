@@ -273,18 +273,20 @@ class Bot extends Client {
 	
 	calculateLevelData(totalXP) {
 		let level = 0;
+		let levelXP = totalXP
 		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
 		let prevTotalToNext = 0;
 
-		while (totalXP >= totalToNext) {
+		while (levelXP >= totalToNext) {
 			level++;
 			prevTotalToNext = totalToNext;
-			totalXP -= totalToNext;
+			levelXP -= totalToNext;
 			totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
 		}
 
 		return {
 			totalXP,
+			levelXP,
 			level,
 			prevTotalToNext,
 			totalToNext
