@@ -88,13 +88,13 @@ module.exports = async (client, message) => {
 				}
 				userLevelData_g.xp += randXP;
             }
-			
+
             // Check for level updates AND UPDATE if true
 			let newLevel = client.calculateLevelData(userLevelData.xp).level;
-			console.log(oldLevel)
-			console.log(newLevel)
-			console.log(oldLevel < newLevel)
-			console.log(userLevelData.xp)
+			// console.log(oldLevel)
+			// console.log(newLevel)
+			// console.log(oldLevel < newLevel)
+			// console.log(userLevelData.xp)
 			if (oldLevel < newLevel) {
 				console.log(`${message.author.id}/${message.author.username} Leveled up from ${oldLevel} to ${newLevel}`);
                 // message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);

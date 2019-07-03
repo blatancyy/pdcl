@@ -303,10 +303,16 @@ class Bot extends Client {
 			return Promise.reject(`[PDCL v3] User ${id} already exists in cache.`);
 		
         db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, (e) => {
-            if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
-			db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, (e) => {
-				if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
-			});
+			if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
+
+			// If this ID already exists in the global table, don't try to insert it again.
+			db.query(`SELECT * FROM global_levels WHERE id = "${id}"`, (e, rows) => {
+				if (rows.length < 1) return;
+				db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, (e) => {
+					if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to DB. \nError: ${e}`);
+				});
+			})
+			
 			// I've decied to just set them in cache and not reload everything.
 			leagueLevelData.push({ id: id, xp: 0, level: 0 });
 			console.log('created user!')
