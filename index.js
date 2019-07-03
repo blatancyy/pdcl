@@ -298,14 +298,13 @@ class Bot extends Client {
 		
 		let leagueLevelData = league == "community" ? this.levels["global"] : this.levels[league];
 		console.log(!leagueLevelData)
-		var result;
 
 		// If a user by the ID already exists, reject.
 		if (leagueLevelData.some(userObj => userObj.id === id))
 			return Promise.reject(`[PDCL v3] User ${id} already exists in cache.`);
 		
         db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, async (e) => {
-			if (e) return result = Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
+			if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
 
 			// If this ID already exists in the global table, don't try to insert it again.
 			db.query(`SELECT * FROM global_levels WHERE id = "${id}"`, async (e, rows) => {
@@ -314,15 +313,16 @@ class Bot extends Client {
 					if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
 				});
 			});
-			
-			// I've decied to just set them in cache and not reload everything.
-			leagueLevelData.push({ id: id, xp: 0, level: 0 });
-			console.log('created user!')
-			result = leagueLevelData.find((u) => u.id == id);
-			if (!result) return result = Promise.reject(`Couldn't get result from cache!`);
-			console.log(result)
 		});
-		return Promise.resolve(result);
+		// I've decied to just set them in cache and not reload everything.
+		leagueLevelData.push({ id: id, xp: 0, level: 0 });
+		console.log('created user!')
+
+		let newEntry = leagueLevelData.find((u) => u.id == id);
+		console.log(newEntry)
+
+		if (!newEntry) return Promise.reject(`Couldn't get result from cache!`);
+		else return Promise.resolve(newEntry);
     }
 }
 
