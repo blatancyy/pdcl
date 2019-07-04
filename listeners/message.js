@@ -42,7 +42,7 @@ module.exports = async (client, message) => {
 			userLevelData = await client.insertNewUser(message.author.id, league).catch(e => console.log(e));
 			console.log('after creating user')
 		}
-		console.log(userLevelData.xp)
+
 		let userCooldown = client.globalCooldowns.get(message.author.id);
         if (!userCooldown) userCooldown = 0;
 

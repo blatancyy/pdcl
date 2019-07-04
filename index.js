@@ -307,10 +307,12 @@ class Bot extends Client {
 			if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
 
 			// If this ID already exists in the global table, don't try to insert it again.
+			if (league == "community") return;
 			db.query(`SELECT * FROM global_levels WHERE id = "${id}"`, async (e, rows) => {
+
 				if (rows.length < 1) return;
 				db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, async (e) => {
-					if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
+					if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to 's level table in DB. \nError: ${e}`);
 				});
 			});
 		});
