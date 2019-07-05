@@ -168,10 +168,15 @@ class Bot extends Client {
             console.log(`[PDCL v3] Successfully loaded player and roster data for: ${name.toUpperCase()}.`);
         });
 	}
+
+	async getDatabasePromise (dbName) {
+		let db = this.databases.get(dbName);
+		return Promise.resolve(db);
+	}
     
     // Called in ./listeners/ready.js 
 	async loadLevelData() {
-		const db = await this.databases.get("discord");
+		const db = await this.getDatabasePromise("discord");
 	
 		// League Discords:
 		this.config.leagues.forEach(async (league) => {
