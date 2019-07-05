@@ -145,7 +145,7 @@ class Bot extends Client {
 
     // Called in ./listeners/ready.js 
     async loadRosterData () {
-        this.config.leagues.forEach((league) => {
+        this.config.leagues.forEach(async (league) => {
             let name = league.config.name;
             console.log(`[PDCL v3] Beginning to load roster data for league: ${name}.`)
 
