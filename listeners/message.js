@@ -31,9 +31,6 @@ module.exports = async (client, message) => {
 		// XP to be added for sending a message (between 15 and 25)
 		let randXP = (Math.floor(Math.random() * 10) + 15); 
 		// Table that corrosponds to message.guild's xp storage.
-		console.log('league:')
-		console.log(league)
-		console.log(message.guild.name)
 		let table = client.config.leagues.find((l) => l.config.name == league).config.level_table; 
 		// An Array of all users with XP in this guild.
 		const leagueLevelData = league == "community" ? client.levels["global"] : client.levels[league]; 

@@ -105,11 +105,9 @@ class Bot extends Client {
 			database: database
 		});
 
-		connection.getConnection((e) => {
-			if (e) return console.log(`[PDCL v3] Error whilst establishing DB connection: \n${e}`);
-			let db = this.databases.set(name, connection);
-			return db;
-		});        
+		await connection.getConnection().catch(e => console.log(`[PDCL v3] Error whilst establishing DB connection: \n${e}`));
+		let db = this.databases.set(name, connection);
+		return db;
     }
 
     async loadDatabases() {
@@ -177,7 +175,8 @@ class Bot extends Client {
     // Called in ./listeners/ready.js 
 	async loadLevelData() {
 		const db = await this.getDatabasePromise("discord");
-	
+		console.log(db)
+		console.log(this.databases.get("discord"))
 		// League Discords:
 		this.config.leagues.forEach(async (league) => {
 			let table = league.config.level_table;
@@ -195,7 +194,7 @@ class Bot extends Client {
 			this.levels[name] = rows;
 			this.levels[name].sort((a, b) => b.xp - a.xp);
 		});
-	
+		
 		const [rows, fields] = await db.execute('SELECT * FROM global_levels')
 			.catch(e => console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`));
 	

@@ -1,6 +1,6 @@
 exports.run = async (client) => {
 	const db = client.databases.get("discord");
-	const [rows, fields] = await db.execute("SELECT * FROM mute_data").catch(e => console.log("[PDCL v3] Error whilst querying for mutes.");)
+	const [rows, fields] = await db.execute("SELECT * FROM mute_data").catch(e => console.log("[PDCL v3] Error whilst querying for mutes."));
 
 	if (!rows.length) return console.log("[PDCL v3] Did not find any entries for mute timers.");
 
