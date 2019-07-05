@@ -33,6 +33,7 @@ module.exports = async (client, message) => {
 		// Table that corrosponds to message.guild's xp storage.
 		console.log('league:')
 		console.log(league)
+		console.log(message.guild.name)
 		let table = client.config.leagues.find((l) => l.config.name == league).config.level_table; 
 		// An Array of all users with XP in this guild.
 		const leagueLevelData = league == "community" ? client.levels["global"] : client.levels[league]; 
