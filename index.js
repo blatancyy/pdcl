@@ -171,7 +171,7 @@ class Bot extends Client {
     
     // Called in ./listeners/ready.js 
 	async loadLevelData() {
-		const db = this.databases.get("discord");
+		const db = await this.databases.get("discord");
 	
 		// League Discords:
 		this.config.leagues.forEach(async (league) => {
