@@ -175,8 +175,7 @@ class Bot extends Client {
     // Called in ./listeners/ready.js 
 	async loadLevelData() {
 		const db = await this.getDatabasePromise("discord");
-		console.log(db)
-		console.log(this.databases.get("discord"))
+
 		// League Discords:
 		this.config.leagues.forEach(async (league) => {
 			let table = league.config.level_table;
@@ -299,7 +298,6 @@ class Bot extends Client {
         // const db = this.databases.get("discord");
 		
 		let leagueLevelData = league == "community" ? this.levels["global"] : this.levels[league];
-		console.log(!leagueLevelData)
 
 		// If a user by the ID already exists, reject.
 		if (leagueLevelData.some(userObj => userObj.id === id))

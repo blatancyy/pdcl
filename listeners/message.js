@@ -60,7 +60,7 @@ module.exports = async (client, message) => {
 					id: message.author.id,
 					xp: randXP,
 					table: table,
-					type: 'newUser'
+					type: 'oldUser'
                 });
                 lvlUpdatesEntry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
 			} else {
@@ -81,7 +81,7 @@ module.exports = async (client, message) => {
                         id: message.author.id,
                         xp: userLevelData_g.xp + randXP,
 						table: "global_levels",
-						type: 'newUser'
+						type: 'oldUser'
                     });
 
                     entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
