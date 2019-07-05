@@ -26,7 +26,7 @@ module.exports = async (client, message) => {
 	}
     
 	// Add XP - Extract this to its own util function?
-	if (home || !league) { // League is sometimes undefined
+	if (home && league) { // League is sometimes undefined
 		
 		// XP to be added for sending a message (between 15 and 25)
 		let randXP = (Math.floor(Math.random() * 10) + 15); 
