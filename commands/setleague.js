@@ -13,11 +13,11 @@ exports.run = async (client, message, args) => {
 
     if (entry) {
         console.log(`[PDCL v3] Changing guild: ${message.guild.name} to league: ${league}.`);
-        await db.query(`UPDATE guild_data SET league = '${league}' WHERE guild = '${message.guild.id}'`);
+        await db.execute(`UPDATE guild_data SET league = '${league}' WHERE guild = '${message.guild.id}'`);
         await client.loadGuildData();
     } else {
         console.log(`[PDCL v3] Creating new row for league: ${message.guild.name} to ${league}.`); 
-        await db.query(`INSERT INTO guild_data (guild, league) VALUES ('${message.guild.id}', '${league}');`);
+        await db.execute(`INSERT INTO guild_data (guild, league) VALUES ('${message.guild.id}', '${league}');`);
         await client.loadGuildData();      
     }
 

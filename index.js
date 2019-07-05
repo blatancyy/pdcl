@@ -6,7 +6,7 @@ class Bot extends Client {
 
         // Pass all packages through the client class:
         this.djs = require("discord.js");
-        this.mysql = require("mysql");
+        this.mysql = require("mysql2/promise");
         this.fs = require("fs");
         this.keyvPackage = require("keyv");
         this.request = require("request");
@@ -95,22 +95,21 @@ class Bot extends Client {
         });
     }
 
-    async loadDatabase(name, database) {
-        return new Promise((resolve) => {
-            const connection = this.mysql.createPool({
-                connectionLimit: 50,
-                host: "localhost", 
-                user: this.config.credentials.mysql.username,
-                password: this.config.credentials.mysql.password,
-                database: database
-            });
+	async loadDatabase (name, database) {
+		
+		const connection = await this.mysql.createPool({
+			connectionLimit: 50,
+			host: "localhost", 
+			user: this.config.credentials.mysql.username,
+			password: this.config.credentials.mysql.password,
+			database: database
+		});
 
-            connection.getConnection((e) => {
-                if (e) return console.log(`[PDCL v3] Error whilst establishing DB connection: \n${e}`);
-                let db = this.databases.set(name, connection);
-                resolve(db);
-            });        
-        });            
+		connection.getConnection((e) => {
+			if (e) return console.log(`[PDCL v3] Error whilst establishing DB connection: \n${e}`);
+			let db = this.databases.set(name, connection);
+			return db;
+		});        
     }
 
     async loadDatabases() {
@@ -133,19 +132,19 @@ class Bot extends Client {
     }
 
     // Called in ./listeners/ready.js    
-    async loadGuildData() {
+    async loadGuildData () {
         const db = this.databases.get("discord");
         if (!db) return console.log(`[PDCL v3] Something went wrong: Could not load database for guild configs. ('Discord')`);
-        db.query("SELECT * FROM guild_data", (e, rows) => {
-            if (e) return console.error(`[PDCL v3] Error whilst querying for guild_data: \n${e}`);
-            rows.forEach((entry) => {
-                this.guildData.set(entry.guild, entry.league);
-            });
-        });
+		const [rows, fields] = await db.execute("SELECT * FROM guild_data")
+			.catch(e => console.error(`[PDCL v3] Error whilst querying for guild_data: \n${e}`));
+		
+		rows.forEach((entry) => {
+			this.guildData.set(entry.guild, entry.league);
+		});
     }
 
     // Called in ./listeners/ready.js 
-    async loadRosterData() {
+    async loadRosterData () {
         this.config.leagues.forEach((league) => {
             let name = league.config.name;
             console.log(`[PDCL v3] Beginning to load roster data for league: ${name}.`)
@@ -156,15 +155,15 @@ class Bot extends Client {
             this.players[name] = [];
             this.teams[name] = [];
 
-            db.query("SELECT * FROM players WHERE team_id > 0", (e, data) => {
-                if (e) return console.log(`[PDCL v3] Error whilst loading players w/ db: ${name}. \nError: ${e}`);
-                this.players[name] = data;
-            });
+			const [rows, fields] = await db.execute("SELECT * FROM players WHERE team_id > 0")
+				.catch(e => console.log(`[PDCL v3] Error whilst loading players w/ db: ${name}. \nError: ${e}`));
+			
+            this.players[name] = rows;
 
-            db.query("SELECT * FROM teams WHERE hidden = 0", (e, data) => {
-                if (e) return console.log(`[PDCL v3] Error whilst loading teams w/ db: ${name}. \nError: ${e}`);
-                this.teams[name] = data;
-            });
+			const [rows, fields] = await db.execute("SELECT * FROM teams WHERE hidden = 0")
+				.catch(e => console.log(`[PDCL v3] Error whilst loading teams w/ db: ${name}. \nError: ${e}`));
+			
+			this.teams[name] = data;
 
             console.log(`[PDCL v3] Successfully loaded player and roster data for: ${name.toUpperCase()}.`);
         });
@@ -175,33 +174,31 @@ class Bot extends Client {
 		const db = this.databases.get("discord");
 	
 		// League Discords:
-		this.config.leagues.forEach((league) => {
+		this.config.leagues.forEach(async (league) => {
 			let table = league.config.level_table;
             let name = league.config.name;
             if (name == "community") return;
 	
 			console.log(`[PDCL v3] Beginning to load local xp data for league: ${name}.`)
 	
-			db.query(`SELECT * FROM ${table}`, (e, rows) => {
-				if (e) console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`);
-	
-				this.levels[name] = [];
-				for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
-					
-				this.levels[name] = rows;
-				this.levels[name].sort((a, b) => b.xp - a.xp);
-			});
-		});    
-	
-		db.query('SELECT * FROM global_levels', (e, rows) => {
-			if (e) console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`);
-	
-			this.levels.global = [];
+			const [rows, fields] = await db.execute(`SELECT * FROM ${table}`)
+				.catch(e => console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`));
+
+			this.levels[name] = [];
 			for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
 				
-			this.levels.global = rows;
-			this.levels.global.sort((a, b) => b.xp - a.xp);
+			this.levels[name] = rows;
+			this.levels[name].sort((a, b) => b.xp - a.xp);
 		});
+	
+		const [rows, fields] = await db.execute('SELECT * FROM global_levels')
+			.catch(e => console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`));
+	
+		this.levels.global = [];
+		for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
+			
+		this.levels.global = rows;
+		this.levels.global.sort((a, b) => b.xp - a.xp);
     }
     
     /*
@@ -293,8 +290,9 @@ class Bot extends Client {
 		};
 	}
 
+	// Adds a new user to levelUpdates
 	async insertNewUser(id, league) {
-        const db = this.databases.get("discord");
+        // const db = this.databases.get("discord");
 		
 		let leagueLevelData = league == "community" ? this.levels["global"] : this.levels[league];
 		console.log(!leagueLevelData)
@@ -303,22 +301,25 @@ class Bot extends Client {
 		if (leagueLevelData.some(userObj => userObj.id === id))
 			return Promise.reject(`[PDCL v3] User ${id} already exists in cache.`);
 		
-        db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, async (e) => {
-			if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
+        // db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, async (e) => {
+		// 	if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
 
-			// If this ID already exists in the global table, don't try to insert it again.
-			if (league == "community") return;
-			db.query(`SELECT * FROM global_levels WHERE id = "${id}"`, async (e, rows) => {
+		// 	// If this ID already exists in the global table, don't try to insert it again.
+		// 	if (league == "community") return;
+		// 	db.query(`SELECT * FROM global_levels WHERE id = "${id}"`, async (e, rows) => {
 
-				if (rows.length < 1) return;
-				db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, async (e) => {
-					if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to 's level table in DB. \nError: ${e}`);
-				});
-			});
-		});
-		// I've decied to just set them in cache and not reload everything.
-		leagueLevelData.push({ id: id, xp: 0, level: 0 });
-		console.log('created user!')
+		// 		if (rows.length < 1) return;
+		// 		db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, async (e) => {
+		// 			if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to 's level table in DB. \nError: ${e}`);
+		// 		});
+		// 	});
+		// });
+		// // I've decied to just set them in cache and not reload everything.
+
+		let entry = { id, xp: 0, table: league == "community" ? "global_levels" : `new_${league}_levels`, type: 'newUser' };
+		this.levelUpdates.push(entry);
+		leagueLevelData.push(entry);
+		console.log('pushed new user to levelUpdates');
 
 		let newEntry = leagueLevelData.find((u) => u.id == id);
 		console.log(newEntry)
@@ -332,7 +333,7 @@ class Bot extends Client {
 class Database {
     constructor(connection) {
         this.connection = connection;
-
+		// If this ever gets used be sure to have it use mysql2
         this.query = (statement) => {
             return new Promise((resolve, reject) => {
                 this.connection.query(statement, (e, res) => {

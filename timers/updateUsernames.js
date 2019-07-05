@@ -22,9 +22,7 @@ exports.run = async(client) => {
                 if (current == updated) return;
 
                 console.log(`[QUERY] UPDATE players SET displayname = "${updated}" WHERE displayname = "${current}";`)
-                db.query(`UPDATE players SET displayname = "${updated}" WHERE displayname = "${current}";`, (e) => {
-                    if (e) return console.error(e)
-                });
+				db.execute(`UPDATE players SET displayname = "${updated}" WHERE displayname = "${current}";`).catch(e => console.log(e));
 
                 console.log(`[PDCL v3][UPDATE USERNAMES] Successfully updated username in league: ${name}, : ${current} --> ${updated}.`);
             });

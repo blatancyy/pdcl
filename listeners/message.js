@@ -51,20 +51,21 @@ module.exports = async (client, message) => {
             
             // user's level before adding randXP. To be used to determine if randXP was enough to level them up.
 			let oldLevel = leagueLevelData.some((u) => u.id == message.author.id) ? leagueLevelData.find((u) => u.id == message.author.id).level : 0;
-			let entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
+			let lvlUpdatesEntry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
             
 			// League Specific Update:
 			// If there is no entry, insert a new one.
-            if (!entry) {                
+            if (!lvlUpdatesEntry) {                
                 client.levelUpdates.push({
 					id: message.author.id,
 					xp: randXP,
-					table: table
+					table: table,
+					type: 'newUser'
                 });
-                entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
+                lvlUpdatesEntry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
 			} else {
 				// Otherwise add the XP to the entry.
-                entry.xp += randXP;
+                lvlUpdatesEntry.xp += randXP;
 			}
 			// Add randXP to cached version
 			userLevelData.xp += randXP;
@@ -79,7 +80,8 @@ module.exports = async (client, message) => {
                     client.levelUpdates.push({
                         id: message.author.id,
                         xp: userLevelData_g.xp + randXP,
-                        table: "global_levels"
+						table: "global_levels",
+						type: 'newUser'
                     });
 
                     entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);

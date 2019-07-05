@@ -61,9 +61,7 @@ exports.run = async (client, message, args) => {
         expiry += Date.now();
         const query = `INSERT INTO mute_data (discord, league, expiry, global) VALUES ("${target.user.id}", "${message.guild.id}", "${expiry}", ${global ? 1 : 0});`;
         const db = client.databases.get("discord");
-        db.query(query, (e) => {
-            if (e) return console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`);
-        });
+		db.execute(query).catch(e => console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`));
     }
  
     // Logging and DM's:
