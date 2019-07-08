@@ -5,7 +5,7 @@ exports.run = async (client) => {
 
 	for (const league of client.config.leagues) {
 		console.log(league.config.name)
-        if (league.config.name == "community") return;
+        if (league.config.name == "community") continue;
 
         let id = league.config.id;
         let table = league.config.level_table;
@@ -13,8 +13,8 @@ exports.run = async (client) => {
 
 		client.request.get({ url: url, json: true }, (e, r, b) => {
 			console.log(!!b.players)
-            if (e) return console.error(e);
-            if (!b.players.length > 0) return console.log(`Received no response from mee6 api, using table: ${table}.`);
+            if (e) console.error(e);
+            if (!b.players.length > 0) console.log(`Received no response from mee6 api, using table: ${table}.`);
 			console.log('no errors')
 
 			for (var row of b.players) {
