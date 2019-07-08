@@ -15,13 +15,13 @@ exports.run = async (client) => {
             if (!b.players.length > 0) return console.log(`Received no response from mee6 api, using table: ${table}.`);
 
 
-            b.players.forEach((row) => {
+            for (var row of b.players) {
                 leagueUpdates.push({id: row.id, xp: row.xp, table: table});
 
                 let existingGlobal = globalUpdates.find((u) => u.id == row.id);
                 if (existingGlobal) existingGlobal.xp += row.xp;
                 else globalUpdates.push({id: row.id, xp: row.xp});
-            });
+            };
         });
     }
 
