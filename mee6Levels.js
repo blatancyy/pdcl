@@ -4,7 +4,7 @@ exports.run = async (client) => {
     const leagueUpdates = [];
 
 	for (const league of client.config.leagues) {
-		console.log(league)
+		console.log(league.config.name)
         if (league.config.name == "community") return;
 
         let id = league.config.id;
@@ -26,7 +26,7 @@ exports.run = async (client) => {
             };
         });
     }
-
+	console.log('Sup over here bro')
 	for (const u of leagueUpdates) {
 		console.log('HI')
         db.execute(`INSERT INTO ${u.table} (id, xp) VALUES ("${u.id}", ${u.xp});`)
