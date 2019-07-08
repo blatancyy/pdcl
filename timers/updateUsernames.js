@@ -36,18 +36,16 @@ const clean = (uuid) => {
 }
 
 const createNewConnection = async (client, database) => {
-    return new Promise((resolve) => {	
-		const connection = await client.mysql.createPool({
-			connectionLimit: 100,
-			host: "localhost", 
-			user: client.config.credentials.mysql.username,
-			password: client.config.credentials.mysql.password,
-			database: database
-		});
+	const connection = await client.mysql.createPool({
+		connectionLimit: 100,
+		host: "localhost", 
+		user: client.config.credentials.mysql.username,
+		password: client.config.credentials.mysql.password,
+		database: database
+	});
 
-		await connection.getConnection().catch(e => console.log(`[PDCL v3][UPDATE USERNAMES] Failed to establish new connection: \n${e}`));
-		resolve(connection);
-    });
+	await connection.getConnection().catch(e => console.log(`[PDCL v3][UPDATE USERNAMES] Failed to establish new connection: \n${e}`));
+	Promise.resolve(connection);
 }
 
 exports.time = 60000 * 60 * 8;
