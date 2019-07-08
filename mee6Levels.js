@@ -3,19 +3,21 @@ exports.run = async (client) => {
     const globalUpdates = [];
     const leagueUpdates = [];
 
-    for (const league of client.config.leagues) {
+	for (const league of client.config.leagues) {
+		console.logs(league)
         if (league.config.name == "community") return;
 
         let id = league.config.id;
         let table = league.config.level_table;
         let url = `https://mee6.xyz/api/plugins/levels/leaderboard/${id}?page=0&limit=500`;
 
-        client.request.get({url: url, json: true}, (e, r, b) => {
+		client.request.get({ url: url, json: true }, (e, r, b) => {
+			console.log(!!b.players)
             if (e) return console.error(e);
             if (!b.players.length > 0) return console.log(`Received no response from mee6 api, using table: ${table}.`);
+			console.log('no errors')
 
-
-            for (var row of b.players) {
+			for (var row of b.players) {
                 leagueUpdates.push({id: row.id, xp: row.xp, table: table});
 
                 let existingGlobal = globalUpdates.find((u) => u.id == row.id);
@@ -25,12 +27,14 @@ exports.run = async (client) => {
         });
     }
 
-    for (const u of leagueUpdates) {
+	for (const u of leagueUpdates) {
+		console.log('HI')
         db.execute(`INSERT INTO ${u.table} (id, xp) VALUES ("${u.id}", ${u.xp});`)
             .catch((e) => console.log(`Error whilst inserting new local mee6 levels into ${u.table}: \n${e}.`));
     }
 
-    for (const u of globalUpdates) {
+	for (const u of globalUpdates) {
+		console.log('HI GLOBAL')
         db.execute(`INSERT INTO global_levels (id, xp) VALUES ("${u.id}", ${u.xp});`)
             .catch((e) => console.log(`Error whilst inserting new global mee6 levels into global_levels: \n${e}.`));
     }
