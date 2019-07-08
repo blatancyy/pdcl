@@ -8,8 +8,10 @@ exports.run = async (client) => {
 
         let id = league.config.id;
         let table = league.config.level_table;
+        let url = `https://mee6.xyz/api/plugins/levels/leaderboard/${id}?page=0&limit=500`;
 
-        client.request.get({url: `https://mee6.xyz/api/plugins/levels/leaderboard/${id}?page=0&limit=500`, json: true}, (e, r, b) => {
+        console.log(url);
+        client.request.get({url: url, json: true}, (e, r, b) => {
             if (e) return console.error(e);
             let rows = b.players;
 
