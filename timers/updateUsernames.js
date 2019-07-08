@@ -1,10 +1,8 @@
 exports.run = async (client) => {
-	console.log('hullo I\'m here')
-	console.log(client.config.leagues)
     client.config.leagues.forEach(async(league) => {
         let name = league.config.name;
         let players = client.players[name];
-		
+		console.log('hullo r u here')
         // Make a new db connection to not exceed connectionLimit:
         let db = await createNewConnection(client, league.config.database);
         if (!db) return console.log(`[PDCL v3][UPDATE USERNAMES] Failed to create new connection for ${name}.`);
