@@ -99,7 +99,17 @@ module.exports = async (client, message) => {
 			// console.log(userLevelData.xp)
 			if (oldLevel < newLevel) {
 				console.log(`${message.author.id}/${message.author.username} Leveled up from ${oldLevel} to ${newLevel}`);
-                // message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
+				// message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
+				
+				let leagueInfo = client.leagues.find(l => l.config.name == league);
+				if (!leagueInfo) console.log(`[PDCL v3] League not found.`)
+				else {
+					leagueInfo.levelTree.forEach(milestone => {
+						let role = message.guild.roles.find(r => r.name.toLowerCase() === milestone.roleName);
+						if (milestone.level == newLevel && !message.member.roles.find(r => r.name === role.name)) message.member.addRole(role).catch(e => console.log);
+					});
+				}
+
                 userLevelData.level = newLevel;
             }
 		}
