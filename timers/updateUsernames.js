@@ -45,7 +45,7 @@ const createNewConnection = async (client, database) => {
 	});
 
 	await connection.getConnection().catch(e => console.log(`[PDCL v3][UPDATE USERNAMES] Failed to establish new connection: \n${e}`));
-	Promise.resolve(connection);
+	return Promise.resolve(connection);
 }
 
 exports.time = 60000 * 60 * 8;
