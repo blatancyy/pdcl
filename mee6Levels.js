@@ -4,7 +4,7 @@ exports.run = async (client) => {
     const leagueUpdates = [];
 
 	for (const league of client.config.leagues) {
-		console.logs(league)
+		console.log(league)
         if (league.config.name == "community") return;
 
         let id = league.config.id;
