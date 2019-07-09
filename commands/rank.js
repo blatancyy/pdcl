@@ -16,8 +16,8 @@ exports.run = (client, message, args) => {
 	let XPData = client.calculateLevelData(xp);
     let level = XPData.level;
     let rank = levels.sort((a, b) => b.xp - a.xp).indexOf(levelData) + 1;
-    let xpToNext = (XPData.levelXP - XPData.totalToNext) - XPData.prevTotalToNext
-
+    let xpToNext = (XPData.totalToNext - XPData.prevTotalToNext) - XPData.levelXP;
+    
     // Format Embed:
     const rankEmbed = new client.djs.RichEmbed()
     .setAuthor(user.tag, user.displayAvatarURL)
