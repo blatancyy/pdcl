@@ -1,4 +1,4 @@
-exports.aliases = ['xp', 'leve'];
+exports.aliases = ['xp', 'level'];
 exports.run = (client, message, args) => {
     if (message.hub) return;
     

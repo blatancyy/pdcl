@@ -57,7 +57,7 @@ module.exports = async (client, message) => {
             
 			// League Specific Update:
 			// If there is no entry, insert a new one.
-            if (!lvlUpdatesEntry) {                
+            if (!lvlUpdatesEntry) {
                 client.levelUpdates.push({
 					id: message.author.id,
 					xp: randXP,
