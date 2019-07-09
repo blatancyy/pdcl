@@ -102,7 +102,7 @@ class Bot extends Client {
             if (!utils) return console.log("Didn't find any utils");
 
             utils.forEach((file) => {
-                if (!file.endsWith("js")) return;
+                if (!file.endsWith(".js")) return;
                 let path = require(`./utils/${file}`);
                 let name = file.split(".")[0];
 
@@ -141,6 +141,7 @@ class Bot extends Client {
         await this.attachCommands();
         await this.attatchTimers();
         await this.registerListeners();
+        await this.attatchUtils();
         await this.loadDatabases();
         await this.login(this.config.credentials.token);
     }
@@ -273,6 +274,28 @@ class Bot extends Client {
 		if (!newEntry) return Promise.reject(`Couldn't get result from cache!`);
 		else return Promise.resolve(newEntry);
     }
+
+    calculateLevelData(totalXP) {
+		let level = 0;
+		let levelXP = totalXP
+		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
+		let prevTotalToNext = 0;
+
+		while (totalXP >= totalToNext) {
+			level++;
+			prevTotalToNext = totalToNext;
+			levelXP = totalXP - totalToNext;
+			totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
+		}
+
+		return {
+			totalXP,
+			levelXP,
+			level,
+			prevTotalToNext,
+			totalToNext
+		};
+	}
 }
 
 // This wrapper function can be used if you want to use promises instead of callbacks.
