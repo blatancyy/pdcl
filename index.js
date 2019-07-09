@@ -23,6 +23,7 @@ class Bot extends Client {
         // No reason to vary between vanilla Map and djs' collection, :?
         this.commands = new Map();
         this.timers = new Map();
+        this.utils = new Map();
         this.teamPools = new Map();
         this.databases = new this.djs.Collection();
 		this.spamWatch = new this.djs.Collection();
@@ -70,7 +71,7 @@ class Bot extends Client {
                 let path = require(`./timers/${file}`);
                 let name = file.split(".")[0];
     
-                console.log(`[PDCL v3] Attatching timer: ${name} to be run every ${this.time(path.time)}.`);
+                console.log(`[PDCL v3] Attatching timer: ${name} to be run every ${path.time / 1000} seconds.`);
                 const runTimer = () => path.run(this);
                 setInterval(runTimer, path.time);
 
@@ -95,8 +96,23 @@ class Bot extends Client {
         });
     }
 
-	async loadDatabase (name, database) {
-		
+    async attatchUtils() {
+        this.fs.readdir("./utils/", (e, utils) => {
+            if (e) return console.log(`[PDCL v3] Error whilst reading util dir: ${e}`);
+            if (!utils) return console.log("Didn't find any utils");
+
+            utils.forEach((file) => {
+                if (!file.endsWith("js")) return;
+                let path = require(`./utils/${file}`);
+                let name = file.split(".")[0];
+
+                console.log(`PDCL v3] Attatching Util: ${name}.`);
+                this.utils.set(name, path);
+            });
+        });
+    }
+
+	async loadDatabase (name, database) {		
 		const connection = await this.mysql.createPool({
 			connectionLimit: 50,
 			host: "localhost", 
@@ -220,78 +236,6 @@ class Bot extends Client {
         this.guildData.on('error', err => console.error('Keyv connection error:', err));        
     }
     */
-
-    escape(str) {
-        return str.replace(/\\(\*|_|`|~|\\)/g, "$1").replace(/(\*|_|`|~|\\)/g, "\\$1"); 
-    }
-
-    time(str) {
-        if(typeof str === "number") {
-            if(str === 0) return "Permanent";
-        
-            const seconds = ~~(str / 1000);
-            const minutes = ~~(str / (1000 * 60));
-            const hours = ~~(str / (1000 * 60 * 60));
-            const days = ~~(str / (1000 * 60 * 60 * 24));
-        
-            if (seconds < 60) return seconds + ` Second${seconds === 1 ? "" : "s"}`;
-            if (minutes < 60) return minutes + ` Minute${minutes === 1 ? "" : "s"}`;
-            if (hours < 24) return hours + ` Hour${hours === 1 ? "" : "s"}`;
-            return days + ` Day${days === 1 ? "" : "s"}`;
-        }
-    
-        if(str === "0") return 0;
-    
-        const periods = [
-            ["s", "sec", "second", "seconds"],
-            ["m", "min", "minute", "minutes"],
-            ["h", "hr", "hour", "hours"],
-            ["d", "day", "days"]
-        ];
-
-        periods[0].multiplier = 1000;
-        periods[1].multiplier = 1000 * 60;
-        periods[2].multiplier = 1000 * 60 * 60;
-        periods[3].multiplier = 1000 * 60 * 60 * 24;
-    
-        let numberString = "";
-        for(const char of str) {
-            if(isNaN(parseInt(char))) break;
-            numberString += char;
-        }
-
-        let number = parseInt(numberString);
-        const unit = str.slice(numberString.length);
-        for(const period of periods) {
-            if(!period.includes(unit)) continue;
-            number *= period.multiplier;
-        }
-
-        if(isNaN(number)) return 0;
-        return number;
-	}
-	
-	calculateLevelData(totalXP) {
-		let level = 0;
-		let levelXP = totalXP
-		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
-		let prevTotalToNext = 0;
-
-		while (totalXP >= totalToNext) {
-			level++;
-			prevTotalToNext = totalToNext;
-			levelXP = totalXP - totalToNext;
-			totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
-		}
-
-		return {
-			totalXP,
-			levelXP,
-			level,
-			prevTotalToNext,
-			totalToNext
-		};
-	}
 
 	// Adds a new user to levelUpdates
 	async insertNewUser(id, league) {

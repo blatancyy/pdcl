@@ -8,7 +8,7 @@ exports.run = (client, message, args) => {
     let colour = client.leagueColours.get(league);
 
     // Find player: 
-    let reqPlayer = client.escape(args[0].toLowerCase());
+    let reqPlayer = client.utils.get("escape")(args[0].toLowerCase());
     let player = client.players[league].find((p) => p.displayname.toLowerCase().includes(reqPlayer));
     if (!player) return message.channel.send("Did not find player.");
 
@@ -17,8 +17,8 @@ exports.run = (client, message, args) => {
 
     // Construct the embed:
     let display;
-    if (message.league == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
-    else display = `${client.escape(player.displayname)}${client.teamRankMap.get(player.teamrank)}${client.emojiMap.get(player.leaguerank)}`;
+    if (message.league == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.utils.get("escape")(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
+    else display = `${client.utils.get("escape")(player.displayname)}${client.teamRankMap.get(player.teamrank)}${client.emojiMap.get(player.leaguerank)}`;
 
     const playerEmbed = new client.djs.RichEmbed()
     .setTitle(display)
