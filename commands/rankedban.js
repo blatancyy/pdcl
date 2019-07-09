@@ -23,8 +23,11 @@ exports.run = async(client, message, args) => {
     let member = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when ranked banning."));
     if (!member) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
-    let reason = args.slice(1).join(" ");
-    if (!reason) return message.channel.send("provide a reason kthx");
+    let time = args[1];
+    if (!time) return message.channel.send("Provide a length of time. e.g 1d, 5d, 1w.");
+
+    let reason = args.slice(time == "0" ? 1 : 2).join(" ");
+    if (!reason) return message.channel.send("Provide a reason for the ranked ban.");
 
     let role = message.guild.roles.find((r) => r.name.toLowerCase() == league.config.ranked.banRole);
     if (!role) return message.channel.send(`Did not find 'Ranked Banned' role in this guild. - Config includes ${client.config.ranked.banRole}.`);
@@ -42,6 +45,7 @@ exports.run = async(client, message, args) => {
     .addField("Member:", member.user.tag, true)
     .addField(`Banned By:`, message.author.tag, true)
     .addField("Reason:", reason)
+    .addField("Time:", time, true)
     .setColor("BLACK")
     .setFooter("Ranked Bans")
     .setTimestamp();
@@ -51,6 +55,7 @@ exports.run = async(client, message, args) => {
     .setDescription(`You have been **banned from ranked** in **${message.guild.name}**.`)
     .addField(`Banned By:`, message.author.tag)
     .addField("Reason:", reason)
+    .addField("Time:", time)
     .setColor("BLACK")
     .setFooter("Ranked Bans")
     .setTimestamp();
@@ -58,6 +63,16 @@ exports.run = async(client, message, args) => {
     let rankedLog = message.guild.channels.find((c) => c.name.toLowerCase() == "ranked-ban-log");
     rankedLog.send({embed: logEmbed}).catch(console.error);
     member.user.send({embed: dmEmbed}).catch(console.error);
+
+    // Upload to DB, providing it's not permanent.
+    let expiry = client.time(time);
+    if (expiry !== 0) {
+        expiry += Date.now();
+        
+        let db = client.databases.get("discord");
+        let query = `INSERT INTO ranked_bans (discord, league, expiry) VALUES ("${member.user.id}", "${message.guild.id}", "${expiry}");`
+        db.execute(query).catch(console.error);
+    }
 }
 
 exports.help = (client, message, args) => {
