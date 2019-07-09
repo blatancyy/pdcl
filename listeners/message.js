@@ -107,7 +107,6 @@ module.exports = async (client, message) => {
 						if (milestone.level == newLevel && !message.member.roles.find((r) => r.name === role.name)) message.member.addRole(role).catch((e) => console.error);
 					});
 				}
-
                 userLevelData.level = newLevel;
             }
 		}

@@ -12,5 +12,4 @@ exports.run = (client) => {
 				.catch(e => console.log(`[PDCL v3] Failed to update someone's XP | ID: ${entry.id} , XP: ${entry.xp}. \nError: ${e}.`));
 	}
 	client.levelUpdates = [];
-	console.log('client.levelUpdates.length = ' + client.levelUpdates.length)
 }
