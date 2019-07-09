@@ -10,10 +10,9 @@ exports.run = (client, message, args) => {
     levels.sort((u1, u2) => u2.xp - u1.xp);
     let top10 = levels.slice(0, 10).map((u) => `<@${u.id}> | **Level: ${u.level}** | **Total XP: ${u.xp}**.`);
     
-    let authorEntry = levels.find((u) => u.id === message.author.id);
+    let authorEntry = levels.find((u) => u.id === message.author.id);  
     let pos = levels.indexOf(authorEntry) + 1;
-    let author = authorEntry.map((u) => `<@${u.id}> | **Level: ${u.level}** | **Total XP: ${u.xp}**.`);
-    
+    let author = `<@${authorEntry.id}> | **Level: ${authorEntry.level}** | **Total XP: ${authorEntry.xp}**.`;    
     
 	const levelsEmbed = new client.djs.RichEmbed()
 	.setAuthor(message.author.tag, message.author.displayAvatarURL)
