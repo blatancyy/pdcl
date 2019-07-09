@@ -139,7 +139,6 @@ class Bot extends Client {
 
     async start() {
         await this.attachCommands();
-        await this.attatchTimers();
         await this.registerListeners();
         await this.attatchUtils();
         await this.loadDatabases();
