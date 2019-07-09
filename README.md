@@ -16,7 +16,7 @@ You can view the changelog for the PDCL Bot [here.](https://github.com/blatancyy
 
 **Status:** Ongoing active maintenance. 
 
-The PDCL Bot was initially created by Qata and is now maintained by the current PDCL development team including fred, RainDance and WinterBeyond. 
+The PDCL Bot was initially created by Qata and is now maintained by the current PDCL development team including fred, Snowful and RainDance.
 
 The application uses [discord.js](https://discord.js.org/#/docs/main/stable/general/welcome) to interact with the Discord API and produce a fully functional bot application. If you are further interested on how the bot works, read [here](#developer-information) . If you wish to contribute to the project, you may use this repository or even [apply for developer.](https://forums.mpcleague.com/forums/dev-app/)
 
