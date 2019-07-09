@@ -3,7 +3,7 @@ exports.run = async (client) => {
     const globalUpdates = [];
     const leagueUpdates = [];
 
-	for await (const league of client.config.leagues) {
+	for (const league of client.config.leagues) {
 		console.log(league.config.name)
         if (league.config.name == "community") continue;
 
@@ -27,7 +27,7 @@ exports.run = async (client) => {
         });
     }
 	console.log('Sup over here bro')
-	for await (const u of leagueUpdates) {
+	for (const u of leagueUpdates) {
 		console.log('HI')
         db.execute(`INSERT INTO ${u.table} (id, xp) VALUES ("${u.id}", ${u.xp});`)
             .catch((e) => console.log(`Error whilst inserting new local mee6 levels into ${u.table}: \n${e}.`));
