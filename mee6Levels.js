@@ -1,3 +1,4 @@
+// THIS SCRIPT IS FULLY FUNCTIONAL, OK?
 exports.run = async (client) => {
     const db = client.databases.get("discord");
     client.globalUpdates = [];

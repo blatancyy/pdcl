@@ -29,9 +29,11 @@ module.exports = async (client, message) => {
 	if (home && league) { // League is sometimes undefined
 		
 		// XP to be added for sending a message (between 15 and 25)
-		let randXP = (Math.floor(Math.random() * 10) + 15); 
+        let randXP = (Math.floor(Math.random() * 10) + 15); 
+        
 		// Table that corrosponds to message.guild's xp storage.
-		let table = client.config.leagues.find((l) => l.config.name == league).config.level_table; 
+        let table = client.config.leagues.find((l) => l.config.name == league).config.level_table; 
+        
 		// An Array of all users with XP in this guild.
 		const leagueLevelData = league == "community" ? client.levels["global"] : client.levels[league]; 
 
@@ -55,48 +57,44 @@ module.exports = async (client, message) => {
             
 			// League Specific Update:
 			// If there is no entry, insert a new one.
-            // if (!lvlUpdatesEntry) {                
-            //     client.levelUpdates.push({
-			// 		id: message.author.id,
-			// 		xp: randXP,
-			// 		table: table,
-			// 		type: 'oldUser'
-            //     });
-            //     lvlUpdatesEntry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
-			// } else {
-			// 	// Otherwise add the XP to the entry.
-            //     lvlUpdatesEntry.xp += randXP;
-			// }
-			// // Add randXP to cached version
-			// userLevelData.xp += randXP;
+            if (!lvlUpdatesEntry) {                
+                client.levelUpdates.push({
+					id: message.author.id,
+					xp: randXP,
+					table: table,
+					type: 'oldUser'
+                });
+                lvlUpdatesEntry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
+			} else {
+				// Otherwise add the XP to the entry.
+                lvlUpdatesEntry.xp += randXP;
+			}
+			// Add randXP to cached version
+			userLevelData.xp += randXP;
 
-            // // Global Update: Only run if we've only added local XP (aka, not the community discord).
-            // if (league !== "community") {
-            //     let entry = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
-            //     let userLevelData_g = client.levels["global"].find((u) => u.id == message.author.id);
-            //     if (!userLevelData_g) userLevelData_g = await client.insertNewUser(message.author.id, "community").catch(e => console.log(e));
+            // Global Update: Only run if we've only added local XP (aka, not the community discord).
+            if (league !== "community") {
+                let entry = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
+                let userLevelData_g = client.levels["global"].find((u) => u.id == message.author.id);
+                if (!userLevelData_g) userLevelData_g = await client.insertNewUser(message.author.id, "community").catch(e => console.log(e));
                 
-            //     if (!entry) {
-            //         client.levelUpdates.push({
-            //             id: message.author.id,
-            //             xp: randXP,
-			// 			table: "global_levels",
-			// 			type: 'oldUser'
-            //         });
+                if (!entry) {
+                    client.levelUpdates.push({
+                        id: message.author.id,
+                        xp: randXP,
+						table: "global_levels",
+						type: 'oldUser'
+                    });
 
-            //         entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
-            //     } else {
-            //         entry.xp += randXP;
-			// 	}
-			// 	userLevelData_g.xp += randXP;
-            // }
+                    entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
+                } else {
+                    entry.xp += randXP;
+				}
+				userLevelData_g.xp += randXP;
+            }
 
             // Check for level updates AND UPDATE if true
 			let newLevel = client.calculateLevelData(userLevelData.xp).level;
-			// console.log(oldLevel)
-			// console.log(newLevel)
-			// console.log(oldLevel < newLevel)
-			// console.log(userLevelData.xp)
 			if (oldLevel < newLevel) {
 				console.log(`${message.author.id}/${message.author.username} Leveled up from ${oldLevel} to ${newLevel}`);
 				// message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
