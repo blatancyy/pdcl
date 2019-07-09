@@ -16,13 +16,14 @@ exports.run = (client, message, args) => {
 	let XPData = client.calculateLevelData(xp);
     let level = XPData.level;
     let rank = levels.sort((a, b) => b.xp - a.xp).indexOf(levelData) + 1;
+    let xpToNext = (XPData.levelXP - XPData.totalToNext) - XPData.prevTotalToNext
 
     // Format Embed:
     const rankEmbed = new client.djs.RichEmbed()
     .setAuthor(user.tag, user.displayAvatarURL)
     .setDescription(`Showing ${league == "global" ? "global" : "local"} level data.`)
     .addField("Rank:", `#${rank}/${levels.length}`, true)
-    .addField("Level Info", `Level ${level} | ${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${(XPData.totalToNext - XPData.prevTotalToNext) - XPData.levelXP} XP to next level | ${XPData.totalXP} total XP`)
+    .addField("Level Info", `Level ${level} | ${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${xpToNext / 1000}k XP to next level | ${XPData.totalXP / 1000}k total XP.`)
     .setColor("BLUE")
     .setTimestamp();
 

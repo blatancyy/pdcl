@@ -81,8 +81,8 @@ exports.help = (client, message, args) => {
     const helpEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
     .addField("Description:", "Ban the user from ranked, using the Ranked Banned role.")
-    .addField("Usage:", "`!rankedban <id> <reason>`", true)
-    .addField("Example", "`!rankedban 207896400539680778 bot`", true)
+    .addField("Usage:", "`!rankedban <id> <time> <reason>`", true)
+    .addField("Example", "`!rankedban 207896400539680778 2d Bot`", true)
     .setColor("DARK_AQUA")
     .setFooter("!rankedban")
     .setTimestamp();
