@@ -27,7 +27,7 @@ const unban = async(client, guild, id) => {
     let member = await guild.fetchMember(id);
     if (!member) return;
 
-    if (!member.role.has(role)) return;
+    if (!member.roles.has(role)) return;
     member.removeRole(role).catch(console.error);
     console.log(`[PDCL v3] Unbanned ${member.user.tag} from ranked in ${guild.name}.`);
 }
