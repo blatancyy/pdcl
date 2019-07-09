@@ -27,7 +27,7 @@ const unban = async(client, guild, id) => {
     let member = await guild.fetchMember(id);
     if (!member) return console.log("Member left the discord? Ranked unbans.");
 
-    if (!member.roles.has(role)) return console.log("[PDCL v3] Tried to unban user automatically, they appear to already be unbanned.");
+    if (!member.roles.has(role.id)) return console.log("[PDCL v3] Tried to unban user automatically, they appear to already be unbanned.");
     member.removeRole(role).catch(console.error);
     console.log(`[PDCL v3] Unbanned ${member.user.tag} from ranked in ${guild.name}.`);
 }
