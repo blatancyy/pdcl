@@ -103,7 +103,9 @@ module.exports = async (client, message) => {
 				if (!leagueInfo) console.log(`[PDCL v3] League not found.`)
                 else {
 					leagueInfo.levelTree.forEach((milestone) => {
-						let role = message.guild.roles.find((r) => r.name === milestone.roleName);
+                        let role = message.guild.roles.find((r) => r.name == milestone.roleName);
+                        if (!role) return console.log(`[PDCL v3] Couldn't find role milestone for level: ${newLevel} in ${message.guild.name}.`)
+
 						if (milestone.level == newLevel && !message.member.roles.find((r) => r.name === role.name)) message.member.addRole(role).catch((e) => console.error);
 					});
 				}
