@@ -12,7 +12,7 @@ exports.run = (client, message, args) => {
     
     let authorEntry = levels.find((u) => u.id === message.author.id);  
     let pos = levels.indexOf(authorEntry) + 1;
-    let author = `<@${authorEntry.id}> | **Level: ${authorEntry.level}** | **Total XP: ${authorEntry.xp}**.`;    
+    let author = `<@${authorEntry.id}> | **Level: ${authorEntry.level ? authorEntry.level : 0}** | **Total XP: ${authorEntry.xp}**.`;    
     
 	const levelsEmbed = new client.djs.RichEmbed()
 	.setAuthor(message.author.tag, message.author.displayAvatarURL)
