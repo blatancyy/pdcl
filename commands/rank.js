@@ -22,12 +22,13 @@ exports.run = (client, message, args) => {
     
     // Format Embed:
     const rankEmbed = new client.djs.RichEmbed()
-    .setAuthor(user.tag, user.displayAvatarURL)
-    .setDescription(`Showing ${league == "global" ? "global" : "local"} level data.`)
-    .addField("Rank:", `#${rank}/${levels.length}`, true)
-    .addField("Level Info", `Level ${level} | ${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext} XP | ${xpToNext >= 1000 ? `${xpToNext / 1000}k` : xpToNext} XP to next level | ${XPData.totalXP >= 1000 ? `${XPData.totalXP / 1000}k` : XPData.totalXP} total XP.`)
-    .setColor("BLUE")
-    .setTimestamp();
+		.setAuthor(user.tag, user.displayAvatarURL)
+		.setDescription(`Showing ${league == "global" ? "global" : "local"} level data for ${message.guild.name}.`)
+		.addField("Level Info", `Level **${level}** | **${XPData.levelXP}/${XPData.totalToNext - XPData.prevTotalToNext}** XP | **${xpToNext >= 1000 ? `${xpToNext / 1000}k` : xpToNext}** XP to next level | **${XPData.totalXP >= 1000 ? `${XPData.totalXP / 1000}k` : XPData.totalXP}** total XP.`)
+		.addField("Rank", `${rank}/${levels.length} Users`, true)
+		.setColor("BLUE")
+		.setFooter(message.guild.name, message.guild.iconURL)
+		.setTimestamp();
 
     message.channel.send({embed: rankEmbed});
 }
