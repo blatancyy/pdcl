@@ -28,7 +28,6 @@ exports.run = (client, message, args) => {
 		.addField("Rank", `**${rank}/${levels.length}** Users`, true)
 		.setColor("BLUE")
 		.setFooter(message.guild.name, message.guild.iconURL)
-		.setURL('https://www.thehappycatsite.com/wp-content/uploads/2017/12/grow.jpg')
 		.setTimestamp();
 
     message.channel.send({embed: rankEmbed});
