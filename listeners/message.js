@@ -50,7 +50,7 @@ module.exports = async (client, message) => {
 		let userLevelData = leagueLevelData.find((u) => u.id == message.author.id);
 		// If the user is not in the cache, this must be their first message, so create them in cache
 		if (!userLevelData) {
-			userLevelData = await client.insertNewUser(message.author.id, league).catch(e => console.log(e));
+			userLevelData = await client.utils.get("insertNewUser")(client, message.author.id, league).catch(e => console.log(e));
 			console.log('after creating user')
 		}
 
@@ -82,12 +82,15 @@ module.exports = async (client, message) => {
 			userLevelData.xp += randXP;
 
             // Global Update: Only run if we've only added local XP (aka, not the community discord).
-            if (league !== "community") {
-                let entry = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
-                let userLevelData_g = client.levels["global"].find((u) => u.id == message.author.id);
-                if (!userLevelData_g) userLevelData_g = await client.insertNewUser(message.author.id, "community").catch(e => console.log(e));
+			if (league !== "community") {
+
+				let oldLevel_g = leagueLevelData.some((u) => u.id == message.author.id) ? leagueLevelData.find((u) => u.id == message.author.id).level : 0;
+                let lvlUpdatesEntry_g = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
+				
+				let userLevelData_g = client.levels["global"].find((u) => u.id == message.author.id);
+                if (!userLevelData_g) userLevelData_g = await client.utils.get("insertNewUser")(client, message.author.id, "community").catch(e => console.log(e));
                 
-                if (!entry) {
+                if (!lvlUpdatesEntry_g) {
                     client.levelUpdates.push({
                         id: message.author.id,
                         xp: randXP,
@@ -95,31 +98,18 @@ module.exports = async (client, message) => {
 						type: 'oldUser'
                     });
 
-                    entry = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
+                    lvlUpdatesEntry_g = client.levelUpdates.find((entry) => entry.id === message.author.id && entry.table === table);
                 } else {
-                    entry.xp += randXP;
+                    lvlUpdatesEntry_g.xp += randXP;
 				}
 				userLevelData_g.xp += randXP;
-            }
 
-            // Check for level updates AND UPDATE if true
-			let newLevel = client.calculateLevelData(userLevelData.xp).level;
-			if (oldLevel < newLevel) {
-				console.log(`${message.guild.id}/${message.author.username} Leveled up from ${oldLevel} to ${newLevel}`);
-				// message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
-				
-				let leagueInfo = client.config.leagues.find((l) => l.config.name == league);
-				if (!leagueInfo) console.log(`[PDCL v3] League not found.`)
-                else {
-					leagueInfo.levelTree.forEach((milestone) => {
-                        let role = message.guild.roles.find((r) => r.name == milestone.roleName);
-                        if (!role) return console.log(`[PDCL v3] Couldn't find role milestone for level: ${newLevel} in ${message.guild.name}.`)
-
-						if (milestone.level == newLevel && !message.member.roles.find((r) => r.name === role.name)) message.member.addRole(role).catch((e) => console.error);
-					});
-				}
-                userLevelData.level = newLevel;
-            }
+				let newLevel_g = client.utils.get("calculateLevelData")(userLevelData.xp).level;
+				userLevelData.level = client.utils.get("checkLevelUp")(client, message, oldLevel_g, newLevel_g);
+			}
+			
+			let newLevel = client.utils.get("calculateLevelData")(userLevelData.xp).level;
+			userLevelData.level = client.utils.get("checkLevelUp")(client, message, oldLevel, newLevel);
 		}
     }
     

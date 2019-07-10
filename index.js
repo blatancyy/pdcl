@@ -182,43 +182,6 @@ class Bot extends Client {
             console.log(`[PDCL v3] Successfully loaded player and roster data for: ${name.toUpperCase()}.`);
         });
 	}
-
-	async getDatabasePromise (dbName) {
-		let db = this.databases.get(dbName);
-		return Promise.resolve(db);
-	}
-    
-    // Called in ./listeners/ready.js 
-	async loadLevelData() {
-		const db = await this.getDatabasePromise("discord");
-
-		// League Discords:
-		this.config.leagues.forEach(async (league) => {
-			let table = league.config.level_table;
-            let name = league.config.name;
-            if (name == "community") return;
-	
-			console.log(`[PDCL v3] Beginning to load local xp data for league: ${name}.`)
-	
-			const [rows, fields] = await db.execute(`SELECT * FROM ${table}`)
-				.catch(e => console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`));
-
-			this.levels[name] = [];
-			for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
-				
-			this.levels[name] = rows;
-			this.levels[name].sort((a, b) => b.xp - a.xp);
-		});
-		
-		const [rows, fields] = await db.execute('SELECT * FROM global_levels')
-			.catch(e => console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`));
-	
-		this.levels.global = [];
-		for (const row of rows) row.level = this.calculateLevelData(row.xp).level;
-			
-		this.levels.global = rows;
-		this.levels.global.sort((a, b) => b.xp - a.xp);
-    }
     
     /*
     async loadGuildData() {
@@ -236,65 +199,6 @@ class Bot extends Client {
         this.guildData.on('error', err => console.error('Keyv connection error:', err));        
     }
     */
-
-	// Adds a new user to levelUpdates
-	async insertNewUser(id, league) {
-        // const db = this.databases.get("discord");
-		
-		let leagueLevelData = league == "community" ? this.levels["global"] : this.levels[league];
-
-		// If a user by the ID already exists, reject.
-		if (leagueLevelData.some(userObj => userObj.id === id))
-			return Promise.reject(`[PDCL v3] User ${id} already exists in cache.`);
-		
-        // db.query(`INSERT INTO ${league == "community" ? "global_levels" : `new_${league}_levels`} (id, xp) VALUES ("${id}", 0)`, async (e) => {
-		// 	if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to ${league}'s level table in DB. \nError: ${e}`);
-
-		// 	// If this ID already exists in the global table, don't try to insert it again.
-		// 	if (league == "community") return;
-		// 	db.query(`SELECT * FROM global_levels WHERE id = "${id}"`, async (e, rows) => {
-
-		// 		if (rows.length < 1) return;
-		// 		db.query(`INSERT INTO global_levels (id, xp) VALUES ("${id}", 0)`, async (e) => {
-		// 			if (e) return Promise.reject(`[PDCL v3] Error whilst inserting new user to 's level table in DB. \nError: ${e}`);
-		// 		});
-		// 	});
-		// });
-		// // I've decied to just set them in cache and not reload everything.
-
-		let entry = { id, xp: 0, table: league == "community" ? "global_levels" : `new_${league}_levels`, type: 'newUser' };
-		this.levelUpdates.push(entry);
-		leagueLevelData.push(entry);
-		console.log('pushed new user to levelUpdates');
-
-		let newEntry = leagueLevelData.find((u) => u.id == id);
-		console.log(newEntry)
-
-		if (!newEntry) return Promise.reject(`Couldn't get result from cache!`);
-		else return Promise.resolve(newEntry);
-    }
-
-    calculateLevelData(totalXP) {
-		let level = 0;
-		let levelXP = totalXP
-		let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;
-		let prevTotalToNext = 0;
-
-		while (totalXP >= totalToNext) {
-			level++;
-			prevTotalToNext = totalToNext;
-			levelXP = totalXP - totalToNext;
-			totalToNext += 5 * Math.pow(level, 2) + 50 * level + 100;
-		}
-
-		return {
-			totalXP,
-			levelXP,
-			level,
-			prevTotalToNext,
-			totalToNext
-		};
-	}
 }
 
 // This wrapper function can be used if you want to use promises instead of callbacks.
