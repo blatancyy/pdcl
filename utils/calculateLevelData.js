@@ -1,4 +1,4 @@
-module.exports = async (totalXP) => {
+module.exports = async(totalXP) => {
 	let level = 0;
 	let levelXP = totalXP
 	let totalToNext = 5 * Math.pow(level, 2) + 50 * level + 100;

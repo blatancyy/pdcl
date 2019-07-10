@@ -1,9 +1,9 @@
 // Called in ./listeners/ready.js 
-module.exports = (client) => {
+module.exports = async(client) => {
 	const db = await client.utils.get("getDatabasePromise")(client, "discord");
 
 	// League Discords:
-	client.config.leagues.forEach(async (league) => {
+	client.config.leagues.forEach(async(league) => {
 		let table = league.config.level_table;
 		let name = league.config.name;
 		if (name == "community") return;
