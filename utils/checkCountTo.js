@@ -15,7 +15,7 @@ module.exports = async(client, message) => {
     if (isNaN(sentNum)) valid = false;
 
     let prevNum = + prevMessage.content;
-    if (sentNum < prevNum) valid = false;
+    if (sentNum != prevNum + 1) valid = false;
 
     return(valid);
 }
