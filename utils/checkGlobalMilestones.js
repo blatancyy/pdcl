@@ -24,7 +24,7 @@ module.exports = async(client) => {
 
         let role = guild.roles.find((r) => r.name == milestone.roleName);
         if (member.roles.has(role.id)) return;
-        member.addRole(role).catch(console.error);
+        await member.addRole(role).catch(console.error);
 
         console.log(`Successfully applied role: ${milestone.roleName} to ${member.user.tag}!`);        
     });
