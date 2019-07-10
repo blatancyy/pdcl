@@ -17,10 +17,12 @@ exports.run = async (client, message, args) => {
     var member;
     var user;
     if (args.length > 0) {        
-        user = await client.fetchUser(args[0]).catch((e) => console.log(e));
+		user = await client.fetchUser(args[0]).catch((e) => console.log(e));
+		if (!user) user = client.users.find(u => u.username.toLowerCase().includes(args.join(' ').toLowerCase()) || u.username.toLowerCase() == args.join(' ').toLowerCase())
         if (!user) return message.channel.send(`Couldn't find a user with the id: ${args[0]}.`);
 
-        member = await message.guild.fetchMember(user);
+		member = await message.guild.fetchMember(user);
+		if (!member) member = message.guild.members.find(m => m.displayName.toLowerCase() == args.join(' ').toLowerCase() || m.user.username.toLowerCase() == args.join(' ').toLowerCase())
         if (!member) return message.channel.send("Successfully found a user, but failed in fetching the guildMember.");
     } else {
         member = message.member;
