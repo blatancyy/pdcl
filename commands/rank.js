@@ -2,8 +2,9 @@ exports.aliases = ['xp', 'level'];
 exports.run = (client, message, args) => {
     if (message.hub) return;
     
-    let mention = message.mentions.members.size > 0;
-    let user = mention ? message.mentions.members.first().user : message.author;
+	let mention = message.mentions.members.size > 0;
+	let member = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase()) || m.user.username.toLowerCase().includes(args[0].toLowerCase()));
+    let user = mention ? message.mentions.members.first().user : member ? member.user : message.author;
 
     // Community Discord ID
     let league = message.guild.id == "542848649202499584" ? "global" : message.league;

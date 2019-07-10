@@ -3,7 +3,6 @@ exports.run = (client, message, args) => {
     if (!message.home) return;
     if (message.hub) return;
 
-
     let league = message.guild.id == "542848649202499584" ? "global" : message.league;
     let levels = client.levels[league];
     
