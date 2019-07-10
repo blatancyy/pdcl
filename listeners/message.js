@@ -30,7 +30,7 @@ module.exports = async (client, message) => {
         let valid = await client.utils.get("checkCountTo")(client, message);
         if (!valid) {
             message.delete().catch(console.error);
-            message.author.send(`Your message in ${message.channel} has been deleted because it appears to be invalid for the 'count-to' feature. Incorrect? Let me know @ fred#5775.`);
+            message.author.send(`Your message in ${message.channel} has been deleted because it appears to be invalid for the 'count-to' feature. \nIncorrect? Let me know @ fred#5775.`);
         } 
     }
     

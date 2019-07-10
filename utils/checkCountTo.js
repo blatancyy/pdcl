@@ -4,8 +4,18 @@ module.exports = async(client, message) => {
     let prevMessage = messages.last();
 
     var valid = true;
+    // Same Author:
     if (prevMessage.author.id == message.author.id) valid = false;
-    if (message.content < prevMessage.content) valid = false;
+
+    // Compare strings:
+    let isNAN = isNaN(message.content);
+    if (isNAN) valid = false;
+
+    let sentNum = + message.content;
+    if (isNaN(sentNum)) valid = false;
+
+    let prevNum = + prevMessage.content;
+    if (sentNum < prevNum) valid = false;
 
     return(valid);
 }
