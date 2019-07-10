@@ -33,6 +33,9 @@ module.exports = async (client, message) => {
             message.author.send(`Your message in ${message.channel} has been deleted because it appears to be invalid for the 'count-to' feature. \nIncorrect? Let me know @ fred#5775.`);
         } 
     }
+
+    // Run Dev's retarded emoji function:
+    client.utils.get("devsReactions")(client, message);
     
 	// Add XP - Extract this to its own util function?
 	if (home && league) { // League is sometimes undefined

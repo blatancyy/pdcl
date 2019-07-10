@@ -5,3 +5,4 @@ package-lock.json
 package.json
 LICENSE
 .vscode/
+/utils/devsReactions.js
