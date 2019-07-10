@@ -3,7 +3,8 @@ exports.run = (client, message, args) => {
     if (message.hub) return;
     
 	let mention = message.mentions.members.size > 0;
-	let member = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase()) || m.user.username.toLowerCase().includes(args[0].toLowerCase()));
+	let member;
+	if (args[0]) member = message.guild.members.find(m => m.displayName.toLowerCase().includes(args[0].toLowerCase()) || m.user.username.toLowerCase().includes(args[0].toLowerCase()));
     let user = mention ? message.mentions.members.first().user : member ? member.user : message.author;
 
     // Community Discord ID
