@@ -12,7 +12,7 @@ module.exports = async(client) => {
 
         let xp = row.xp;
         let level = client.utils.get("calculateLevelData")(xp).level;
-        let levelTree = client.config.leagues.find((l) => l.name == "community").levelTree;
+        let levelTree = client.config.leagues.find((l) => l.config.name == "community").levelTree;
         
         var index = -1;
         levelTree.forEach((l) => {
