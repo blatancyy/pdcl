@@ -23,7 +23,16 @@ module.exports = async (client, message) => {
 
             setTimeout(() => user.c--, 5000);
         }
-	}
+    }
+    
+    // Check count-to: id is community count to channel id:
+    if (message.channel.id == "554149057673560074") {
+        let valid = await client.utils.get("checkCountTo")(client, message);
+        if (!valid) {
+            message.delete().catch(console.error);
+            message.author.send(`Your message in ${message.channel} has been deleted because it appears to be invalid for the 'count-to' feature. Incorrect? Let me know @ fred#5775.`);
+        } 
+    }
     
 	// Add XP - Extract this to its own util function?
 	if (home && league) { // League is sometimes undefined
