@@ -7,7 +7,7 @@ module.exports = async(client) => {
 
     rows.forEach(async(row) => {
         let id = row.id;
-        let member = await guild.fetchMember(id).catch((e) => console.log("User isn't in community discord."));
+        let member = await guild.fetchMember(id).catch((e) => {});
         if (!member) return;
 
         let xp = row.xp;
