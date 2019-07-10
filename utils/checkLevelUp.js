@@ -3,7 +3,7 @@ module.exports = (client, message, oldLevel, newLevel) => {
 		console.log(`${message.guild.id}/${message.author.username} Leveled up from ${oldLevel} to ${newLevel}`);
 		// message.channel.send(`Congratulations ${message.author}! You reached level ${newLevel}!`);
 		
-		let leagueInfo = client.config.leagues.find((l) => l.config.name == league);
+		let leagueInfo = client.config.leagues.find((l) => l.config.name == message.league);
 		if (!leagueInfo) console.log(`[PDCL v3] League not found.`)
 		else {
 			leagueInfo.levelTree.forEach((milestone) => {
