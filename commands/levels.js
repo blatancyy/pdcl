@@ -7,7 +7,7 @@ exports.run = (client, message, args) => {
     let levels = client.levels[league];
     
     levels.sort((u1, u2) => u2.xp - u1.xp);
-    let top10 = levels.slice(0, 10).map((u) => `<@${u.id}> | **Level: ${u.level}** | **Total XP: ${u.xp > 1000 ? u.xp / 1000 + "k" : u.xp}**.`);
+    let top10 = levels.slice(0, 10).map((u) => `<@${u.id}> | **Level: ${client.utils.get("calculateLevelData")(u.xp).level}** | **Total XP: ${u.xp > 1000 ? u.xp / 1000 + "k" : u.xp}**.`);
     
     let authorEntry = levels.find((u) => u.id === message.author.id);  
     let pos = levels.indexOf(authorEntry) + 1;
