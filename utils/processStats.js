@@ -1,7 +1,6 @@
-exports.aliases = ['insert']
-exports.run = async (client, message, args) => {
+module.exports = async (data) => {
 	
-	let rows = message.content.split('\n');
+	let rows = data.split('\n');
 	// Remove map name and first team name.
 	rows.shift();
 	rows.shift();
@@ -18,5 +17,5 @@ exports.run = async (client, message, args) => {
 		// Now we can do whatever we want with these values, like insert to DB.
 		formattedRows.push(`${name} | ${kills} | ${deaths}`);
 	}
-	console.log('Name | Kills | Deaths\n' + formattedRows.map(r => r).join('\n'))
+	return formattedRows;
 }
