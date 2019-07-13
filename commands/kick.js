@@ -20,7 +20,7 @@ exports.run = async (client, message, args) => {
     let target = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when kicked."));
     if (!target) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
-    let time = args[1] ? client.utils.get("time")(args[1]) : "0";
+    let time = args[1] ? client.time(args[1]) : "0";
     let reason = args.slice(time == "0" ? 1 : 2).join(" ").replace("--g", "");
     if (!reason) reason = "None provided.";
     let global = message.content.endsWith("--g") ? true : false;
@@ -49,7 +49,7 @@ exports.run = async (client, message, args) => {
     .setDescription("A member has been kicked.")
     .addField("Target:", target.user.tag, true)
     .addField("Reason:", reason, true)
-    .addField("Time:", client.utils.get("time")(time), true)
+    .addField("Time:", client.time(time), true)
     .setColor("RED")
     .setFooter("Member Kicked")
     .setTimestamp();
@@ -58,7 +58,7 @@ exports.run = async (client, message, args) => {
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
     .setDescription(`You have been **kicked** in **${message.guild.name}**.`)
     .addField("Reason:", reason, true)
-    .addField("Time:", client.utils.get("time")(time), true)
+    .addField("Time:", client.time(time), true)
     .addField("Global ?", global ? "True" : "False", true)
     .setColor("RED")
     .setFooter("Member Kicked")

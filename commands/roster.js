@@ -20,8 +20,8 @@ exports.run = (client, message, args) => {
 
     // Sort players:
     const roster = players.sort((p1, p2) => p2.teamrank - p1.teamrank).map((player) => {
-        if (league == "mscl") return `${client.msclGarbage.get(player.teamrank)}${client.utils.get("escape")(player.displayname)}${client.emojiMap.get(player.leaguerank)}`;
-        return `${client.utils.get("escape")(player.displayname)}${client.teamRankMap.get(player.teamrank)}${client.emojiMap.get(player.leaguerank)}`;
+        if (league == "mscl") return `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`;
+        return `${client.escape(player.displayname)}${client.teamRankMap.get(player.teamrank)}${client.emojiMap.get(player.leaguerank)}`;
     }); 
 
     // Construct embed:

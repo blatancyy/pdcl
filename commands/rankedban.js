@@ -65,7 +65,7 @@ exports.run = async(client, message, args) => {
     member.user.send({embed: dmEmbed}).catch(console.error);
 
     // Upload to DB, providing it's not permanent.
-    let expiry = client.utils.get("time")(time);
+    let expiry = client.time(time);
     if (expiry !== 0) {
         expiry += Date.now();
         

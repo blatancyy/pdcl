@@ -54,7 +54,7 @@ exports.run = async (client, message, args) => {
     global ? message.channel.send("✅ (Global)") : message.channel.send("✅");
 
     // Query mute info to db:
-    let expiry = client.utils.get("time")(time);
+    let expiry = client.time(time);
 
     // Ignore permanent mutes.
     if (expiry !== 0) {

@@ -15,7 +15,7 @@ exports.run = (client, message, args) => {
     if (!levelData) return message.channel.send("You are not ranked yet!");
 
 	let xp = levelData.xp;
-	let XPData = client.utils.get("calculateLevelData")(xp);
+	let XPData = client.calculateLevelData(xp);
     let level = XPData.level;
     let rank = levels.sort((a, b) => b.xp - a.xp).indexOf(levelData) + 1;
     let xpToNext = (XPData.totalToNext - XPData.prevTotalToNext) - XPData.levelXP;

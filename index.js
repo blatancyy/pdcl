@@ -107,7 +107,7 @@ class Bot extends Client {
                 let name = file.split(".")[0];
 
                 console.log(`PDCL v3] Attatching Util: ${name}.`);
-                this.utils.set(name, path);
+                this[name] = path;
             });
         });
     }

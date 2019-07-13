@@ -20,7 +20,7 @@ exports.run = async(client, message, args) => {
     let target = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when unmuting."));
     if (!target) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
-    let time = args[1] ? client.utils.get("time")(args[1]) : "0";
+    let time = args[1] ? client.time(args[1]) : "0";
     let reason = args[2] ? args[2].replace("--g", "") : "None Provided.";
     let global = message.content.endsWith("--g") ? true : false;
 

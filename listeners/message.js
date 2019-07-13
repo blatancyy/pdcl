@@ -27,7 +27,7 @@ module.exports = async (client, message) => {
     
     // Check count-to: id is community count to channel id:
     if (message.channel.id == "554149057673560074") {
-        let valid = await client.utils.get("checkCountTo")(client, message);
+        let valid = await client.checkCountTo(client, message);
         if (!valid) {
             message.delete().catch(console.error);
             message.author.send(`Your message in ${message.channel} has been deleted because it appears to be invalid for the 'count-to' feature. \nIncorrect? Let me know @ fred#5775.`);
@@ -35,7 +35,7 @@ module.exports = async (client, message) => {
     }
 
     // Run Dev's retarded emoji function:
-    client.utils.get("devsReactions")(client, message);
+    client.devsReactions(client, message);
     
 	// Add XP - Extract this to its own util function?
 	if (home && league) { // League is sometimes undefined
@@ -54,7 +54,7 @@ module.exports = async (client, message) => {
 		let userLevelData = leagueLevelData.find((u) => u.id == message.author.id);
 		// If the user is not in the cache, this must be their first message, so create them in cache
 		if (!userLevelData) {
-			userLevelData = await client.utils.get("insertNewUser")(client, message.author.id, league).catch(e => console.log(e));
+			userLevelData = await client.insertNewUser(client, message.author.id, league).catch(e => console.log(e));
 			console.log('after creating user')
 		}
 
@@ -92,7 +92,7 @@ module.exports = async (client, message) => {
                 let lvlUpdatesEntry_g = client.levelUpdates.find((entry) => entry.id == message.author.id && entry.table === "global_levels");
 				
 				let userLevelData_g = client.levels["global"].find((u) => u.id == message.author.id);
-                if (!userLevelData_g) userLevelData_g = await client.utils.get("insertNewUser")(client, message.author.id, "community").catch(e => console.log(e));
+                if (!userLevelData_g) userLevelData_g = await client.insertNewUser(client, message.author.id, "community").catch(e => console.log(e));
                 
                 if (!lvlUpdatesEntry_g) {
                     client.levelUpdates.push({
@@ -108,12 +108,12 @@ module.exports = async (client, message) => {
 				}
 				userLevelData_g.xp += randXP;
 
-				let newLevel_g = client.utils.get("calculateLevelData")(userLevelData.xp).level;
-				userLevelData.level = client.utils.get("checkLevelUp")(client, message, oldLevel_g, newLevel_g);
+				let newLevel_g = client.calculateLevelData(userLevelData.xp).level;
+				userLevelData.level = client.checkLevelUp(client, message, oldLevel_g, newLevel_g);
 			}
 			
-			let newLevel = client.utils.get("calculateLevelData")(userLevelData.xp).level;
-			userLevelData.level = client.utils.get("checkLevelUp")(client, message, oldLevel, newLevel);
+			let newLevel = client.calculateLevelData(userLevelData.xp).level;
+			userLevelData.level = client.checkLevelUp(client, message, oldLevel, newLevel);
 		}
     }
     
