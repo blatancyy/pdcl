@@ -13,8 +13,8 @@ module.exports = async(client, data) => {
 	// Determine the rounds won, so can calc the winner later.
 	let team1 = rows.slice(0, halfwayPos);
 	let team2 = rows.slice(halfwayPos, rows.length);
-	let t1rounds = team1[0].split(" ")[1];
-	let t2rounds = team2[0].split(" ")[1];
+	let t1rounds = +(team1[0].split(" ")[1]);
+	let t2rounds = +(team2[0].split(" ")[1]);
 
 	let t1players = [];
 	let t2players = [];
