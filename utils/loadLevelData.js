@@ -1,6 +1,6 @@
 // Called in ./listeners/ready.js 
 module.exports = async(client) => {
-	const db = await client.utils.get("getDatabasePromise")(client, "discord");
+	const db = await client.getDatabasePromise(client, "discord");
 
 	// League Discords:
 	client.config.leagues.forEach(async(league) => {
@@ -14,7 +14,7 @@ module.exports = async(client) => {
 			.catch(e => console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`));
 
 		client.levels[name] = [];
-		for (const row of rows) row.level = client.utils.get("calculateLevelData")(row.xp).level;
+		for (const row of rows) row.level = client.calculateLevelData(row.xp).level;
 			
 		client.levels[name] = rows;
 		client.levels[name].sort((a, b) => b.xp - a.xp);
@@ -24,7 +24,7 @@ module.exports = async(client) => {
 		.catch(e => console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`));
 
 	client.levels.global = [];
-	for (const row of rows) row.level = client.utils.get("calculateLevelData")(row.xp).level;
+	for (const row of rows) row.level = client.calculateLevelData(row.xp).level;
 		
 	client.levels.global = rows;
 	client.levels.global.sort((a, b) => b.xp - a.xp);
