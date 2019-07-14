@@ -41,7 +41,7 @@ module.exports = async(client, data) => {
 		let difference = won ? roundDifference : 0;
 
 		let elo = client.msclElos.get(name.toLowerCase());
-		if (!elo) elo == 100;
+		if (!elo) elo = 100;
 
 		let p = {
 			ign: name,
