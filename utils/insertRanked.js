@@ -1,6 +1,7 @@
-module.exports = async(client, rows) => {
+module.exports = async(client, content) => {
     let db = client.databases.get("mscl");
-        
+	let rows = content.split('\n');
+
     rows.forEach(async(row) => {
         let args = row.split(" ");
         let ign = args[0];
