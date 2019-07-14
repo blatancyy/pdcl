@@ -1,9 +1,17 @@
 exports.run = async (client, message, args) => {	
-	let allPlayers = await client.processStats(message.content);
+    if (!message.home && message.guild.id !== "542820537412616192") return;
+    if (message.hub) return;
+
+    let league = client.config.leagues.find((l) => l.id == message.guild.id);
+    if (!league.name !== "mscl" && message.guild.id !== "542820537412616192") return;
+
+    if (!league.config.ranked.stats.includes(message.author.id)) return;
+
+	let allPlayers = await client.processStats(client, message.content);
     let mappedPlayers = allPlayers.map((p) => `IGN: ${p.ign} | Rounds Played : ${p.rounds} | K: ${p.kills} | D: ${p.deaths} | W ? ${p.win} | L ? ${p.lost} | Tied ? ${p.tied} | Elo: ${p.elo} | + Elo: ${p.calculatedElo}.`);
 
     message.channel.send(`\`\`\`\n${mappedPlayers.join("\n")}\n\`\`\``);
-    message.channel.send("Is the above information correct? Reply yes/no.");
+    message.channel.send("Is the above information correct? Reply yes/no. If no, let @ fred#5775 know asap.");
 
 	let confirmation = await message.channel.awaitMessages((msg) => msg.author.id == message.author.id, { max: 1, time: 120000, errors: ['time'] })
 		.catch(() => message.channel.send('Aborting stats insert. --> Time Ran Out!'));
