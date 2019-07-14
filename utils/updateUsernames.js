@@ -1,6 +1,6 @@
 module.exports = async(client, players, dbInfo) => {
-    let db = await createNewConnection(client, dbInfo.name);
-    if (!db) return console.log(`Failed to create a new connection with db name: ${dbInfo.name}`);
+    let db = await createNewConnection(client, dbInfo.db);
+    if (!db) return console.log(`Failed to create a new connection with db name: ${dbInfo.db}`);
 
     players.forEach((player) => {
         let current = player.displayname;
@@ -17,7 +17,7 @@ module.exports = async(client, players, dbInfo) => {
             console.log(`[QUERY] UPDATE ${dbInfo.table} SET displayname = "${updated}" WHERE displayname = "${current}";`)
             db.execute(`UPDATE ${dbInfo.table} SET displayname = "${updated}" WHERE displayname = "${current}";`).catch(e => console.log(e));
 
-            console.log(`[PDCL v3][UPDATE USERNAMES] Successfully updated username in league: ${dbInfo.name} for ${dbInfo.table}, : ${current} --> ${updated}.`);
+            console.log(`[PDCL v3][UPDATE USERNAMES] Successfully updated username in league: ${dbInfo.db} for ${dbInfo.table}, : ${current} --> ${updated}.`);
         });
     });
 
