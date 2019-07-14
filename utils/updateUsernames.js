@@ -1,5 +1,5 @@
 module.exports = async(client, players, dbInfo) => {
-    let db = await createNewConnection(dbInfo.name);
+    let db = await createNewConnection(client, dbInfo.name);
     if (!db) return console.log(`Failed to create a new connection with db name: ${dbInfo.name}`);
 
     players.forEach((player) => {
