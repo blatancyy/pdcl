@@ -14,7 +14,7 @@ exports.run = async(client, message, args) => {
     let elo = client.msclElos.get(username);
     let startingElo = elo ? elo : 0;
 
-    message.channel.send(`Successfully found player: ${username}! Starting Elo: ${elo}. \nIs this info wrong? Let me know at @ fred#5775.`);
+    message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let me know at @ fred#5775.`);
     
     let table = league.config.ranked.table;
     await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
