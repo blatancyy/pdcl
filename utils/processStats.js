@@ -97,7 +97,7 @@ module.exports = async(client, data) => {
 	t1players.forEach((p) => calculateElo(p, t1players, t2players));
 	t2players.forEach((p) => calculateElo(p, t2players, t1players));
 
-	let allPlayers = t1players + t2players;
+	let allPlayers = t1players.concat(t2players);
 	return allPlayers;
 }
 
