@@ -138,8 +138,6 @@ const calculateElo = (p, team, enemy) => {
 		This one factor means we have to store all players elo in cache, which upsets me but w/e. It's important.
 		If we use keyv to make a simple map of (name --> ign) then this will be so much easier!
 	*/							   
-		
-	console.log(`lengths: ${team.length} : ${enemy.length}`);
 
 	let t1TotalElo = 0;
 	team.forEach((player) => t1TotalElo += player.elo);
@@ -153,7 +151,6 @@ const calculateElo = (p, team, enemy) => {
 	let totalAvgElo = totalElo / (team.length + enemy.length);
 
 	let eloDifferenceFactor = ((Math.abs(t1AvgElo) - Math.abs(t2AvgElo)) / (4 * totalAvgElo));
-	console.log((`(${Math.abs(t1AvgElo)} - ${Math.abs(t2AvgElo)}) / (4 * ${totalAvgElo})`));
 
 	// Performance Factor: '(take the players kills per round minus his teams average kills per round) / 3;'
 	let indKillsPerRound = p.kills / p.rounds;
@@ -166,8 +163,6 @@ const calculateElo = (p, team, enemy) => {
 	});
 
 	let teamAvgKillsPerRound = teamTotalKills / team.length;
-
-	console.log(`(${indKillsPerRound} - ${teamAvgKillsPerRound}) / 3`);
 	let performanceFactor = (indKillsPerRound - teamAvgKillsPerRound) / 3;
 
 	// Carry Bonus: If your KPR > 1.5 * (TeamAvgKPR), = 5;
@@ -177,6 +172,5 @@ const calculateElo = (p, team, enemy) => {
 
 	// Finally, calculate and edit players elo:
 	let elo = (20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus);
-	console.log(`20 * ${roundDifferenceFactor} * ${playerNumber} * ${result} * (1 + ${result} * ${eloDifferenceFactor}) * (1 + ${result} * ${performanceFactor}) + ${carryBonus}); \n == ${elo}`);
 	return p.calculatedElo = elo;
 }
