@@ -1,9 +1,9 @@
 exports.run = async (client, message, args) => {	
-    if (!message.home && message.guild.id !== "542820537412616192") return;
+    if (!message.home) return;
     if (message.hub) return;
 
-    let league = client.config.leagues.find((l) => l.id == message.guild.id);
-    if (!league.name !== "mscl" && message.guild.id !== "542820537412616192") return;
+    let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
+    if (!league.name !== "mscl") return;
 
     if (!league.config.ranked.stats.includes(message.author.id)) return;
 
