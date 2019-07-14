@@ -1,51 +1,18 @@
-exports.run = async (client) => {
-    client.config.leagues.forEach(async(league) => {
-        let name = league.config.name;
-        let players = client.players[name];
-
-        // Make a new db connection to not exceed connectionLimit:
-        let db = await createNewConnection(client, league.config.database);
-        if (!db) return console.log(`[PDCL v3][UPDATE USERNAMES] Failed to create new connection for ${name}.`);
-
-        console.log(`[PDCL v3][UPDATE USERNAMES] Created new database for: ${name}.`);
-
-        players.forEach((player) => {
-            let current = player.displayname;
-            let uuid = clean(player.uuid);
-            if (!uuid) return console.log(`[PDCL v3][UPDATE USERNAMES] Was supplied an invalid UUID: ${uuid}`);
-
-            client.request.get({url: `https://api.mojang.com/user/profiles/${uuid}/names`, json: true}, (e, r, b) => {
-                if (!b) return console.log(`[PDCL v3][UPDATE USERNAMES] Didn't receive a response w/ UUID: ${uuid}.`);
-                if (b.constructor.name !== "Array") return console.log(`[PDCL v3][UPDATE USERNAMES] Response is not an array: ${b}`);
-
-                let updated = b.pop().name;
-                if (current == updated) return;
-
-                console.log(`[QUERY] UPDATE players SET displayname = "${updated}" WHERE displayname = "${current}";`)
-				db.execute(`UPDATE players SET displayname = "${updated}" WHERE displayname = "${current}";`).catch(e => console.log(e));
-
-                console.log(`[PDCL v3][UPDATE USERNAMES] Successfully updated username in league: ${name}, : ${current} --> ${updated}.`);
-            });
-        });
-    });
+exports.time = 60000 * 60 * 2;
+exports.run = async(client) => {
+	for (const league of client.config.leagues) {
+        let ranked = league.config.ranked.status;
+        let rankedTable = league.config.ranked.table;
+        let database = league.config.database;
+		
+		client.updateUsernames(client, client.players[league.config.name], { db: database, table: "players"})
+        
+        if (ranked) {
+            const db = client.databases.get(league.config.name);
+            const [rows, fields] = db.execute(`SELECT * FROM ${league.config.ranked.table};`)
+            client.updateUsernames(client, rows, {db: database, table: rankedTable});
+        }
+        
+        await client.wait(1000 * 60 * 15);
+	}
 }
-
-const clean = (uuid) => {
-    if (typeof(uuid) !== "string") return false;
-    return uuid.replace(/-/g, "");
-}
-
-const createNewConnection = async (client, database) => {
-	const connection = await client.mysql.createPool({
-		connectionLimit: 100,
-		host: "localhost", 
-		user: client.config.credentials.mysql.username,
-		password: client.config.credentials.mysql.password,
-		database: database
-	});
-
-	await connection.getConnection().catch(e => console.log(`[PDCL v3][UPDATE USERNAMES] Failed to establish new connection: \n${e}`));
-	return Promise.resolve(connection);
-}
-
-exports.time = 60000 * 60 * 8;
