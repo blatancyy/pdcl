@@ -13,8 +13,8 @@ module.exports = async(client, data) => {
 	// Determine the rounds won, so can calc the winner later.
 	let team1 = rows.slice(0, halfwayPos);
 	let team2 = rows.slice(halfwayPos, rows.length);
-	let t1rounds = team1.split(" ")[1];
-	let t2rounds = team2.split(" ")[1];
+	let t1rounds = team1[0].split(" ")[1];
+	let t2rounds = team2[0].split(" ")[1];
 
 	let t1players = [];
 	let t2players = [];
@@ -41,7 +41,7 @@ module.exports = async(client, data) => {
 		let difference = won ? roundDifference : 0;
 
 		let elo = await client.msclElos.get(name.toLowerCase());
-		if (elo) elo == 100;
+		if (!elo) elo == 100;
 
 		let p = {
 			ign: name,
@@ -53,7 +53,8 @@ module.exports = async(client, data) => {
 			roundDifference: difference,
 			elo: elo,
 			calculatedElo: 0,
-			rounds: totalRounds
+			rounds: totalRounds,
+			carry: 0
 		}
 
 		t1players.push(p);
@@ -86,7 +87,8 @@ module.exports = async(client, data) => {
 			roundDifference: difference,
 			elo: elo,
 			calculatedElo: 0,
-			rounds: totalRounds
+			rounds: totalRounds,
+			carry: 0
 		}
 
 		t2players.push(p);
@@ -168,6 +170,7 @@ const calculateElo = (p, team, enemy) => {
 	// Carry Bonus: If your KPR > 1.5 * (TeamAvgKPR), = 5;
 	let carryBonus = 0;
 	if (indKillsPerRound > (1.5 * teamAvgKillsPerRound)) carryBonus = 5;
+	if (carryBonus == 5) p.carry = 1;
 
 	// Finally, calculate and edit players elo:
 	let elo = (20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus);
