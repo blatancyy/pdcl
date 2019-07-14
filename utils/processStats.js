@@ -26,7 +26,7 @@ module.exports = async(client, data) => {
 	let roundDifference = t1Won ? t1rounds - t2rounds : t2rounds - t1rounds;
 	let totalRounds = t1rounds + t2rounds;
 
-	team1.forEach(async(row) => {
+	team1.forEach((row) => {
 		// Ignore team names:
 		if (!row.includes('-')) return;
 
@@ -40,7 +40,7 @@ module.exports = async(client, data) => {
 		let tied = tie ? 1 : 0;
 		let difference = won ? roundDifference : 0;
 
-		let elo = await client.msclElos.get(name.toLowerCase());
+		let elo = client.msclElos.get(name.toLowerCase());
 		if (!elo) elo == 100;
 
 		let p = {
@@ -60,7 +60,7 @@ module.exports = async(client, data) => {
 		t1players.push(p);
 	});
 
-	team2.forEach(async(row) => {
+	team2.forEach((row) => {
 		// Ignore team names:
 		if (!row.includes('-')) return;
 
@@ -74,7 +74,7 @@ module.exports = async(client, data) => {
 		let tied = tie ? 1 : 0;
 		let difference = won ? roundDifference : 0;
 
-		let elo = await client.msclElos.get(name.toLowerCase());
+		let elo = client.msclElos.get(name.toLowerCase());
 		if (!elo) elo = 100;
 
 		let p = {
@@ -117,7 +117,7 @@ const calculateElo = (p, team, enemy) => {
 
 	if (roundDifference >= 6) roundDifferenceFactor = 1.2;
 	else if (roundDifference < 6 && roundDifference > 3) roundDifferenceFactor = 1.05;
-	else roundDifferenceFactor = 0;
+	else roundDifferenceFactor = 1;
 	
 	// Halve the elo if there's less than 5 players:
 	let playerNumber = 1;
