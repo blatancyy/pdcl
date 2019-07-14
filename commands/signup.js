@@ -3,10 +3,10 @@ exports.run = async(client, message, args) => {
     if (message.hub) return;
 
     if (!args.length > 0) return message.channel.send("Please provide a UUID.");
-    let username = await client.fetchUsername(args[0]);
+    let username = await client.fetchUsername(client, args[0]);
     if (!username) return message.channel.send("Failed to fetch your username.");
 
-    message.channel.send(`Successfully found player: ${username}! Starting Elo: To be done later when we have the db setup after ranked ends.`);
+    message.channel.send(`Successfully found player: ${username}! Starting Elo: to be done later when we have the db setup after ranked ends.`);
 }
 
 exports.help = (client, message, args) => {
