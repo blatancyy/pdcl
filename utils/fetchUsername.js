@@ -1,14 +1,13 @@
-module.exports = (client, uncleaned_uuid) => {
-    let request = client.request;
+module.exports = async (client, uncleaned_uuid) => {
+    let request = client.request_promise;
     let uuid = clean(uncleaned_uuid);
-    var ign = null;
+    let ign = null;
 
-    request.get({url: `https://api.mojang.com/user/profiles/${uuid}/names`, json: true}, (e, r, b) => {
-        if (!b) return;
+    let b = await request({ url: `https://api.mojang.com/user/profiles/${uuid}/names`, json: true });
+    if (!b) return;
         
-        if (b.constructor.name !== "Array") return ign = b.name;
-        ign = b.pop().name;
-    });
+    if (b.constructor.name !== "Array") return ign = b.name;
+    ign = b.pop().name;
 
     return ign;
 }
