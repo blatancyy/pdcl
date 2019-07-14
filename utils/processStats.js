@@ -26,7 +26,7 @@ module.exports = async(client, data) => {
 	let roundDifference = t1Won ? t1rounds - t2rounds : t2rounds - t1rounds;
 	let totalRounds = t1rounds + t2rounds;
 
-	team1.forEach((row) => {
+	await team1.forEach((row) => {
 		// Ignore team names:
 		if (!row.includes('-')) return;
 
@@ -60,7 +60,7 @@ module.exports = async(client, data) => {
 		t1players.push(p);
 	});
 
-	team2.forEach((row) => {
+	await team2.forEach((row) => {
 		// Ignore team names:
 		if (!row.includes('-')) return;
 
@@ -157,7 +157,8 @@ const calculateElo = (p, team, enemy) => {
 	
 	let teamsKillsPerRound = [];
 	team.forEach((player) => {
-		if (player.name.toLowerCase() == p.name.toLowerCase()) return;
+		console.log(player);
+		if (player.ign.toLowerCase() == p.ign.toLowerCase()) return;
 		let kpr = player.kills / player.rounds;
 		teamsKillsPerRound.push(kpr);
 	});
