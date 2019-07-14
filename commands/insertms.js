@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
     if (!league.config.ranked.stats.includes(message.author.id)) return;
 
 	let allPlayers = await client.processStats(client, message.content);
-    let mappedPlayers = allPlayers.map((p) => `IGN: ${p.ign} | Rounds Played : ${p.rounds} | K: ${p.kills} | D: ${p.deaths} | W ? ${p.win} | L ? ${p.lost} | Tied ? ${p.tied} | Elo: ${p.elo} | + Elo: ${p.calculatedElo}.`);
+    let mappedPlayers = allPlayers.map((p) => `IGN: ${p.ign} | Rounds Played : ${p.rounds} | K: ${p.kills} | D: ${p.deaths} | W ? ${p.win} | L ? ${p.loss} | Tied ? ${p.tie} | Elo: ${p.elo} | + Elo: ${p.calculatedElo}.`);
 
     message.channel.send(`\`\`\`\n${mappedPlayers.join("\n")}\n\`\`\``);
     message.channel.send("Is the above information correct? Reply yes/no. If no, let @ fred#5775 know asap.");
