@@ -1,9 +1,10 @@
 exports.run = async (client, message, args) => {	
     if (!message.home) return;
     if (message.hub) return;
+    if (!args.length > 0) return message.channel.send("Please provide the exported stats.");
 
     let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
-    if (!league.config.name !== "mscl") return;
+    if (league.config.name !== "mscl") return;
 
     if (!league.config.ranked.stats.includes(message.author.id)) return;
 
