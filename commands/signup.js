@@ -11,7 +11,7 @@ exports.run = async(client, message, args) => {
     let username = await client.fetchUsername(client, uuid);
     if (!username) return message.channel.send("Failed to fetch your username.");
 
-    const player = await db.execute(`SELECT name FROM ranked_s5 WHERE uuid = "${uuid}"`);
+    const player = await db.execute(`SELECT displayname FROM ranked_s5 WHERE uuid = "${uuid}"`);
     if (player) return message.channel.send("Already found this UUID in the database, will not duplicate.");
 
     let elo = client.msclElos.get(username);
