@@ -65,8 +65,8 @@ module.exports = async(client, data) => {
 		if (!row.includes('-')) return;
 
 		let name = row.split(' ')[0];
-		let k = row.split(' ')[1].split('-')[0];
-		let d = row.split(' ')[1].split('-')[1];
+		let k = +(row.split(' ')[1].split('-')[0]);
+		let d = +(row.split(' ')[1].split('-')[1]);
 		
 		// Probably a faster way to do this but: , storing as int value for ease of use when updating db.
 		let won = t2Won ? 1 : 0
@@ -150,14 +150,14 @@ const calculateElo = (p, team, enemy) => {
 	let totalElo = t1TotalElo + t2TotalElo;
 	let totalAvgElo = totalElo / (team.length + enemy.length);
 
-	let eloDifferenceFactor = ((Math.abs(t1AvgElo) - Math.abs(t2AvgElo)) / ( 4 * totalAvgElo));
+	let eloDifferenceFactor = ((Math.abs(t1AvgElo) - Math.abs(t2AvgElo)) / (4 * totalAvgElo));
+	console.log((`${Math.abs(t1AvgElo)} - ${Math.abs(t2AvgElo)}) / ( 4 * ${totalAvgElo}`));
 
 	// Performance Factor: '(take the players kills per round minus his teams average kills per round) / 3;'
 	let indKillsPerRound = p.kills / p.rounds;
 	
 	let teamsKillsPerRound = [];
 	team.forEach((player) => {
-		console.log(player);
 		if (player.ign.toLowerCase() == p.ign.toLowerCase()) return;
 		let kpr = player.kills / player.rounds;
 		teamsKillsPerRound.push(kpr);
@@ -166,6 +166,7 @@ const calculateElo = (p, team, enemy) => {
 	let teamAvgKillsPerRound;
 	teamsKillsPerRound.forEach((kpr) => teamAvgKillsPerRound += kpr);
 
+	console.log(`(${indKillsPerRound} - ${teamAvgKillsPerRound}) / 3`);
 	let performanceFactor = (indKillsPerRound - teamAvgKillsPerRound) / 3;
 
 	// Carry Bonus: If your KPR > 1.5 * (TeamAvgKPR), = 5;
@@ -175,6 +176,6 @@ const calculateElo = (p, team, enemy) => {
 
 	// Finally, calculate and edit players elo:
 	let elo = (20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus);
-	console.log(`20 * ${roundDifferenceFactor} * ${playerNumber} * ${result} * (1 + $[result} * ${eloDifferenceFactor}) * (1 + ${result} * ${performanceFactor}) + ${carryBonus}); \n == ${elo}`);
+	console.log(`20 * ${roundDifferenceFactor} * ${playerNumber} * ${result} * (1 + ${result} * ${eloDifferenceFactor}) * (1 + ${result} * ${performanceFactor}) + ${carryBonus}); \n == ${elo}`);
 	return p.calculatedElo = elo;
 }
