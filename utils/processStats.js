@@ -138,12 +138,14 @@ const calculateElo = (p, team, enemy) => {
 		This one factor means we have to store all players elo in cache, which upsets me but w/e. It's important.
 		If we use keyv to make a simple map of (name --> ign) then this will be so much easier!
 	*/							   
+		
+	console.log(`lengths: ${team.length} : ${enemy.length}`);
 
-	let t1TotalElo;
+	let t1TotalElo = 0;
 	team.forEach((player) => t1TotalElo += player.elo);
 	let t1AvgElo = t1TotalElo / team.length;
 	
-	let t2TotalElo;
+	let t2TotalElo = 0;
 	enemy.forEach((player) => t2TotalElo += player.elo);
 	let t2AvgElo = t2TotalElo / enemy.length;
 
@@ -151,20 +153,19 @@ const calculateElo = (p, team, enemy) => {
 	let totalAvgElo = totalElo / (team.length + enemy.length);
 
 	let eloDifferenceFactor = ((Math.abs(t1AvgElo) - Math.abs(t2AvgElo)) / (4 * totalAvgElo));
-	console.log((`${Math.abs(t1AvgElo)} - ${Math.abs(t2AvgElo)}) / ( 4 * ${totalAvgElo}`));
+	console.log((`(${Math.abs(t1AvgElo)} - ${Math.abs(t2AvgElo)}) / (4 * ${totalAvgElo})`));
 
 	// Performance Factor: '(take the players kills per round minus his teams average kills per round) / 3;'
 	let indKillsPerRound = p.kills / p.rounds;
 	
-	let teamsKillsPerRound = [];
+	let teamTotalKills = 0;
 	team.forEach((player) => {
 		if (player.ign.toLowerCase() == p.ign.toLowerCase()) return;
 		let kpr = player.kills / player.rounds;
-		teamsKillsPerRound.push(kpr);
+		teamTotalKills += kpr;
 	});
 
-	let teamAvgKillsPerRound;
-	teamsKillsPerRound.forEach((kpr) => teamAvgKillsPerRound += kpr);
+	let teamAvgKillsPerRound = teamTotalKills / team.length;
 
 	console.log(`(${indKillsPerRound} - ${teamAvgKillsPerRound}) / 3`);
 	let performanceFactor = (indKillsPerRound - teamAvgKillsPerRound) / 3;
