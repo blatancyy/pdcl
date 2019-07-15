@@ -13,6 +13,6 @@ exports.run = async(client) => {
             client.updateUsernames(client, rows, {db: database, table: rankedTable});
         }
         
-        await client.wait(1000 * 60 * 15);
+        // await client.wait(1000 * 60 * 15);
 	}
 }
