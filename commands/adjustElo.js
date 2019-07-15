@@ -11,10 +11,10 @@ exports.run = async(client, message, args) => {
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
 	let foundElo = client.msclElos.get(player);
-	if (!foundElo) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+	if (!foundElo && foundElo !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
-	if (!elo.includes("+") || !elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
+	if (!elo.includes("+") && !elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
 	if (!elo) return message.channel.send("Please provide an amount of add or subtract.");
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
