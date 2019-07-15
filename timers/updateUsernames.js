@@ -2,7 +2,7 @@ exports.time = 60000 * 60 * 2;
 exports.run = async(client) => {
 	for (const league of client.config.leagues) {
         let ranked = league.config.ranked.status;
-        if (!ranked) return;
+        if (!ranked) continue;
         console.log(league);
         
         let rankedTable = league.config.ranked.table;
