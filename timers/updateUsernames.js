@@ -9,7 +9,7 @@ exports.run = async(client) => {
         
         if (ranked) {
             const db = client.databases.get(league.config.name);
-            const [rows, fields] = db.execute(`SELECT * FROM ${league.config.ranked.table};`)
+            const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table};`)
             client.updateUsernames(client, rows, {db: database, table: rankedTable});
         }
         
