@@ -1,5 +1,5 @@
 exports.aliases = ['e'];
-exports.run = (client, message, args) => {
+exports.run = async(client, message, args) => {
     if (!client.config.eval.includes(message.author.id)) return;
     let error = false;
     const input = args.join(" ");
