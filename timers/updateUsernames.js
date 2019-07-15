@@ -12,7 +12,7 @@ exports.run = async(client) => {
             const db = client.databases.get(league.config.name);
             const [rows, fields] = await db.execute(`SELECT * FROM ${rankedTable};`);
             
-            client.updateUsernames(client, rows, {db: database, table: rankedTable});
+            client.updateUsernames(client, rows, { db: database, table: rankedTable });
             console.log("Successfully updated player usernames for ${league.config.name.toUpperCase()} for RANKED.");
         }
         
