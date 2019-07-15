@@ -22,6 +22,7 @@ exports.run = async(client, message, args) => {
     
     let table = league.config.ranked.table;
     await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
+    client.msclElos.set(username, startingElo);
     console.log(`Successfully set ${username}'s (${uuid}) starting elo to ${startingElo}.`);
 }
 
