@@ -1,4 +1,3 @@
-exports.aliases = ["ar"];
 module.exports = async(client, content) => {
     console.log("Running insert ranked ")
 
@@ -17,8 +16,4 @@ module.exports = async(client, content) => {
 
         console.log(`Successfully added player ${ign} to the ranked_s5 table with elo: ${elo}, and uuid: ${uuid}.`);
     });
-}
-
-exports.help = (client, message, args) => {
-    return;
 }
