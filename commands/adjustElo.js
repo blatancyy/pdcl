@@ -22,14 +22,15 @@ exports.run = async(client, message, args) => {
 	// Using +(elo) to make sure it's a number.
 	let newElo = foundElo + (+elo); 
 	client.msclElos.set(player, newElo);
+
+	var e = false;
 	await db.execute(`UPDATE ${table} SET elo = ${newElo} WHERE displayname = "${player}";`).catch((e) => {
-		if (e) {
-			console.log(`Error whilst updating someone's elo: ${e}.`);
-			return message.channel.send("Something went wrong. Error has been logged to the console.");
-		} else {			
-			message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${foundElo}.`);
-		}
+		console.log(`Error whilst updating someone's elo: ${e}.`);
+		message.channel.send("Something went wrong. Error has been logged to the console.");
+		e = true;
 	});
+	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${foundElo}.`);	
 }
 
 exports.help = (client, message, args) => {
