@@ -2,10 +2,10 @@ exports.aliases = ['elo'];
 exports.run = async(client, message, args) => {
 	// Idk what this is in the config so you can fix this fred >.> lol nw
 	let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
-	if (!league.ranked.status) return;
-	if (!league.ranked.stats.includes(message.author.id)) return;
+	if (!league.config.ranked.status) return;
+	if (!league.config.ranked.stats.includes(message.author.id)) return;
 
-	let table = league.ranked.table
+	let table = league.config.ranked.table;
 	const db = client.databases.get(league);
 
 	let player = args[0];
@@ -14,6 +14,7 @@ exports.run = async(client, message, args) => {
 	if (!foundElo) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
+	if (!elo.includes("+") || !elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
 	if (!elo) return message.channel.send("Please provide an amount of add or subtract.");
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
