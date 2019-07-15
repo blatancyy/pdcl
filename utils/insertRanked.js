@@ -5,7 +5,7 @@ module.exports = async(client, content) => {
 	let rows = content.split('\n');
 
     rows.forEach(async(row) => {
-        if (row.includes("!")) row = row.slice(3);
+        if (row.includes("!")) row = row.slice(4);
         let args = row.split(" ");
         let ign = args[0];
         let uuid = args[1];
