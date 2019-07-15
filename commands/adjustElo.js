@@ -1,22 +1,33 @@
 exports.aliases = ['elo'];
-exports.run = (client, message, args) => {
-
-	// Idk what this is in the config so you can fix this fred >.>
-	if (["207896400539680778", "254728052070678529", "172823248860479488", "581945828235542548", "230520062337875969", "260514084305240064", "275302433335410688", "137364424775172097", "133277137607196673", "172855017999564800", "109119035072888832", "232281870501543938"]
-		.some(id => id !== message.author.id)) return;
-
+exports.run = async(client, message, args) => {
+	// Idk what this is in the config so you can fix this fred >.> lol nw
 	let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
 	if (!league.ranked.status) return;
+	if (!league.ranked.stats.includes(message.author.id)) return;
+
 	let table = league.ranked.table
 	const db = client.databases.get(league);
-	
-	if (!client.msclElos.has(args[0].toLowerCase())) return message.channel.send(`Couldn't find player ${args[0]}.`);
-	if (isNaN(args[1])) return message.channel.send(`Elo needs to be a number.`);
 
-	let elo = client.msclElos.get(args[0]);
-	// Do we need to add to database too? I'm too tired
-	client.msclElos.set(args[0], elo + args[1]);
-	message.channel.send(`Successfully adjust ${args[0]}'s elo from ${elo} to ${client.msclElos.get(args[0])}`);
+	let player = args[0];
+	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
+	let foundElo = client.msclElos.get(player);
+	if (!foundElo) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+
+	let elo = args[1];
+	if (!elo) return message.channel.send("Please provide an amount of add or subtract.");
+	if (isNaN(elo)) return message.channel.send("Please provide a number.");
+
+	// Using +(elo) to make sure it's a number.
+	let newElo = foundElo + +(elo); 
+	client.msclElos.set(player, newElo);
+	await db.execute(`UPDATE ${table} SET elo = ${newElo} WHERE displayname = "${player}";`).catch((e) => {
+		if (e) {
+			console.log(`Error whilst updating someone's elo: ${e}.`);
+			return message.channel.send("Something went wrong. Error has been logged to the console.");
+		} else {			
+			message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${foundElo}.`);
+		}
+	});
 }
 
 exports.help = (client, message, args) => {
@@ -27,7 +38,7 @@ exports.help = (client, message, args) => {
     .addField("Description:", "Add to or subtract from a player's elo.")
     .addField("Usage:", "`!elo <IGN> <±amount of elo>`")
     .setColor("DARK_AQUA")
-    .setFooter("!flip")
+    .setFooter("!elo")
     .setTimestamp();
 
     message.channel.send({embed: helpEmbed});
