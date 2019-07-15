@@ -1,20 +1,19 @@
 exports.time = 60000 * 60 * 2;
 exports.run = async(client) => {
 	for (const league of client.config.leagues) {
-        let ranked = league.config.ranked.status;
-        if (!ranked) continue;
-        console.log(league);
-        
+        let ranked = league.config.ranked.status;        
         let rankedTable = league.config.ranked.table;
         let database = league.config.database;
 		
 		client.updateUsernames(client, client.players[league.config.name], { db: database, table: "players"});
-        console.log('updatedUsernames complete');
-        if (ranked) {
+        console.log(`Successfully updated player usernames for ${league.config.name.toUpperCase()}.`);
+
+        if (!ranked) {
             const db = client.databases.get(league.config.name);
             const [rows, fields] = await db.execute(`SELECT * FROM ${rankedTable};`);
-            console.log(rows);
+            
             client.updateUsernames(client, rows, {db: database, table: rankedTable});
+            console.log("Successfully updated player usernames for ${league.config.name.toUpperCase()} for RANKED.");
         }
         
         await client.wait(1000 * 60 * 15);

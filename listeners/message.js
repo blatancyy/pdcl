@@ -42,7 +42,6 @@ module.exports = async (client, message) => {
 		
 		// XP to be added for sending a message (between 15 and 25)
         let randXP = (Math.floor(Math.random() * 10) + 15); 
-		if (message.guild.id == '542848649202499584') randXP *= 5;
 		
 		// Table that corrosponds to message.guild's xp storage.
         let table = client.config.leagues.find((l) => l.config.name == league).config.level_table; 
