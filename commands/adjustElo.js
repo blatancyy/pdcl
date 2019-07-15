@@ -6,7 +6,7 @@ exports.run = async(client, message, args) => {
 	if (!league.config.ranked.stats.includes(message.author.id)) return;
 
 	let table = league.config.ranked.table;
-	const db = client.databases.get(league);
+	const db = client.databases.get(message.league);
 
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
@@ -14,12 +14,13 @@ exports.run = async(client, message, args) => {
 	if (!foundElo && foundElo !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
+	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
 	if (!elo.includes("+") && !elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
 	if (!elo) return message.channel.send("Please provide an amount of add or subtract.");
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
 	// Using +(elo) to make sure it's a number.
-	let newElo = foundElo + +(elo); 
+	let newElo = foundElo + (+elo); 
 	client.msclElos.set(player, newElo);
 	await db.execute(`UPDATE ${table} SET elo = ${newElo} WHERE displayname = "${player}";`).catch((e) => {
 		if (e) {
