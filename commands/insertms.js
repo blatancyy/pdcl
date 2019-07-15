@@ -1,3 +1,4 @@
+exports.aliases = ["stats"];
 exports.run = async (client, message, args) => {	
     if (!message.home) return;
     if (message.hub) return;
@@ -11,7 +12,7 @@ exports.run = async (client, message, args) => {
 	let allPlayers = await client.processStats(client, message.content);
     let mappedPlayers = allPlayers.map((p) => `IGN: ${p.ign} | Rounds Played : ${p.rounds} | K: ${p.kills} | D: ${p.deaths} | W ? ${p.win} | L ? ${p.loss} | Tied ? ${p.tie} | Elo: ${p.elo} | + Elo: ${p.calculatedElo}.\n`);
 
-    message.channel.send(`\`\`\`\n${mappedPlayers.join("\n")}\n\`\`\``);
+    message.channel.send(`\`\`\`\n${mappedPlayers.join("\n")}\n\nby ${message.author.tag}\n\`\`\``);
     message.channel.send("Is the above information correct? Reply yes/no. If no, let @ fred#5775 know asap.");
 
 	let confirmation = await message.channel.awaitMessages((msg) => msg.author.id == message.author.id, { max: 1, time: 120000, errors: ['time'] })
@@ -21,6 +22,17 @@ exports.run = async (client, message, args) => {
     if (confirmation.first().content.toLowerCase() != 'yes') return message.channel.send('Aborting stats insert. --> User Cancelled!');
 
     // Update into db for each player :D. We will want to catch and SEND TO CHANNEL if can't find an ign.
+    let db = client.databases.get(message.league);
+    let table = league.config.ranked.table;
+
+    allPlayers.forEach(async(p) => {
+        let foundElo = client.msclElos.get(p.ign);
+        if (!foundElo) return message.channel.send(`The player '${p.ign}' doesn't seem to be in our database. Their stats have not been updated and their elo was assumed as 100.`);
+
+        client.msclElos.set(p.ign, foundElo + p.elo);
+        await db.execute(`UPDATE ${table} SET kills = kills + ${p.kills}, deaths = deaths + ${p.deaths}, wins = wins + ${p.won}, losses = losses + ${p.lost}, draws = draws + ${p.tie}, games_played = games_played + 1, games_carried = games_carried + ${p.carry}, elo = elo + ${p.calculatedElo} WHERE displayname = "${p.ign}";`).catch(console.error);
+        console.log(`Successfully updated stats for ${p.ign}.`);
+    });
 }
 
 exports.help = (client, message, args) => {

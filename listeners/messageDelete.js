@@ -12,7 +12,7 @@ module.exports = (client, message) => {
 
     const logEmbed = new client.djs.RichEmbed()
     .setAuthor(message.author.tag, message.author.avatarURL)
-    .addField("Content", message.content)
+    .addField("Content", `Here: ${message.content}`)
     .addField("Channel", message.channel)
     .setColor("RED")
     .setFooter("Message Delete")
