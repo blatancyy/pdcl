@@ -27,12 +27,14 @@ exports.run = async (client, message, args) => {
 
     allPlayers.forEach(async(p) => {
         let foundElo = client.msclElos.get(p.ign);
-        if (!foundElo) return message.channel.send(`The player '${p.ign}' doesn't seem to be in our database. Their stats have not been updated and their elo was assumed as 100.`);
+        if (!foundElo && foundElo !== 0) return message.channel.send(`The player '${p.ign}' doesn't seem to be in our database. Their stats have not been updated and their elo was assumed as 0.`);
 
-        client.msclElos.set(p.ign, foundElo + p.elo);
-        await db.execute(`UPDATE ${table} SET kills = kills + ${p.kills}, deaths = deaths + ${p.deaths}, wins = wins + ${p.won}, losses = losses + ${p.lost}, draws = draws + ${p.tie}, games_played = games_played + 1, games_carried = games_carried + ${p.carry}, elo = elo + ${p.calculatedElo} WHERE displayname = "${p.ign}";`).catch(console.error);
+        client.msclElos.set(p.ign, foundElo + p.calculatedElo);
+        await db.execute(`UPDATE ${table} SET kills = kills + ${p.kills}, deaths = deaths + ${p.deaths}, wins = wins + ${p.win}, losses = losses + ${p.loss}, draws = draws + ${p.tie}, games_played = games_played + 1, games_carried = games_carried + ${p.carry}, elo = elo + ${p.calculatedElo} WHERE displayname = "${p.ign}";`).catch(console.error);
         console.log(`Successfully updated stats for ${p.ign}.`);
     });
+
+    message.channel.send("✅");
 }
 
 exports.help = (client, message, args) => {
