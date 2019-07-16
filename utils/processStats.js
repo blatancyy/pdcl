@@ -160,14 +160,19 @@ const calculateElo = (p, team, enemy) => {
 	team.forEach((player) => {
 		let kpr = player.kills / player.rounds;
 		teamTotalKPR += kpr;
+
+		console.log(`player: ${player.ign}, +kills = ${player.kills}`);
 		teamTotalKills += player.kills;
 	});
 
 	let teamAvgKillsPerRound = teamTotalKPR / team.length;
 	let performanceFactor = (indKillsPerRound - teamAvgKillsPerRound) / 3;
 
-	// Carry Bonus: If your KPR > 1.5 * (TeamAvgKPR), = 5;
+	// Carry Bonus: If your total kills > 1.5 * (team average kills), = 5;
 	let carryBonus = 0;
+
+	console.log(`total kills ${teamTotalKills}. team.length: ${team.length}`);
+	console.log(`PLAYER: ${p.ign} : KILLS : ${p.kills} :::::::: ${p.kills > (1.5 * (teamTotalKills / team.length))}`)
 	if (p.kills > (1.5 * (teamTotalKills / team.length))) carryBonus = 5;
 	if (carryBonus == 5) p.carry = 1;
 
