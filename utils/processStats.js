@@ -40,7 +40,7 @@ module.exports = async(client, data) => {
 		let tied = tie ? 1 : 0;
 		let difference = won ? roundDifference : 0;
 
-		let elo = client.msclElos.get(name.toLowerCase());
+		let elo = client.msclElos.get(name);
 		if (!elo && elo !== 0) elo = 0;
 
 		let p = {
@@ -74,7 +74,7 @@ module.exports = async(client, data) => {
 		let tied = tie ? 1 : 0;
 		let difference = won ? roundDifference : 0;
 
-		let elo = client.msclElos.get(name.toLowerCase());
+		let elo = client.msclElos.get(name);
 		if (!elo && elo !== 0) elo = 0;
 
 		let p = {
