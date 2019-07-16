@@ -158,7 +158,6 @@ const calculateElo = (p, team, enemy) => {
 	let teamTotalKPR = 0;
 	let teamTotalKills = 0;
 	team.forEach((player) => {
-		if (player.ign.toLowerCase() == p.ign.toLowerCase()) return;
 		let kpr = player.kills / player.rounds;
 		teamTotalKPR += kpr;
 		teamTotalKills += player.kills;
