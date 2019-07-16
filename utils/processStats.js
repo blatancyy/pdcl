@@ -155,19 +155,21 @@ const calculateElo = (p, team, enemy) => {
 	// Performance Factor: '(take the players kills per round minus his teams average kills per round) / 3;'
 	let indKillsPerRound = p.kills / p.rounds;
 	
+	let teamTotalKPR = 0;
 	let teamTotalKills = 0;
 	team.forEach((player) => {
 		if (player.ign.toLowerCase() == p.ign.toLowerCase()) return;
 		let kpr = player.kills / player.rounds;
-		teamTotalKills += kpr;
+		teamTotalKPR += kpr;
+		teamTotalKills += player.kills;
 	});
 
-	let teamAvgKillsPerRound = teamTotalKills / team.length;
+	let teamAvgKillsPerRound = teamTotalKPR / team.length;
 	let performanceFactor = (indKillsPerRound - teamAvgKillsPerRound) / 3;
 
 	// Carry Bonus: If your KPR > 1.5 * (TeamAvgKPR), = 5;
 	let carryBonus = 0;
-	if (p.kills > (1.5 * teamAvgKillsPerRound)) carryBonus = 5;
+	if (p.kills > (1.5 * teamTotalKills)) carryBonus = 5;
 	if (carryBonus == 5) p.carry = 1;
 
 	// Finally, calculate and edit players elo:
