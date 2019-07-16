@@ -31,8 +31,8 @@ module.exports = async(client, data) => {
 		if (!row.includes('-')) return;
 
 		let name = row.split(' ')[0];
-		let k = row.split(' ')[1].split('-')[0];
-		let d = row.split(' ')[1].split('-')[1];
+		let k = +(row.split(' ')[1].split('-')[0]);
+		let d = +(row.split(' ')[1].split('-')[1]);
 		
 		// Probably a faster way to do this but: , storing as int value for ease of use when updating db.
 		let won = t1Won ? 1 : 0
@@ -160,8 +160,6 @@ const calculateElo = (p, team, enemy) => {
 	team.forEach((player) => {
 		let kpr = player.kills / player.rounds;
 		teamTotalKPR += kpr;
-
-		console.log(`player: ${player.ign}, +kills = ${player.kills}`);
 		teamTotalKills += player.kills;
 	});
 
@@ -171,8 +169,6 @@ const calculateElo = (p, team, enemy) => {
 	// Carry Bonus: If your total kills > 1.5 * (team average kills), = 5;
 	let carryBonus = 0;
 
-	console.log(`total kills ${teamTotalKills}. team.length: ${team.length}`);
-	console.log(`PLAYER: ${p.ign} : KILLS : ${p.kills} :::::::: ${p.kills > (1.5 * (teamTotalKills / team.length))}`)
 	if (p.kills > (1.5 * (teamTotalKills / team.length))) carryBonus = 5;
 	if (carryBonus == 5) p.carry = 1;
 
