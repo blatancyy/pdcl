@@ -35,6 +35,7 @@ exports.run = async (client, message, args) => {
     });
 
     message.channel.send("✅");
+    message.guild.channels.find((c) => c.name.toLowerCase() == "ranked-stats").send(`\`\`\`\n${mappedPlayers.join("\n")}\n\nby ${message.author.tag}\n\`\`\``);
 }
 
 exports.help = (client, message, args) => {
