@@ -7,7 +7,8 @@ exports.run = async (client, message, args) => {
     let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
     if (league.config.name !== "mscl") return;
 
-    if (!league.config.ranked.stats.includes(message.author.id)) return;
+    let role = message.guild.roles.find((r) => r.name.toLowerCase() == "management");
+    if (!league.config.ranked.stats.includes(message.author.id) && !message.member.roles.has(role.id)) return;
 
 	let allPlayers = await client.processStats(client, message.content);
     let mappedPlayers = allPlayers.map((p) => `IGN: ${p.ign} | Rounds Played : ${p.rounds} | Carry ? ${p.carry} | K: ${p.kills} | D: ${p.deaths} | W ? ${p.win} | L ? ${p.loss} | Tied ? ${p.tie} | Elo: ${p.elo} | + Elo: ${p.calculatedElo}.\n`);
@@ -35,7 +36,6 @@ exports.run = async (client, message, args) => {
     });
 
     message.channel.send("✅");
-    message.guild.channels.find((c) => c.name.toLowerCase() == "ranked-stats").send(`\`\`\`\n${mappedPlayers.join("\n")}\n\nby ${message.author.tag}\n\`\`\``);
 }
 
 exports.help = (client, message, args) => {
