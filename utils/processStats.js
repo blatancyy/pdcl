@@ -167,7 +167,7 @@ const calculateElo = (p, team, enemy) => {
 
 	// Carry Bonus: If your KPR > 1.5 * (TeamAvgKPR), = 5;
 	let carryBonus = 0;
-	if (indKillsPerRound > (1.5 * teamAvgKillsPerRound)) carryBonus = 5;
+	if (p.kills > (1.5 * teamAvgKillsPerRound)) carryBonus = 5;
 	if (carryBonus == 5) p.carry = 1;
 
 	// Finally, calculate and edit players elo:
