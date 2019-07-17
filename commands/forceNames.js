@@ -14,11 +14,16 @@ exports.run = async(client, message, args) => {
     let database = league.config.database;
     if (!ranked) return;    
 
+    // owo
+    message.channel.startTyping();
+
     const db = client.databases.get(league.config.name);
     const [rows, fields] = await db.execute(`SELECT * FROM ${rankedTable};`);
     await client.updateUsernames(client, rows, { db: database, table: rankedTable });
-    
-    // Clear the names, idk why it was bugging otherwise.
+
+    // Cheat method, please help me owo @snowful
+    await client.wait(5000);
+
     console.log("Clearing all current elo data from the mscl elo map!")
     await client.msclElos.clear();
     await client.loadElos(client);
