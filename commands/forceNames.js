@@ -29,4 +29,5 @@ exports.run = async(client, message, args) => {
     await client.loadElos(client);
 
     message.channel.send(`Successfully forced the update username script for \`${rankedTable}\` in database: \`${league.config.name}\`.`);
+    message.channel.stopTyping();
 }
