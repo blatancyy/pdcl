@@ -10,6 +10,8 @@ module.exports = async(client) => {
 
 	const [rows2, fields2] = await db.execute(`SELECT * FROM ranked_s6;`);
 
+	// Clear msclElos first: 
+	client.msclElos.clear();
 	for (const row2 of rows2) {
 		client.msclElos.set(row2.displayname, row2.elo);
 	}
