@@ -17,7 +17,11 @@ exports.run = async(client, message, args) => {
     const db = client.databases.get(league.config.name);
     const [rows, fields] = await db.execute(`SELECT * FROM ${rankedTable};`);
     await client.updateUsernames(client, rows, { db: database, table: rankedTable });
+    
+    // Clear the names, idk why it was bugging otherwise.
+    console.log("Clearing all current elo data from the mscl elo map!")
+    await client.msclElos.clear();
     await client.loadElos(client);
 
-    message.channel.send(`Successfully forced the update username script for ${rankedTable} in database: ${league.config.name}.`);
+    message.channel.send(`Successfully forced the update username script for \`${rankedTable}\` in database: \`${league.config.name}\`.`);
 }
