@@ -1,4 +1,4 @@
-exports.aliases = ["stats"];
+exports.aliases = ["insertms"];
 exports.run = async (client, message, args) => {	
     if (!message.home) return;
     if (message.hub) return;
