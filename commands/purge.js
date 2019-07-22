@@ -22,7 +22,7 @@ exports.run = async (client, message, args) => {
 	let response = responses.first();
 
 	if (response.content.toLowerCase() != 'yes') return message.channel.send(`Canceling message purge.`);
-
+	amount += 3;
 	await message.channel.bulkDelete(amount).catch(console.log)
 	console.log(`bulkDelete of ${amount} messages in ${message.channel.name} by ${message.author.username} was successful.`);
 }
