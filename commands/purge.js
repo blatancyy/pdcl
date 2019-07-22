@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
 
 	if (!hasPerms) return;
 	
-	let amount = args[0];
+	let amount = parseInt(args[0]);
 	if (isNaN(amount)) return message.channel.send(`'amount' must be a number.`);
 	if (amount < 2) return message.channel.send(`'amount' should be more than 1.`);
 
