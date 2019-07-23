@@ -2,7 +2,7 @@ exports.run = async (client, message, args) => {
 	if (!message.home) return;
 
 	// Check permissions using role names:
-    const muteRoles = ["developer", "referee", "management", "director", "global", "leadership", "trial referee", "chat moderator"];
+    const muteRoles = ["developer", "management"];
 
     var hasPerms = false;
     muteRoles.forEach((name) => {
