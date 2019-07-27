@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
     let mappedPlayers = allPlayers.map((p) => `IGN: ${p.ign} | Rounds Played : ${p.rounds} | Carry ? ${p.carry} | K: ${p.kills} | D: ${p.deaths} | W ? ${p.win} | L ? ${p.loss} | Tied ? ${p.tie} | Elo: ${p.elo} | + Elo: ${p.calculatedElo}.\n`);
 
     message.channel.send(`\`\`\`\n${mappedPlayers.join("\n")}\n\nby ${message.author.tag}\n\`\`\``);
-    message.channel.send("Is the above information correct? Reply yes/no. If no, let @ fred#5775 know asap.");
+    message.channel.send("Is the above information correct? Reply yes/no. If 'no', let @ Snowful#1513 know ASAP.\nP.S. *Actually review the above please* kthxguys");
 
 	let confirmation = await message.channel.awaitMessages((msg) => msg.author.id == message.author.id, { max: 1, time: 120000, errors: ['time'] })
 		.catch(() => message.channel.send('Aborting stats insert. --> Time Ran Out!'));
