@@ -6,3 +6,4 @@ package.json
 LICENSE
 .vscode/
 /utils/devsReactions.js
+.DS_Store
