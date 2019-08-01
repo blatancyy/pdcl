@@ -170,17 +170,8 @@ const calculateElo = (p, team, enemy) => {
 
 	if (p.kills > (1.5 * (teamTotalKills / team.length))) carryBonus = 5;
 	if (carryBonus == 5) p.carry = 1;
-	console.log(p.ign + ' ------------');
-	console.log('round dif: ' + roundDifferenceFactor)
-	console.log(playerNumber)
-	console.log('result: ' + result)
-	console.log(eloDifferenceFactor)
-	console.log('performance factor: ' + performanceFactor)
-	console.log(carryBonus);
 	
 	// Finally, calculate and edit players elo:
 	let elo = (20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus);
-	console.log('elo: ' + elo)
-	console.log('\n')
 	return p.calculatedElo = elo;
 }
