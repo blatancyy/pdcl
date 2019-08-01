@@ -151,7 +151,7 @@ const calculateElo = (p, team, enemy) => {
 	let totalAvgElo = totalElo / (team.length + enemy.length);
 
 	let eloDifferenceFactor = ((Math.abs(t1AvgElo) - Math.abs(t2AvgElo)) / (4 * totalAvgElo));
-
+	
 	// Performance Factor: '(take the players kills per round minus his teams average kills per round) / 3;'
 	let indKillsPerRound = p.kills / p.rounds;
 	
@@ -171,7 +171,14 @@ const calculateElo = (p, team, enemy) => {
 
 	if (p.kills > (1.5 * (teamTotalKills / team.length))) carryBonus = 5;
 	if (carryBonus == 5) p.carry = 1;
-
+	console.log(p.ign + ' ------------');
+	console.log('round dif: ' + roundDifferenceFactor)
+	console.log(playerNumber)
+	console.log('result: ' + result)
+	console.log(eloDifferenceFactor)
+	console.log('performance factor: ' + performanceFactor)
+	console.log(carryBonus);
+	console.log('\n')
 	// Finally, calculate and edit players elo:
 	let elo = (20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus);
 	return p.calculatedElo = elo;
