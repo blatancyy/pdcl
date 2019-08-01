@@ -103,8 +103,7 @@ module.exports = async(client, data) => {
 
 const calculateElo = (p, team, enemy) => {
 	/* 
-		(20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) 
-			* (1 + result * performanceFactor) + carryBonus + expectations)
+		(20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus + expectations)
 
 		Expectations is difficult to do. For now, I'm just going to leave it out because it's
 		rarely actually applicable. I'm going to comment each value with more explanation.
@@ -150,7 +149,7 @@ const calculateElo = (p, team, enemy) => {
 	let totalElo = t1TotalElo + t2TotalElo;
 	let totalAvgElo = totalElo / (team.length + enemy.length);
 
-	let eloDifferenceFactor = ((Math.abs(t1AvgElo) - Math.abs(t2AvgElo)) / (4 * totalAvgElo));
+	let eloDifferenceFactor = ((Math.abs(t2AvgElo) - Math.abs(t1AvgElo)) / (4 * totalAvgElo));
 	
 	// Performance Factor: '(take the players kills per round minus his teams average kills per round) / 3;'
 	let indKillsPerRound = p.kills / p.rounds;
