@@ -178,8 +178,10 @@ const calculateElo = (p, team, enemy) => {
 	console.log(eloDifferenceFactor)
 	console.log('performance factor: ' + performanceFactor)
 	console.log(carryBonus);
-	console.log('\n')
+	
 	// Finally, calculate and edit players elo:
 	let elo = (20 * roundDifferenceFactor * playerNumber * result * (1 + result * eloDifferenceFactor) * (1 + result * performanceFactor) + carryBonus);
+	console.log('elo: ' + elo)
+	console.log('\n')
 	return p.calculatedElo = elo;
 }
