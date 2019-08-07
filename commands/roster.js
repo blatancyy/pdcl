@@ -4,7 +4,8 @@ exports.run = (client, message, args) => {
     if (!args.length) return message.channel.send("Please provide a team name.");
 
     // Configure league-specific attributes:
-    let league = message.league;
+	let league = !args[1] ? message.league : args[1];
+	if (!client.config.leagues.some(l => l.config.name == league)) return message.channel.send(`Couldn't find league ${league}`)
     let colour = client.leagueColours.get(league);
 
     // Find roster data:
@@ -27,7 +28,7 @@ exports.run = (client, message, args) => {
     // Construct embed:
     const rosterEmbed = new client.djs.RichEmbed()
     .setTitle(team.name)
-    .setDescription(`Rank: ${rank} | Region: ${team.region}`)
+    .setDescription(`Rank: ${rank} | Region: ${team.region} | League: ${league.toUpperCase()}`)
     .setURL(`https://club.mpcleague.com/switchleagues/${league}?redirect=/roster/${encodeURIComponent(team.name)}`)
     .setColor(colour);
 

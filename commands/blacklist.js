@@ -26,12 +26,13 @@ exports.run = async (client, message, args) => {
     if (!time) return message.channel.send("Please provide a valid time.");
 
     if (args.length < 3) return message.channel.send("Please provide a reason.");
-    let reason = args.slice(2).join(" ");
-    if (!reason) return message.channel.send("Please provide a reason.");
+    let reason = args.slice(2).join(" ").replace("--g", "");
+	if (!reason) return message.channel.send("Please provide a reason.");
+	let global = message.content.endsWith("--g") ? true : false;
 
     const blacklistEmbed = new client.djs.RichEmbed()
       .setAuthor(client.user.tag, client.user.displayAvatarURL)
-      .setDescription(`You have been blacklisted in **${message.guild.name}**.`)
+      .setDescription(`You have been blacklisted in **${global ? 'all leagues' : message.guild.name}**.`)
       .addField("Time", time, true)
       .addField("Reason", reason, true)
       .setColor('RED')
@@ -48,7 +49,7 @@ exports.help = (client, message, args) => {
     const helpEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
     .addField("Description:", "Sends the user a message about a blacklist anonymously. Referee+ Only.")
-    .addField("Usage:", "`!blacklist @user <time> <reason>`", true)
+    .addField("Usage:", "`!blacklist @user <time> <reason> [--g]`", true)
     .addField("Example:", "`!blacklist @fred 60d Paid Cheats.`", true)
     .setColor("DARK_AQUA")
     .setFooter("!blacklist")
