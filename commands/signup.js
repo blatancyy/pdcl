@@ -4,7 +4,7 @@ exports.run = async(client, message, args) => {
 
     let db = client.databases.get(message.league);
     let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
-    if (!league.config.ranked.status) return;
+	if (!league.config.ranked.status) return;
 
     if (!args.length > 0) return message.channel.send("Please provide a UUID.");
     let uuid = args[0];
@@ -18,7 +18,7 @@ exports.run = async(client, message, args) => {
     let elo = client.lastSeasonElos.get(username);
     let startingElo = elo ? elo : 0;
 
-    message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let me know at @ fred#5775.`);
+    message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let me know at @ Snowful#1513.`);
     
     let table = league.config.ranked.table;
     await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);

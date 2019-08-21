@@ -1,6 +1,6 @@
 module.exports = async(client) => {
 	let db = client.databases.get("mscl");
-	const [rows, fields] = await db.execute(`SELECT * FROM ranked_s7`);
+	const [rows, fields] = await db.execute(`SELECT * FROM ranked_s6`);
 	rows.sort((p1, p2) => p2.elo - p1.elo);
 	
 	for (const row of rows) {
