@@ -6,7 +6,7 @@ exports.run = async(client, message, args) => {
     let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
 	if (!league.config.ranked.status) return;
 
-    if (!args.length > 0) return message.channel.send("Please provide a UUID.");
+    if (args.length == 0) return message.channel.send("Please provide a UUID.");
     let uuid = args[0];
     let username = await client.fetchUsername(client, uuid);
     if (!username) return message.channel.send("Failed to fetch your username.");
@@ -18,7 +18,7 @@ exports.run = async(client, message, args) => {
     let elo = client.lastSeasonElos.get(username);
     let startingElo = elo ? elo : 0;
 
-    message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let me know at @ Snowful#1513.`);
+    message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let @ Snowful#1513 know.`);
     
     let table = league.config.ranked.table;
     await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
@@ -30,13 +30,13 @@ exports.help = (client, message, args) => {
     if (message.hub) return;
 
     const helpEmbed = new client.djs.RichEmbed()
-    .setAuthor(client.user.tag, client.user.displayAvatarURL)
-    .addField("Description:", "Signup for a ranked season.")
-    .addField("Usage:", "`!signup <uuid>`", true)
-    .addField("Example", "`!signup c0dca1da-7a15-4d12-8006-603640a72846`", true)
-    .setColor("DARK_AQUA")
-    .setFooter("!signup")
-    .setTimestamp();
+		.setAuthor(client.user.tag, client.user.displayAvatarURL)
+		.addField("Description:", "Signup for a ranked season.")
+		.addField("Usage:", "`!signup <uuid>`", true)
+		.addField("Example", "`!signup c0dca1da-7a15-4d12-8006-603640a72846`", true)
+		.setColor("DARK_AQUA")
+		.setFooter("!signup")
+		.setTimestamp();
 
     message.channel.send({embed: helpEmbed});
 }
