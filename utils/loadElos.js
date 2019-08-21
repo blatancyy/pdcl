@@ -1,6 +1,6 @@
 module.exports = async(client) => {
 	let db = client.databases.get("mscl");
-	const [rows, fields] = await db.execute(`SELECT * FROM ranked_s5`);
+	const [rows, fields] = await db.execute(`SELECT * FROM ranked_s7`);
 	rows.sort((p1, p2) => p2.elo - p1.elo);
 	
 	for (const row of rows) {
@@ -8,7 +8,7 @@ module.exports = async(client) => {
 		client.lastSeasonElos.set(row.displayname, elo);
 	}
 
-	const [rows2, fields2] = await db.execute(`SELECT * FROM ranked_s6;`);
+	const [rows2, fields2] = await db.execute(`SELECT * FROM ranked_s7;`);
 
 	for (const row2 of rows2) {
 		client.msclElos.set(row2.displayname, row2.elo);
