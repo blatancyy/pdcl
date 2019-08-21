@@ -8,8 +8,9 @@ module.exports = async (client) => {
 	
 	for (const row of rows) {
 		console.log(row)
-		// Need a clamp util
-		let elo = Math.max(0, Math.min((5 - (Math.ceil((rows.indexOf(row) + 1) / 10))) * 75), 300);
+		let elo = (5 - (Math.ceil((rows.indexOf(row) + 1) / 10))) * 75;
+		if (elo < 0) elo = 0;
+		else if (elo > 300) elo = 300;
 		console.log(elo)
 		client.lastSeasonElos.set(row.displayname, elo);
 	}
