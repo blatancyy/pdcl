@@ -5,7 +5,7 @@ exports.run = (client, message, args) => {
 
     // Configure league-specific attributes:
 	let league = !args[1] ? message.league : args[1];
-	if (!client.config.leagues.some(l => l.config.name == league)) return message.channel.send(`Couldn't find league ${league}`)
+	if (!client.config.leagues.some(l => l.config.name == league)) league = message.league;
     let colour = client.leagueColours.get(league);
 
     // Find roster data:
