@@ -21,7 +21,7 @@ exports.run = async (client, message, args) => {
     let target = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when muting."));
     if (!target) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
-    let time = args[1] ? args[1] : "0";
+    let time = args[1] && args[1].toLowerCase() != 'perm' ? args[1] : "0";
     let reason = args.slice(time == "0" ? 1 : 2).join(" ").replace("--g", "");
     if (!reason) reason = "None provided";
     let global = message.content.endsWith("--g") ? true : false;
@@ -72,7 +72,6 @@ exports.run = async (client, message, args) => {
     .addField("Reason:", reason, true)
     .addField("Time:", time, true)
     .setColor("ORANGE")
-    .setFooter("PDCL Bot v2.0")
     .setTimestamp();
 
     const dmEmbed = new client.djs.RichEmbed()
@@ -82,7 +81,6 @@ exports.run = async (client, message, args) => {
     .addField("Time:", time, true)
     .addField("Global ?", global ? "True" : "False", true)
     .setColor("ORANGE")
-    .setFooter("PDCL Bot v2.0")
     .setTimestamp();
 
     let mutelog = global ? client.channels.get("548965999961964555") : message.guild.channels.find((c) => c.name == "mutelog");

@@ -23,7 +23,8 @@ exports.run = async (client, message, args) => {
     }
 
     let time = args[1];
-    if (!time) return message.channel.send("Please provide a valid time.");
+	if (!time) return message.channel.send("Please provide a valid time.");
+	if (time == 0 || time.toLowerCase() == 'perm') time = "Permanent"
 
     if (args.length < 3) return message.channel.send("Please provide a reason.");
     let reason = args.slice(2).join(" ").replace("--g", "");
