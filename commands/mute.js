@@ -55,7 +55,7 @@ exports.run = async (client, message, args) => {
 console.log(time)
     // Query mute info to db:
 	let expiry = client.time(time);
-	if (time === 0) time = "Permanent";
+	if (time == 0) time = "Permanent";
 
     // Ignore permanent mutes.
     if (expiry !== 0) {
