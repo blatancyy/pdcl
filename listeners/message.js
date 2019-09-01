@@ -52,7 +52,7 @@ module.exports = async (client, message) => {
 			member.addRole(role).catch(console.error);
 		});
 
-		const query = `INSERT INTO mute_data (discord, league, expiry, global) VALUES ("${message.author.id}", "${message.guild.id}", "86400000", 1);`;
+		const query = `INSERT INTO mute_data (discord, league, expiry, global) VALUES ("${message.author.id}", "${message.guild.id}", "${Date.now() + 86400000}", 1);`;
 		const db = client.databases.get("discord");
 		db.execute(query).catch(e => console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`));
 
