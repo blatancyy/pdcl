@@ -160,9 +160,9 @@ class Bot extends Client {
 			this.guildData.set(entry.guild, entry.league);
 		});
 
-		const [wordList, fields] = await db.execute('SELECT * FROM bad_words')
+		const [wordList, wfields] = await db.execute('SELECT * FROM bad_words')
 			.catch(() => console.log(`[PDCL v3] Error whilst querying for bad_words`));
-		rows.forEach(r => {
+		wordList.forEach(r => {
 			this.filteredWords.push(r.word);
 		});
     }

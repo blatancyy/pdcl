@@ -1,4 +1,3 @@
-exports.aliases = ['m']
 exports.run = async (client, message, args) => {
 
     const allowedRoles = ["developer", "referee", "management", "director", "global", "leadership", "trial referee", "chat moderator"];
