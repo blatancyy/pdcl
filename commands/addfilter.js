@@ -1,6 +1,6 @@
 exports.run = async (client, message, args) => {
 
-    const allowedRoles = ["developer", "referee", "management", "director"];
+    const allowedRoles = ["developer", "leadership", "global"];
 
     var hasPerms = false;
     allowedRoles.forEach((name) => {
@@ -8,6 +8,7 @@ exports.run = async (client, message, args) => {
         if (role !== null && message.member.roles.has(role.id)) hasPerms = true;
 	});
 	if (!hasPerms) return;
+	if (!args[0]) return message.channel.send('Please include a word to filter out.');
 	let newWord = args[0].toLowerCase();
 	if (client.filteredWords.includes(newWord)) return message.channel.send('That word is already being filtered');
 
