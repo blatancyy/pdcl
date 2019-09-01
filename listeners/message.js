@@ -26,7 +26,7 @@ module.exports = async (client, message) => {
     }
 	
 	// Check content for slurs
-	if (client.filteredWords.some(w => w === message.content.toLowerCase())) {
+	if (home && client.filteredWords.some(w => message.content.toLowerCase().includes(w))) {
 		message.delete();
 
 		let role = message.guild.roles.find((r) => r.name.toLowerCase() == "muted");
