@@ -27,14 +27,15 @@ class Bot extends Client {
         this.utils = new Map();
         this.teamPools = new Map();
         this.msclElos = new Map();
-        this.lastSeasonElos = new Map();
+		this.lastSeasonElos = new Map();
         this.databases = new this.djs.Collection();
 		this.spamWatch = new this.djs.Collection();
 		this.globalCooldowns = new this.djs.Collection();
 		this.guildData = new this.djs.Collection();
         this.config = require("./config.json");
     
-        this.levelUpdates = [];
+		this.levelUpdates = [];
+		this.filteredWords = [];
 		this.levels = {};
         this.players = {};
         this.teams = {};
@@ -157,6 +158,12 @@ class Bot extends Client {
 		
 		rows.forEach((entry) => {
 			this.guildData.set(entry.guild, entry.league);
+		});
+
+		const [wordList, fields] = await db.execute('SELECT * FROM bad_words')
+			.catch(() => console.log(`[PDCL v3] Error whilst querying for bad_words`));
+		rows.forEach(r => {
+			this.filteredWords.push(r.word);
 		});
     }
 

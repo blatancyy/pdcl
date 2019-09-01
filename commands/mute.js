@@ -21,7 +21,7 @@ exports.run = async (client, message, args) => {
     let target = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when muting."));
     if (!target) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
 
-    let time = args[1] && args[1].toLowerCase() != 'perm' ? args[1] : "0";
+    let time = args[1] ? args[1] : "0";
     let reason = args.slice(time == "0" ? 1 : 2).join(" ").replace("--g", "");
     if (!reason) reason = "None provided";
     let global = message.content.endsWith("--g") ? true : false;
@@ -52,7 +52,7 @@ exports.run = async (client, message, args) => {
     }
 
     global ? message.channel.send("✅ (Global)") : message.channel.send("✅");
-console.log(time)
+
     // Query mute info to db:
 	let expiry = client.time(time);
 	if (time == 0) time = "Permanent";

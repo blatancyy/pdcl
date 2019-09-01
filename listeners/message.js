@@ -24,7 +24,61 @@ module.exports = async (client, message) => {
             setTimeout(() => user.c--, 5000);
         }
     }
-    
+	
+	// Check content for slurs
+	if (client.filteredWords.some(w => w === message.content.toLowerCase())) {
+		message.delete();
+
+		let role = message.guild.roles.find((r) => r.name.toLowerCase() == "muted");
+		if (!role) return console.log(`[PDCL v3] Could not find 'Muted' role in ${message.guild.name}.`);
+		if (message.member.roles.has(role.id)) return console.log('Someone sent a slur while muted?');
+
+		message.member.addRole(role).catch(console.error);
+
+		const leagues = client.config.homeGuilds;
+        leagues.forEach(async(league) => {
+            let guild = await client.guilds.get(league);
+            if (!guild) return console.log(`[PDCL v3] Something went wrong whilst fetching guild w/ id ${league}.`);
+
+            // Using guild#fetchMember in case they aren't cached in guild#members, it takes a UserResolvable arg.
+            let user = message.author;
+            let member = await guild.fetchMember(user).catch((e) => console.log("Member is not in all guilds."));
+            if (!member) return;
+
+            let role = guild.roles.find((r) => r.name.toLowerCase() == "muted");    
+            if (!role) return console.log(`Did not find a role in ${member.guild.name}.`);
+            
+            if (member.roles.has(role.id)) return;
+			member.addRole(role).catch(console.error);
+		});
+
+		const query = `INSERT INTO mute_data (discord, league, expiry, global) VALUES ("${message.author.id}", "${message.guild.id}", "86400000", 1);`;
+		const db = client.databases.get("discord");
+		db.execute(query).catch(e => console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`));
+
+		const logEmbed = new client.djs.RichEmbed()
+			.setAuthor(client.user.tag, client.user.displayAvatarURL)
+			.setDescription("A member has been muted.")
+			.addField("Target:", message.author.tag, true)
+			.addField("Reason:", 'Auto-detected slur', true)
+			.addField("Time:", '1d', true)
+			.setColor("ORANGE")
+			.setTimestamp();
+		
+		const dmEmbed = new client.djs.RichEmbed()
+			.setAuthor(client.user.tag, client.user.displayAvatarURL)
+			.setDescription(`You have been **muted** in **${message.guild.name}**.`)
+			.addField("Reason:", 'Auto-detected slur', true)
+			.addField("Time:", '1d', true)
+			.addField("Global ?", "True", true)
+			.setColor("ORANGE")
+			.setTimestamp();
+
+		let mutelog = global ? client.channels.get("548965999961964555") : message.guild.channels.find((c) => c.name == "mutelog");
+	    mutelog.send({embed: logEmbed});
+		message.author.send({embed: dmEmbed}).catch(console.error);
+	}
+	
     // Check count-to: id is community count to channel id:
     if (message.channel.id == "554149057673560074") {
         let valid = await client.checkCountTo(client, message);
@@ -38,7 +92,7 @@ module.exports = async (client, message) => {
     client.devsReactions(client, message);
     
 	// Add XP - Extract this to its own util function?
-	if (home && league) { // League is sometimes undefined
+	if (home && league) {
 		
 		// XP to be added for sending a message (between 15 and 25)
         let randXP = (Math.floor(Math.random() * 10) + 15); 
