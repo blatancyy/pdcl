@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 	});
 	if (!hasPerms) return;
 	if (!args[0]) return message.channel.send('Please include a word to filter out.');
-	let oldWord = args[0].toLowerCase();
+	let oldWord = args.join(' ').toLowerCase();
 	if (!client.filteredWords.includes(oldWord)) return message.channel.send('That word isn\'t being filtered');
 
 	const query = `DELETE FROM bad_words WHERE word = "${oldWord}";`;

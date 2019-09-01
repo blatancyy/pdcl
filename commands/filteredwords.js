@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 	});
 	if (!hasPerms) return;
 
-	message.channel.send(client.filteredWords.join('\n'));
+	message.channel.send('**I AM A BOT AND AM SIMPLY REPORTING WHAT WORDS/SLURS ARE NOT TOLORATED IN THE PDCL DISCORDS**\n' + client.filteredWords.join('\n'));
 }
 
 exports.help = (client, message, args) => {

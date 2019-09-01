@@ -26,7 +26,7 @@ module.exports = async (client, message) => {
     }
 	
 	// Check content for slurs in league discords
-	if (home && client.filteredWords.some(w => message.content.toLowerCase().includes(w))) {
+	if (home && client.filteredWords.some(w => message.content.toLowerCase().includes(` ${w} `))) {
 		if (message.member.roles.some(r => ["developer", "leadership", "global"].includes(r.name.toLowerCase()))) return;
 		message.delete();
 

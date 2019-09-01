@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 	});
 	if (!hasPerms) return;
 	if (!args[0]) return message.channel.send('Please include a word to filter out.');
-	let newWord = args[0].toLowerCase();
+	let newWord = args.join(' ').toLowerCase();
 	if (client.filteredWords.includes(newWord)) return message.channel.send('That word is already being filtered');
 
 	const query = `INSERT INTO bad_words (word) VALUES ("${newWord}");`;
