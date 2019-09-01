@@ -1,6 +1,6 @@
 exports.run = async (client, message, args) => {
 
-    const allowedRoles = ["developer", "referee", "management", "director", "global", "leadership", "trial referee", "chat moderator"];
+    const allowedRoles = ["developer", "referee", "management", "director", "global", "trial referee", "chat moderator"];
 
     var hasPerms = false;
     allowedRoles.forEach((name) => {

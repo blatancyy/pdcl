@@ -1,6 +1,6 @@
 exports.run = async (client, message, args) => {
 
-    const allowedRoles = ["developer", "referee", "management", "director", "global", "leadership", "trial referee", "chat moderator"];
+    const allowedRoles = ["developer", "referee", "management", "director", "global", "trial referee", "chat moderator"];
 
     var hasPerms = false;
     allowedRoles.forEach((name) => {
@@ -16,7 +16,7 @@ exports.run = async (client, message, args) => {
 	await db.execute(query).catch(e => console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`));
 	client.loadGuildData();
 
-	message.channel.send('Successfully added new word to filter.');
+	message.channel.send('Successfully removed new word to filter.');
 }
 
 exports.help = (client, message, args) => {
