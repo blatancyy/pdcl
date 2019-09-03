@@ -59,14 +59,14 @@ module.exports = async (client, message) => {
 		const db = client.databases.get("discord");
 		db.execute(query).catch(e => console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`));
 
-		const logEmbed = new client.djs.RichEmbed()
-			.setAuthor(client.user.tag, client.user.displayAvatarURL)
-			.setDescription("A member has been muted.")
-			.addField("Target:", message.author.tag, true)
-			.addField("Reason:", 'Auto-detected slur', true)
-			.addField("Time:", '1d', true)
-			.setColor("ORANGE")
-			.setTimestamp();
+		// const logEmbed = new client.djs.RichEmbed()
+		// 	.setAuthor(client.user.tag, client.user.displayAvatarURL)
+		// 	.setDescription("A member has been muted.")
+		// 	.addField("Target:", message.author.tag, true)
+		// 	.addField("Reason:", 'Auto-detected slur', true)
+		// 	.addField("Time:", '1d', true)
+		// 	.setColor("ORANGE")
+		// 	.setTimestamp();
 		
 		const dmEmbed = new client.djs.RichEmbed()
 			.setAuthor(client.user.tag, client.user.displayAvatarURL)
@@ -78,7 +78,7 @@ module.exports = async (client, message) => {
 			.setTimestamp();
 
 		let mutelog = global ? client.channels.get("548965999961964555") : message.guild.channels.find((c) => c.name == "mutelog");
-	    mutelog.send({embed: logEmbed});
+	    // mutelog.send({embed: logEmbed});
 		message.author.send({embed: dmEmbed}).catch(console.error);
 	}
 	

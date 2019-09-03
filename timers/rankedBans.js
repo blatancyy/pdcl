@@ -36,15 +36,15 @@ const log = async(client, guild, id) => {
     let member = await guild.fetchMember(id);
     if (!member) return;    
     
-    const logEmbed = new client.djs.RichEmbed()
-    .setAuthor(member.user.tag, member.user.displayAvatarURL)
-    .setDescription(`A member has been unbanned from ranked.`)
-    .addField("Member:", member.user.tag, true)
-    .addField(`Unbanned By:`, client.user.tag, true)
-    .addField("Reason:", "Auto")
-    .setColor("WHITE")
-    .setFooter("Ranked Bans")
-    .setTimestamp();
+    // const logEmbed = new client.djs.RichEmbed()
+    // .setAuthor(member.user.tag, member.user.displayAvatarURL)
+    // .setDescription(`A member has been unbanned from ranked.`)
+    // .addField("Member:", member.user.tag, true)
+    // .addField(`Unbanned By:`, client.user.tag, true)
+    // .addField("Reason:", "Auto")
+    // .setColor("WHITE")
+    // .setFooter("Ranked Bans")
+    // .setTimestamp();
 
     const dmEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
@@ -56,7 +56,7 @@ const log = async(client, guild, id) => {
     .setTimestamp();
 
     let rankedLog = guild.channels.find((c) => c.name.toLowerCase() == "ranked-ban-log");
-    rankedLog.send({embed: logEmbed}).catch(console.error);
+    // rankedLog.send({embed: logEmbed}).catch(console.error);
     member.user.send({embed: dmEmbed}).catch(console.error);
 }
 

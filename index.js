@@ -150,7 +150,7 @@ class Bot extends Client {
     }
 
     // Called in ./listeners/ready.js    
-    async loadGuildData () {
+	async loadGuildData () {
         const db = this.databases.get("discord");
         if (!db) return console.log(`[PDCL v3] Something went wrong: Could not load database for guild configs. ('Discord')`);
 		const [rows, fields] = await db.execute("SELECT * FROM guild_data")
@@ -160,6 +160,7 @@ class Bot extends Client {
 			this.guildData.set(entry.guild, entry.league);
 		});
 
+		this.filteredWords = [];
 		const [wordList, wfields] = await db.execute('SELECT * FROM bad_words')
 			.catch(() => console.log(`[PDCL v3] Error whilst querying for bad_words`));
 		wordList.forEach(r => {

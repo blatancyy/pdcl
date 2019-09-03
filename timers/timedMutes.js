@@ -66,16 +66,16 @@ const log = async (client, guild, id, global) => {
 	let channel = global ? client.channels.get("548965999961964555") : guild.channels.find((c) => c.name == "mutelog");
 	if (!channel) return console.log("[PDCL v3] Didn't find channel when logging timed unmute.")
 
-	const logEmbed = new client.djs.RichEmbed()
-		.setAuthor(client.user.tag, client.user.displayAvatarURL)
-		.setDescription("A member has been unmuted.")
-		.addField("Target:", user.tag, true)
-		.addField("Reason:", "Auto", true)
-		.setColor("GREEN")
-		.setFooter("PDCL Bot v2.0")
-		.setTimestamp();
+	// const logEmbed = new client.djs.RichEmbed()
+	// 	.setAuthor(client.user.tag, client.user.displayAvatarURL)
+	// 	.setDescription("A member has been unmuted.")
+	// 	.addField("Target:", user.tag, true)
+	// 	.addField("Reason:", "Auto", true)
+	// 	.setColor("GREEN")
+	// 	.setFooter("PDCL Bot v2.0")
+	// 	.setTimestamp();
 
-	channel.send({ embed: logEmbed });
+	// channel.send({ embed: logEmbed });
 }
 
 
