@@ -26,7 +26,7 @@ module.exports = async (client, message) => {
     }
 	
 	// Check content for slurs in league discords
-	let content = message.content.replace(/:regional_indicator_\w:/g, (match) => match.slice(20, -1)).split(/\s+/);
+	let content = message.content.replace(/:regional_indicator_\w:/g, (match) => match.slice(20, -1)).split(/\s+/).toLowerCase();
 	if (home && content.some(w => client.filteredWords.indexOf(w) !== -1)) {
 
 		if (message.member.roles.some(r => ["developer", "leadership", "global"].includes(r.name.toLowerCase()))) return;
