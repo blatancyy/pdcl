@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
     if (args.length > 0) {        
 		user = await client.fetchUser(args[0]).catch((e) => console.log(e));
 		if (!user) user = client.users.find(u => u.username.toLowerCase().includes(args.join(' ').toLowerCase()) || u.username.toLowerCase() == args.join(' ').toLowerCase())
-        if (!user) return message.channel.send(`Couldn't find user '${args[0]}'.`);
+        if (!user) return message.channel.send(`Couldn't find user '${args[0].replace('@', '')}'.`);
 
 		member = await message.guild.fetchMember(user);
 		if (!member) member = message.guild.members.find(m => m.displayName.toLowerCase() == args.join(' ').toLowerCase() || m.user.username.toLowerCase() == args.join(' ').toLowerCase())
