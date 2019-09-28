@@ -111,7 +111,6 @@ module.exports = async (client, message) => {
 		// If the user is not in the cache, this must be their first message, so create them in cache
 		if (!userLevelData) {
 			userLevelData = await client.insertNewUser(client, message.author.id, league).catch(e => console.log(e));
-			console.log('after creating user')
 		}
 
 		let userCooldown = client.globalCooldowns.get(message.author.id);

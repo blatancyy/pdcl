@@ -3,7 +3,7 @@ exports.run = async (client, message, args) => {
     if (message.hub) return;
     if (!message.home) return;
 
-    const banRoles = ["referee", "management", "director", "global", "leadership"];
+    const banRoles = ["trial referee", "referee", "management", "director", "global", "leadership"];
     var hasPerms = false;
     banRoles.forEach((name) => {
         let role = message.guild.roles.find((r) => r.name.toLowerCase() == name);
