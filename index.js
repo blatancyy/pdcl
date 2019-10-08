@@ -26,7 +26,8 @@ class Bot extends Client {
         this.timers = new Map();
         this.utils = new Map();
         this.teamPools = new Map();
-        this.msclElos = new Map();
+		this.msclElos = new Map();
+		this.cwclElos = new Map();
 		this.lastSeasonElos = new Map();
         this.databases = new this.djs.Collection();
 		this.spamWatch = new this.djs.Collection();
