@@ -5,7 +5,7 @@ module.exports = async (client) => {
 		if (!isRanked) continue;
 
 		let table = league.config.ranked.table;
-		let prevTable = league.config.ranked.prev_table;
+		let prevTable = league.config.ranked.table_prev;
 
 		let db = client.databases.get(league.config.name);
 
