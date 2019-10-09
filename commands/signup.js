@@ -24,6 +24,7 @@ exports.run = async(client, message, args) => {
 	await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
 	
 	let playerElo = client.playerElos.get(username);
+	if (!playerElo) playerElo = {};
 	playerElo[league.config.name] = startingElo;
     console.log(`Successfully set ${username}'s (${uuid}) starting elo to ${startingElo}.`);
 }
