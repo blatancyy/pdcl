@@ -1,6 +1,6 @@
 module.exports = async (client) => {
 	
-	for (const league in client.config.leagues) {
+	for (const league of client.config.leagues) {
 		let isRanked = league.config.ranked.status;
 		if (!isRanked) continue;
 
