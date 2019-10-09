@@ -32,7 +32,7 @@ module.exports = async (client) => {
 		const [rows, fields] = await db.execute(`SELECT * FROM ${table};`);
 	
 		for (const row of rows) {
-			let playerElo = client.playerElo.get(row.displayname);
+			let playerElo = client.playerElos.get(row.displayname);
 			if (!playerElo) playerElo = {};
 
 			playerElo[league.config.name] = row.elo;
