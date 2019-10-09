@@ -15,8 +15,8 @@ exports.run = async(client, message, args) => {
     let player = players.find((p) => p.displayname.toLowerCase() == username.toLowerCase());
     if (player) return message.channel.send("Already found this UUID in the database, will not duplicate.");
 
-    let elo = client.playerStartingElo.get(username)[league.config.name];
-    let startingElo = elo ? elo : 0;
+	let playerSElo = client.playerStartingElo.get(username);
+	let startingElo = playerSElo ? playerSElo[league.config.name] : 0;
 
     message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let @ Snowful#1513 know.`);
     
