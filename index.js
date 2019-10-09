@@ -86,7 +86,7 @@ class Bot extends Client {
 				this.timers.set(name, path);
 				timers.push({name, time: path.time / 1000})
 			});
-			console.log(`[PDCL v3] Attached timers: ${timers.map(t => `${t.name} - ${t.time} seconds.`)} `);
+			console.log(`[PDCL v3] Attached timers: ${timers.map(t => `${t.name} - ${t.time} seconds.`).join(', ')} `);
         });
     }
 
@@ -186,7 +186,7 @@ class Bot extends Client {
 	async loadRosterData () {
 		
 		let rosters = [];
-        this.config.leagues.forEach(async (league) => {
+        for (const league of this.config.leagues) {
             let name = league.config.name;
 
             let db = this.databases.get(name);
@@ -206,7 +206,7 @@ class Bot extends Client {
 			this.teams[name] = rows;
 
 			rosters.push(name.toUpperCase());
-		});
+		};
 		console.log(`[PDCL v3] Successfully loaded player and roster data for: ${rosters.map(r => r).join(', ')}.`);
 	}
     

@@ -2,13 +2,12 @@
 module.exports = async(client) => {
 	const db = await client.getDatabasePromise(client, "discord");
 
+	let names = [];
 	// League Discords:
 	client.config.leagues.forEach(async(league) => {
 		let table = league.config.level_table;
 		let name = league.config.name;
-		if (name == "community") return;
-
-		console.log(`[PDCL v3] Beginning to load local xp data for league: ${name}.`)
+		if (name == "community") return;		
 
 		const [rows, fields] = await db.execute(`SELECT * FROM ${table}`)
 			.catch(e => console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`));
@@ -18,7 +17,10 @@ module.exports = async(client) => {
 			
 		client.levels[name] = rows;
 		client.levels[name].sort((a, b) => b.xp - a.xp);
+		names.push(name);
 	});
+
+	console.log(`[PDCL v3] Loaded local xp data for league: ${names.map(n => n).join(', ')}.`)
 	
 	const [rows, fields] = await db.execute('SELECT * FROM global_levels')
 		.catch(e => console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`));
