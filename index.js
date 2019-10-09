@@ -45,14 +45,15 @@ class Bot extends Client {
         this.fs.readdir("./commands/", async(e, files) => {
             if (e) return console.log(`[PDCL v3] Error whilst reading listener dir: ${e}`);
             if (!files) return console.error("[PDCL v3] Error whilst reading command directory.");
-        
+		
+			let commands = [];
             files.forEach((file) => {
                 if (!file.endsWith(".js")) return;
                 let path = require(`./commands/${file}`);
                 let name = file.split(".")[0];
 				let aliases = path.aliases;
 
-                console.log(`[PDCL V3] Attatching command: ${name}.`);
+                
 				this.commands.set(name, path);
 				
 				if (aliases) {
@@ -61,7 +62,9 @@ class Bot extends Client {
 						else this.commands.set(a, path);
 					}
 				}
-            });
+				commands.push(name);
+			});
+			console.log(`[PDCL V3] Attatching command: ${commands.map(c => c).join(', ')}.`);
         });
     }
 
@@ -69,18 +72,21 @@ class Bot extends Client {
         this.fs.readdir("./timers/", async(e, files) => {
             if (e) return console.log(`[PDCL v3] Error whilst reading listener dir: ${e}`);
             if (!files) return console.error("[PDCL v3] Error whilst reading timer directory.");
-    
+	
+			let timers = [];
             files.forEach((file) => {
                 if (!file.endsWith(".js")) return;
                 let path = require(`./timers/${file}`);
                 let name = file.split(".")[0];
     
-                console.log(`[PDCL v3] Attatching timer: ${name} to be run every ${path.time / 1000} seconds.`);
+                
                 const runTimer = () => path.run(this);
                 setInterval(runTimer, path.time);
 
-                this.timers.set(name, path);
-            });
+				this.timers.set(name, path);
+				timers.push({name, time: path.time / 1000})
+			});
+			console.log(`[PDCL v3] Attached timers: ${timers.map(t => `${t.name} - ${t.time} seconds.`)} `);
         });
     }
 
@@ -89,30 +95,36 @@ class Bot extends Client {
             if (e) return console.log(`[PDCL v3] Error whilst reading listener dir: ${e}`);
             if (!listeners) return console.log("[PDCL v3] Error whilst reading listener directory.");
 
+			let registered = [];
             listeners.forEach((file) => {
                 if (!file.endsWith(".js")) return;
                 let path = require(`./listeners/${file}`);
                 let name = file.split(".")[0];
-    
-                console.log(`[PDCL v3] Registering Listener: ${name}.`);
-                this.on(name, path.bind(null, this));
-            });
+                
+				this.on(name, path.bind(null, this));
+				
+				registered.push(name);
+			});
+			console.log(`[PDCL v3] Registered Listeners: ${registered.map(r => r).join(', ')}.`);
         });
     }
 
     async attatchUtils() {
         this.fs.readdir("./utils/", (e, utils) => {
             if (e) return console.log(`[PDCL v3] Error whilst reading util dir: ${e}`);
-            if (!utils) return console.log("Didn't find any utils");
+			if (!utils) return console.log("Didn't find any utils");
+			
+			let attached = [];
 
-            utils.forEach((file) => {
+            for (const file of utils) {
                 if (!file.endsWith(".js")) return;
                 let path = require(`./utils/${file}`);
                 let name = file.split(".")[0];
 
-                console.log(`PDCL v3] Attatching Util: ${name}.`);
+				attached.push(name);
                 this[name] = path;
-            });
+			};
+			console.log(`[PDCL v3] Attached Utils: ${attached.map(u => u).join(', ')}.`);
         });
     }
 
@@ -131,14 +143,16 @@ class Bot extends Client {
     }
 
     async loadDatabases() {
-        const leagueData = this.config.leagues;
+		const leagueData = this.config.leagues;
+		let dbs = [];
+		this.loadDatabase("discord", "mpcleagu_discord"); 
         leagueData.forEach((league) => {
-            this.loadDatabase(league.config.name, league.config.database);
-            console.log(`[PDCL v3] Loaded database for ${league.config.name.toUpperCase()}.`);
-        });
-
-        console.log("[PDCL v3] Loaded database for DISCORD.")
-        this.loadDatabase("discord", "mpcleagu_discord");        
+			this.loadDatabase(league.config.name, league.config.database);
+			dbs.push(league.config.name.toUpperCase());
+            
+		});
+		
+		console.log(`[PDCL v3] Loaded database for DISCORD, ${dbs.map(u => u).join(', ')}.`);               
     }
 
     async start() {
@@ -169,10 +183,11 @@ class Bot extends Client {
     }
 
     // Called in ./listeners/ready.js 
-    async loadRosterData () {
+	async loadRosterData () {
+		
+		let rosters = [];
         this.config.leagues.forEach(async (league) => {
             let name = league.config.name;
-            console.log(`[PDCL v3] Beginning to load roster data for league: ${name}.`)
 
             let db = this.databases.get(name);
             if (!db) return console.log(`[PDCL v3] Didn't find database for: ${name}.`);
@@ -190,8 +205,9 @@ class Bot extends Client {
 			
 			this.teams[name] = rows;
 
-            console.log(`[PDCL v3] Successfully loaded player and roster data for: ${name.toUpperCase()}.`);
-        });
+			rosters.push(name.toUpperCase());
+		});
+		console.log(`[PDCL v3] Successfully loaded player and roster data for: ${rosters.map(r => r).join(', ')}.`);
 	}
     
     /*

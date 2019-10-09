@@ -31,7 +31,7 @@ exports.run = async(client, message, args) => {
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${playerElo.mscl}.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${newElo - elo}.`);	
 }
 
 exports.help = (client, message, args) => {

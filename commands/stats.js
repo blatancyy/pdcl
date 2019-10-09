@@ -27,7 +27,8 @@ exports.run = async (client, message, args) => {
     let table = league.config.ranked.table;
 
     allPlayers.forEach(async(p) => {
-        let playerElo = client.playerElos.get(p.ign);
+		let playerElo = client.playerElos.get(p.ign);
+		if (!playerElo) playerElo = {};
         if (!playerElo.mscl && playerElo.mscl !== 0) return message.channel.send(`The player '${p.ign}' doesn't seem to be in our database. Their stats have not been updated and their elo was assumed as 0.`);
 
 		playerElo.mscl = playerElo.mscl + p.calculatedElo;
