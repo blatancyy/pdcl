@@ -27,10 +27,11 @@ exports.run = async (client, message, args) => {
     let table = league.config.ranked.table;
 
     allPlayers.forEach(async(p) => {
-        let foundElo = client.msclElos.get(p.ign);
-        if (!foundElo && foundElo !== 0) return message.channel.send(`The player '${p.ign}' doesn't seem to be in our database. Their stats have not been updated and their elo was assumed as 0.`);
+        let playerElo = client.playerElos.get(p.ign);
+        if (!playerElo.mscl && playerElo.mscl !== 0) return message.channel.send(`The player '${p.ign}' doesn't seem to be in our database. Their stats have not been updated and their elo was assumed as 0.`);
 
-        client.msclElos.set(p.ign, foundElo + p.calculatedElo);
+		playerElo.mscl = playerElo.mscl + p.calculatedElo;
+        client.playerElos.set(p.ign, playerElo);
         await db.execute(`UPDATE ${table} SET kills = kills + ${p.kills}, deaths = deaths + ${p.deaths}, wins = wins + ${p.win}, losses = losses + ${p.loss}, draws = draws + ${p.tie}, games_played = games_played + 1, games_carried = games_carried + ${p.carry}, elo = elo + ${p.calculatedElo} WHERE displayname = "${p.ign}";`).catch(console.error);
         console.log(`Successfully updated stats for ${p.ign}.`);
     });

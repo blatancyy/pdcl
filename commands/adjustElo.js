@@ -10,8 +10,8 @@ exports.run = async(client, message, args) => {
 
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
-	let foundElo = client.msclElos.get(player);
-	if (!foundElo && foundElo !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+	let playerElo = client.playerElos.get(player);
+	if (!playerElo.mscl && playerElo.mscl !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
 	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
@@ -20,8 +20,9 @@ exports.run = async(client, message, args) => {
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
 	// Using +(elo) to make sure it's a number.
-	let newElo = foundElo + (+elo); 
-	client.msclElos.set(player, newElo);
+	let newElo = playerElo.mscl + (+elo); 
+	playerElo.mscl = newElo;
+	client.playerElos.set(player, playerElo);
 
 	var e = false;
 	await db.execute(`UPDATE ${table} SET elo = ${newElo} WHERE displayname = "${player}";`).catch((e) => {
@@ -30,7 +31,7 @@ exports.run = async(client, message, args) => {
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${foundElo}.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${playerElo.mscl}.`);	
 }
 
 exports.help = (client, message, args) => {

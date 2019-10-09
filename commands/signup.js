@@ -11,18 +11,20 @@ exports.run = async(client, message, args) => {
     let username = await client.fetchUsername(client, uuid);
     if (!username) return message.channel.send("Failed to fetch your username.");
 
-    const [players, fields] = await db.execute(`SELECT * FROM ranked_s8`);
+    const [players, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table}`);
     let player = players.find((p) => p.displayname.toLowerCase() == username.toLowerCase());
     if (player) return message.channel.send("Already found this UUID in the database, will not duplicate.");
 
-    let elo = client.lastSeasonElos.get(username);
+    let elo = client.playerStartingElo.get(username)[league.config.name];
     let startingElo = elo ? elo : 0;
 
     message.channel.send(`Signed up player: ${username} w/ a starting elo of: ${startingElo}. \nIs this info wrong? Let @ Snowful#1513 know.`);
     
     let table = league.config.ranked.table;
-    await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
-    client.msclElos.set(username, startingElo);
+	await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
+	
+	let playerElo = client.playerElos.get(username);
+	playerElo[league.config.name] = startingElo;
     console.log(`Successfully set ${username}'s (${uuid}) starting elo to ${startingElo}.`);
 }
 

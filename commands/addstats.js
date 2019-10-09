@@ -8,30 +8,37 @@ exports.run = async(client, message, args) => {
 
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
-	let foundElo = client.cwclElos.get(player);
-	if (!foundElo && foundElo !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+	let playerElo = client.playerElos.get(player);
+	if (!playerElo.cwcl && playerElo.cwcl !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
 	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
-	if (!elo.includes("+") && !elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
-	if (!elo) return message.channel.send("Please provide an amount of add or subtract.");
+	if (!elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
 	let wins = args[2];
-	if (!wins) return message.channel.send('Please provide all arguments')
+	if (!wins) wins = "+0";
+	if (!wins.includes("-")) return message.channel.send("Please provide +/-(wins) e.g +1, -1.");
+	if (isNaN(wins)) return message.channel.send("Please provide a number.");
+
+	let losses = args[3];
+	if (!losses) losses = "+0";
+	if (!losses.includes("-")) return message.channel.send("Please provide +/-(losses) e.g +1, -1.");
+	if (isNaN(losses)) return message.channel.send("Please provide a number.");
 
 	// Using +(elo) to make sure it's a number.
-	let newElo = foundElo + (+elo); 
-	client.cwclElos.set(player, newElo);
+	let newElo = playerElo.cwcl + (+elo); 
+	playerElo.cwcl = newElo;
+	client.playerElos.set(player, playerElo);
 
 	var e = false;
-	await db.execute(`UPDATE ${table} SET elo = ${newElo} WHERE displayname = "${player}";`).catch((e) => {
+	await db.execute(`UPDATE ${table} SET elo = ${newElo}, wins = wins + ${wins}, losses = losses + ${losses} WHERE displayname = "${player}";`).catch((e) => {
 		console.log(`Error whilst updating someone's elo: ${e}.`);
 		message.channel.send("Something went wrong. Error has been logged to the console.");
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${foundElo}.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${playerElo.cwcl}.`);	
 }
 
 exports.help = (client, message, args) => {
