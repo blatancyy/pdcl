@@ -140,7 +140,7 @@ module.exports = async (client, message) => {
 			// Add randXP to cached version
 			userLevelData.xp += randXP;
 
-            // Global Update: Only run if we've only added local XP (aka, not the community discord).
+            // Global Update: Only run if we've only added local XP (not the community discord).
 			if (league !== "community") {
 
 				let oldLevel_g = leagueLevelData.some((u) => u.id == message.author.id) ? leagueLevelData.find((u) => u.id == message.author.id).level : 0;

@@ -7,7 +7,7 @@ module.exports = async(client) => {
 	for (const league of client.config.leagues) {
 		let table = league.config.level_table;
 		let name = league.config.name;
-		if (name == "community") return;		
+		if (name == "community") continue;		
 
 		const [rows, fields] = await db.execute(`SELECT * FROM ${table}`)
 			.catch(e => console.log(`[PDCL v3] Error whilst loading local xp for ${name}. \nError: ${e}`));
@@ -20,7 +20,7 @@ module.exports = async(client) => {
 		names.push(name);
 	};
 
-	console.log(`[PDCL v3] Loaded local xp data for league: ${names.map(n => n).join(', ')}.`)
+	console.log(`[PDCL v3] Loaded local xp data for leagues: ${names.map(n => n).join(', ')}.`)
 	
 	const [rows, fields] = await db.execute('SELECT * FROM global_levels')
 		.catch(e => console.log(`[PDCL v3] Error whilst loading global levels. \nError: ${e}`));
