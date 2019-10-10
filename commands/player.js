@@ -28,7 +28,7 @@ exports.run = async (client, message, args) => {
 	}
     // Construct the embed:
     let display;
-    if (message.league == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
+    if (message.league.config.name == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
     else display = `${client.escape(player.displayname)}${client.teamRankMap.get(player.teamrank)}${client.emojiMap.get(player.leaguerank)}`;
 
 	const playerEmbed = new client.djs.RichEmbed()
@@ -36,10 +36,10 @@ exports.run = async (client, message, args) => {
 		.setURL("https://club.mpcleague.com/players/${player.displayname}")
 		.addField("Team", !team ? 'None' : team.name, true)
 		.addField(`[KDR] Rating: ${player.kills / player.deaths}`, `${player.kills}/${player.deaths}`, true)
-		.addField('League', league.toUpperCase(), true)
+		.addField('League', league.config.name.toUpperCase(), true)
 		.setColor(colour)
 		.setTimestamp();
-	if (rankedStats) playerEmbed.addField(`Ranked ${league.toUpperCase()}`, rankedStats, true)
+	if (rankedStats) playerEmbed.addField(`Ranked ${league.config.name.toUpperCase()}`, rankedStats, true)
 
     message.channel.send({embed: playerEmbed});
 }
