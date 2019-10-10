@@ -17,13 +17,16 @@ exports.run = async (client, message, args) => {
 
 	// Ranked stuff
 	let rankedStats = undefined;
+	console.log(league.config.ranked.status)
 	if (league.config.ranked.status) {
 		let playerElo = client.playerElos.get(player.displayname);
+		console.log(playerElo)
 		if (playerElo && playerElo[league.config.name]) {
 
 			const db = client.databases.get(league.config.name);
 			const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} WHERE displayname = "${player.displayname}";`);
 			if (rows.length == 1) rankedStats = `Elo: ${rows[0].elo}, ${rows[0].kills != 0 && rows[0].deaths != 0 ? `KDR: ${rows[0].kills / rows[0].deaths}, ` : ''} Wins: ${rows[0].wins}, Losses: ${rows[0].losses}`;
+		console.log(rankedStats)
 		}
 	}
     // Construct the embed:
