@@ -1,10 +1,11 @@
 exports.run = async(client, message, args) => {
-    if (!message.home) return;
-    if (message.hub) return;
-
-    let db = client.databases.get(message.league);
+    if (!message.home) return console.log('is not a home guild');
+    if (message.hub) return console.log('is a hub channel');
+    
     let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
-	if (!league.config.ranked.status) return;
+	if (!league.config.ranked.status) return console.log('not ranked : ' + league.config.ranked.status);
+
+	let db = client.databases.get(league.config.name);
 
     if (args.length == 0) return message.channel.send("Please provide a UUID.");
     let uuid = args[0];

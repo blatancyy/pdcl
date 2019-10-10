@@ -4,7 +4,7 @@ module.exports = async(client) => {
 
 	let names = [];
 	// League Discords:
-	client.config.leagues.forEach(async(league) => {
+	for (const league of client.config.leagues) {
 		let table = league.config.level_table;
 		let name = league.config.name;
 		if (name == "community") return;		
@@ -18,7 +18,7 @@ module.exports = async(client) => {
 		client.levels[name] = rows;
 		client.levels[name].sort((a, b) => b.xp - a.xp);
 		names.push(name);
-	});
+	};
 
 	console.log(`[PDCL v3] Loaded local xp data for league: ${names.map(n => n).join(', ')}.`)
 	

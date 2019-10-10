@@ -47,7 +47,7 @@ class Bot extends Client {
             if (!files) return console.error("[PDCL v3] Error whilst reading command directory.");
 		
 			let commands = [];
-            files.forEach((file) => {
+            for ( const file of files) {
                 if (!file.endsWith(".js")) return;
                 let path = require(`./commands/${file}`);
                 let name = file.split(".")[0];
@@ -63,8 +63,8 @@ class Bot extends Client {
 					}
 				}
 				commands.push(name);
-			});
-			console.log(`[PDCL V3] Attatching command: ${commands.map(c => c).join(', ')}.`);
+			};
+			console.log(`[PDCL V3] Attached commands: ${commands.map(c => c).join(', ')}.`);
         });
     }
 
@@ -86,7 +86,7 @@ class Bot extends Client {
 				this.timers.set(name, path);
 				timers.push({name, time: path.time / 1000})
 			});
-			console.log(`[PDCL v3] Attached timers: ${timers.map(t => `${t.name} - ${t.time} seconds.`).join(', ')} `);
+			console.log(`[PDCL v3] Attached timers: ${timers.map(t => `${t.name} - ${t.time} seconds`).join(', ')} `);
         });
     }
 
