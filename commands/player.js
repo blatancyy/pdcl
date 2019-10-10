@@ -28,7 +28,7 @@ exports.run = async (client, message, args) => {
 	}
     // Construct the embed:
     let display;
-    if (message.league.config.name == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
+    if (message.league == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
     else display = `${client.escape(player.displayname)}${client.teamRankMap.get(player.teamrank)}${client.emojiMap.get(player.leaguerank)}`;
 
 	const playerEmbed = new client.djs.RichEmbed()
