@@ -9,7 +9,7 @@ exports.run = async(client, message, args) => {
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
 	let playerElo = client.playerElos.get(player);
-	if (!playerElo.cwcl && playerElo.cwcl !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+	if (!playerElo.swcl && playerElo.swcl !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
 	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
@@ -27,8 +27,8 @@ exports.run = async(client, message, args) => {
 	if (isNaN(losses)) return message.channel.send("Please provide a number.");
 
 	// Using +(elo) to make sure it's a number.
-	let newElo = playerElo.cwcl + (+elo); 
-	playerElo.cwcl = newElo;
+	let newElo = playerElo.swcl + (+elo); 
+	playerElo.swcl = newElo;
 	client.playerElos.set(player, playerElo);
 
 	var e = false;
@@ -38,7 +38,7 @@ exports.run = async(client, message, args) => {
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${playerElo.cwcl}.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${playerElo.swcl}.`);	
 }
 
 exports.help = (client, message, args) => {
@@ -46,7 +46,7 @@ exports.help = (client, message, args) => {
 
     const helpEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
-    .addField("Description:", "Adjust a player's CWCL ranked stats.")
+    .addField("Description:", "Adjust a player's SWCL ranked stats.")
     .addField("Usage:", "`!addstats <IGN> <±amount of elo> <wins to add> <losses to add>`")
     .setColor("DARK_AQUA")
     .setFooter("!addstats")
