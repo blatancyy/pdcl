@@ -29,13 +29,13 @@ exports.run = async(client, message, args) => {
 	client.playerElos.set(player, playerElo);
 
 	var e = false;
-	await db.execute(`UPDATE ${table} SET elo = ${newElo}, wins = wins + ${wins}, losses = losses + ${losses} WHERE displayname = "${player}";`).catch((e) => {
+	await db.execute(`UPDATE ${table} SET elo = ${newElo}, wins = wins + ${wins}, losses = losses + ${losses}, games_played = wins + losses WHERE displayname = "${player}";`).catch((e) => {
 		console.log(`Error whilst updating someone's elo: ${e}.`);
 		message.channel.send("Something went wrong. Error has been logged to the console.");
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${playerElo.swcl}.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${newElo - elo}, ${wins} wins, ${losses} losses.`);	
 }
 
 exports.help = (client, message, args) => {
