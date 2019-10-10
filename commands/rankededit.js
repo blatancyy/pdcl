@@ -1,4 +1,4 @@
-exports.aliases = ["insertms"];
+exports.aliases = ["re"];
 exports.run = async (client, message, args) => {	
     if (!message.home) return;
     if (message.hub) return;

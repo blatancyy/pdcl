@@ -9,7 +9,7 @@ exports.run = async(client, message, args) => {
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
 	let playerElo = client.playerElos.get(player);
-	if (!playerElo.swcl && playerElo.swcl !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+	if (!playerElo) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
 	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
