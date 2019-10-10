@@ -25,6 +25,7 @@ exports.run = async (client, message, args) => {
 
 			const db = client.databases.get(league.config.name);
 			const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} WHERE displayname = "${player.displayname}";`);
+			console.log(rows.length)
 			if (rows.length != 0) rankedStats = `Elo: ${rows[0].elo}, ${rows[0].kills != 0 && rows[0].deaths != 0 ? `KDR: ${rows[0].kills / rows[0].deaths}, ` : ''} Wins: ${rows[0].wins}, Losses: ${rows[0].losses}`;
 		console.log(rankedStats)
 		}
