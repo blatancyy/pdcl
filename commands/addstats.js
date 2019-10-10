@@ -13,17 +13,14 @@ exports.run = async(client, message, args) => {
 
 	let elo = args[1];
 	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
-	if (!elo.includes("-")) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
 	let wins = args[2];
 	if (!wins) wins = "+0";
-	if (!wins.includes("-")) return message.channel.send("Please provide +/-(wins) e.g +1, -1.");
 	if (isNaN(wins)) return message.channel.send("Please provide a number.");
 
 	let losses = args[3];
 	if (!losses) losses = "+0";
-	if (!losses.includes("-")) return message.channel.send("Please provide +/-(losses) e.g +1, -1.");
 	if (isNaN(losses)) return message.channel.send("Please provide a number.");
 
 	// Using +(elo) to make sure it's a number.
