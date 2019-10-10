@@ -35,7 +35,7 @@ exports.run = async(client, message, args) => {
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, from ${newElo - elo}, ${wins} wins, ${losses} losses.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, ${wins} wins, ${losses} losses.`);	
 }
 
 exports.help = (client, message, args) => {

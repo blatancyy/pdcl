@@ -1,6 +1,6 @@
 exports.aliases = ['p'];
 exports.run = (client, message, args) => {
-    if (message.hub) return;
+    if (message.hub) return console.log("is hub");
     if (!args.length) return message.channel.send("Please provide a player name.");
 
     // Configure league-specific attributes:
