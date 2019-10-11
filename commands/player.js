@@ -27,9 +27,10 @@ exports.run = async (client, message, args) => {
 			const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} WHERE displayname = "${player.displayname}";`);
 			console.log(rows.length)
 			if (rows.length != 0) rankedStats = `Elo: ${rows[0].elo}, ${rows[0].kills != 0 && rows[0].deaths != 0 ? `KDR: ${rows[0].kills / rows[0].deaths}, ` : ''} Wins: ${rows[0].wins}, Losses: ${rows[0].losses}`;
-		console.log(rankedStats)
+		console.log('1st rankedStats: ' + rankedStats)
 		}
 	}
+	console.log('2nd rankedStats: ' + rankedStats)
     // Construct the embed:
     let display;
     if (message.league == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
@@ -43,7 +44,7 @@ exports.run = async (client, message, args) => {
 		.addField('League', league.config.name.toUpperCase(), true)
 		.setColor(colour)
 		.setTimestamp();
-	if (rankedStats) playerEmbed.addField(`Ranked ${league.config.name.toUpperCase()}`, rankedStats, true)
+	if (rankedStats != undefined) playerEmbed.addField(`Ranked ${league.config.name.toUpperCase()}`, rankedStats, true)
 
     message.channel.send({embed: playerEmbed});
 }
