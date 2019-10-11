@@ -21,7 +21,7 @@ exports.run = async (client, message, args) => {
 	if (league.config.ranked.status) {
 		let playerElo = client.playerElos.get(player.displayname);
 		console.log(playerElo)
-		if (playerElo && playerElo[league.config.name]) {
+		if (playerElo && playerElo[league.config.name] != undefined) {
 
 			const db = client.databases.get(league.config.name);
 			const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} WHERE displayname = "${player.displayname}";`);
