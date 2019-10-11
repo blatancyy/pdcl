@@ -17,20 +17,20 @@ exports.run = async (client, message, args) => {
 
 	// Ranked stuff
 	let rankedStats = undefined;
-	console.log(league.config.ranked.status)
+
 	if (league.config.ranked.status) {
 		let playerElo = client.playerElos.get(player.displayname);
-		console.log(playerElo)
+
 		if (playerElo && playerElo[league.config.name] != undefined) {
 
 			const db = client.databases.get(league.config.name);
 			const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} WHERE displayname = "${player.displayname}";`);
-			console.log(rows.length)
-			if (rows.length != 0) rankedStats = `Elo: ${rows[0].elo}, ${rows[0].kills != 0 && rows[0].deaths != 0 ? `KDR: ${rows[0].kills / rows[0].deaths}, ` : ''} Wins: ${rows[0].wins}, Losses: ${rows[0].losses}`;
-		console.log('1st rankedStats: ' + rankedStats)
+
+			if (rows.length != 0) rankedStats = `Elo: ${rows[0].elo}, ${rows[0].kills != 0 && rows[0].deaths != 0 ? `KDR: ${(rows[0].kills / rows[0].deaths).toFixed(3)}, ` : ''} Wins: ${rows[0].wins}, Losses: ${rows[0].losses}`;
+
 		}
 	}
-	console.log('2nd rankedStats: ' + rankedStats)
+
     // Construct the embed:
     let display;
     if (message.league == "mscl") display = `${client.msclGarbage.get(player.teamrank)}${client.escape(player.displayname)}${client.emojiMap.get(player.leaguerank)}`; 
@@ -40,7 +40,7 @@ exports.run = async (client, message, args) => {
 		.setTitle(display)
 		.setURL("https://club.mpcleague.com/players/${player.displayname}")
 		.addField("Team", !team ? 'None' : team.name, true)
-		.addField(`[KDR] Rating: ${player.kills / player.deaths}`, `${player.kills}/${player.deaths}`, true)
+		.addField(`[KDR] Rating: ${(player.kills / player.deaths).toFixed(3)}`, `${player.kills}/${player.deaths}`, true)
 		.addField('League', league.config.name.toUpperCase(), true)
 		.setColor(colour)
 		.setTimestamp();
