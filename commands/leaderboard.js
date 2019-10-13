@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
 	if (!league) return;
 	let db = client.databases.get(league.config.name);
 
-	const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} ORDER BY elo DESC LIMIT 15;`);
+	const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} ORDER BY elo DESC LIMIT 10;`);
 
 	let elos = rows.map(row => `**${row.displayname}** | **Elo:** ${row.elo}, ${row.kills != 0 && row.deaths != 0 ? `**KDR:** ${(row.kills / row.deaths).toFixed(3)}, ` : ''} **Wins:** ${row.wins}, **Losses:** ${row.losses}**`);
 	
