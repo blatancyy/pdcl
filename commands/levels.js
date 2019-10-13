@@ -1,4 +1,4 @@
-exports.aliases = ["rankings", "leaderboard"];
+exports.aliases = ["rankings"];
 exports.run = (client, message, args) => {
     if (!message.home) return;
     if (message.hub) return;
