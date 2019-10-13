@@ -11,6 +11,9 @@ exports.run = async(client, message, args) => {
 	let playerElo = client.playerElos.get(player);
 	if (!playerElo) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
+	playerElo.swcl = 0;
+	client.playerElos.set(player, playerElo);
+
 	var e = false;
 	await db.execute(`UPDATE ${table} SET elo = 0 WHERE displayname = "${player}";`).catch((e) => {
 		console.log(`Error whilst updating someone's elo: ${e}.`);
