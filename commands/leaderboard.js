@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
 
 	const [rows, fields] = await db.execute(`SELECT * FROM ${league.config.ranked.table} ORDER BY elo DESC LIMIT 15;`);
 
-	let elos = rows.map(row => `**${row.displayname}** | **Elo: ${row.elo}, ${row.kills != 0 && row.deaths != 0 ? `KDR: ${(row.kills / row.deaths).toFixed(3)}, ` : ''} Wins: ${row.wins}, Losses: ${row.losses}**`);
+	let elos = rows.map(row => `**${row.displayname}** | **Elo:** ${row.elo}, ${row.kills != 0 && row.deaths != 0 ? `**KDR:** ${(row.kills / row.deaths).toFixed(3)}, ` : ''} **Wins:** ${row.wins}, **Losses:** ${row.losses}**`);
 	
 	// Some day if Discord accounts are linked with MC IGNs we can use this.
     // let authorEntry = elos.find((u) => u.id === message.author.id);  
