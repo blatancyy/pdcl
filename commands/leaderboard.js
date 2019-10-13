@@ -1,5 +1,5 @@
 
-exports.run = (client, message, args) => {
+exports.run = async (client, message, args) => {
     if (!message.home) return;
     if (message.hub) return;
 
