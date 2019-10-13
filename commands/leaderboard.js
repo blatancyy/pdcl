@@ -22,7 +22,6 @@ exports.run = async (client, message, args) => {
     .addField(`Showing ranked leaderboard for ${message.guild.name}.`, elos)
     // .addField("Individual Stats", author)
     .setColor("BLUE")
-    .setFooter("Global Cooldown of 15-25xp per message/minute!")
     .setTimestamp();
 
     message.channel.send({embed: levelsEmbed});
