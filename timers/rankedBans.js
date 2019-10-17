@@ -20,9 +20,9 @@ exports.run = async (client) => {
 }
 
 const unban = async(client, guild, id) => {
-    let roleName = client.config.leagues.find((l) => l.config.id == guild.id).config.ranked.banRole;
-    let role = guild.roles.find((r) => r.name.toLowerCase() == roleName);
-    if (!role) return console.log(`Couldn't find role: ${roleName} whilst unbanning user from ranked in ${guild.name}.`);
+    let roleID = client.config.leagues.find((l) => l.config.id == guild.id).config.ranked.banRole;
+    let role = guild.roles.find((r) => r.id == roleID);
+    if (!role) return console.log(`Couldn't find role: ${roleID} whilst unbanning user from ranked in ${guild.name}.`);
 
     let member = await guild.fetchMember(id);
     if (!member) return console.log("Member left the discord? Ranked unbans.");

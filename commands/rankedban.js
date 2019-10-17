@@ -29,8 +29,8 @@ exports.run = async(client, message, args) => {
     let reason = args.slice(time == "0" ? 1 : 2).join(" ");
     if (!reason) return message.channel.send("Provide a reason for the ranked ban.");
 
-    let role = message.guild.roles.find((r) => r.name.toLowerCase() == league.config.ranked.banRole);
-    if (!role) return message.channel.send(`Did not find 'Ranked Banned' role in this guild. - Config includes ${client.config.ranked.banRole}.`);
+    let role = message.guild.roles.find((r) => r.id == league.config.ranked.banRole);
+    if (!role) return message.channel.send(`Did not find the ranked ban role in this guild. - Config includes ${client.config.ranked.banRole}.`);
 
     let isBanned = member.roles.has(role.id);
     if (isBanned) return message.channel.send("This member is already banned.");
