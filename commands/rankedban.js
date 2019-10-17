@@ -2,7 +2,7 @@ exports.aliases = ["rban"];
 exports.run = async(client, message, args) => {
     if (!message.home) return;
 
-    const rankedBanRoles = ["global", "leadership", "ranked ms organizer", "management"];
+    const rankedBanRoles = ["global", "leadership", "ranked ms organizer", "management", "developer"];
 
     var hasPerms = false;
     rankedBanRoles.forEach((name) => {
