@@ -26,7 +26,7 @@ exports.run = async(client, message, args) => {
 
 	if (!client.players[league.config.name].some(p => p.displayname.toLowerCase().includes(reqPlayer))) {
 		await db.execute(`INSERT INTO players (displayname, uuid, team_id) VALUES ("${username}", "${uuid}", 0);`);
-		client.players[league.config.name].push({ displayname: username, uuid, region: 0, team_id: 0, teamrank: 0, leaguerank: 0, kills: 0, deaths: 0, rating: 0, blacklisted: 0, token: null, games_played: 0 })}	
+		client.players[league.config.name].push({ displayname: username, uuid, region: 0, team_id: 0, teamrank: 0, leaguerank: 0, kills: 0, deaths: 0, rating: 0, blacklisted: 0, token: null, games_played: 0 });	
 	}
 	
 	let playerElo = client.playerElos.get(username);
