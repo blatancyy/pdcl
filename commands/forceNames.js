@@ -27,7 +27,9 @@ exports.run = async(client, message, args) => {
 
     console.log("Clearing all current elo data from the mscl elo map!")
     await client.playerElos.clear();
-    await client.loadElos(client);
+	await client.loadElos(client);
+	
+	await client.loadRosterData();
 
     message.channel.send(`Successfully forced the update username script for \`${rankedTable}\` in database: \`${league.config.name}\`.`);
     message.channel.stopTyping();
