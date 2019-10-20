@@ -19,7 +19,8 @@ exports.run = async(client, message, args) => {
 
     const db = client.databases.get(league.config.name);
     const [rows, fields] = await db.execute(`SELECT * FROM ${rankedTable};`);
-    await client.updateUsernames(client, rows, { db: database, table: rankedTable });
+	await client.updateUsernames(client, rows, { db: database, table: rankedTable });
+	await client.updateUsernames(client, client.players[league.config.name], { db: database, table: "players"});
 
     // Cheat method, please help me owo @snowful
     await client.wait(5000);
