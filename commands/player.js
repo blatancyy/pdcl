@@ -10,8 +10,9 @@ exports.run = async (client, message, args) => {
 
     // Find player: 
     let reqPlayer = client.escape(args[0].toLowerCase());
-    let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(reqPlayer));
-    if (!player) return message.channel.send("Did not find player.");
+	let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(reqPlayer));
+	// if (!player) player = client.playerElos.get(Array.from(client.playerElos.keys()).find((name) => name.toLowerCase().includes(reqPlayer)));
+	if (!player) return message.channel.send("Did not find player.");
 
 	let team = client.teams[league.config.name].find((t) => t.id === player.team_id);
 

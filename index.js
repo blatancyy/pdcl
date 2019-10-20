@@ -195,7 +195,7 @@ class Bot extends Client {
             this.players[name] = [];
             this.teams[name] = [];
 
-			let [rows, fields] = await db.execute("SELECT * FROM players WHERE team_id > 0")
+			let [rows, fields] = await db.execute("SELECT * FROM players;")
 				.catch(e => console.log(`[PDCL v3] Error whilst loading players w/ db: ${name}. \nError: ${e}`));
 			
             this.players[name] = rows;
