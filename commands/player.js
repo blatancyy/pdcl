@@ -40,8 +40,7 @@ exports.run = async (client, message, args) => {
 	const playerEmbed = new client.djs.RichEmbed()
 		.setTitle(display)
 		.setURL("https://club.mpcleague.com/players/${player.displayname}")
-		.addField("Team", !team ? 'None' : team.name, true)	
-		.addField('League', league.config.name.toUpperCase(), true)
+		.addField('Team / League', `${!team ? 'None' : team.name} / ${league.config.name.toUpperCase()}`, true)	
 		.setColor(colour)
 		.setTimestamp();
 	if (player.deaths != 0) playerEmbed.addField(`[KDR] Rating: ${(player.kills / player.deaths).toFixed(3)}`, `${player.kills}/${player.deaths}`, true)
