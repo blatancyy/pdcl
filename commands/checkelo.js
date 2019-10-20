@@ -1,4 +1,3 @@
-exports.aliases = ['p'];
 exports.run = async (client, message, args) => {
     if (message.hub) return
     if (!args.length) return message.channel.send("Please provide a player name.");
