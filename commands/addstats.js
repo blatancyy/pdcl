@@ -1,4 +1,5 @@
-exports.run = async(client, message, args) => {
+exports.aliases = ['as'];
+exports.run = async (client, message, args) => {
 	let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
 	if (!league.config.ranked.status) return;
 	if (!league.config.ranked.stats.includes(message.author.id)) return;
@@ -35,7 +36,7 @@ exports.run = async(client, message, args) => {
 		e = true;
 	});
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s elo to ${newElo}, ${wins} wins, ${losses} losses.`);	
+	if (!e)	message.channel.send(`Successfully adjusted ${player}'s stats by: ${newElo} elo, ${wins} wins, ${losses} losses.\nuse !player ${player} to check full stats.`);	
 }
 
 exports.help = (client, message, args) => {
