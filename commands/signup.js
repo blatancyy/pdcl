@@ -30,7 +30,10 @@ exports.run = async(client, message, args) => {
 	}
 	
 	let playerElo = client.playerElos.get(username);
-	if (!playerElo) playerElo = {};
+	if (!playerElo) {
+		client.playerElos.set(username, {});
+		playerElo = client.playerElos.get(username);
+	}
 	playerElo[league.config.name] = startingElo;
     console.log(`Successfully set ${username}'s (${uuid}) starting elo to ${startingElo}.`);
 }
