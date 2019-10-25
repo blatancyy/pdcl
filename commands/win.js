@@ -30,14 +30,14 @@ exports.run = async (client, message, args) => {
 		let player = { displayname: req }
 		let playerElo = {swcl: 0}
 
-		let eloGain = await getEloGain(playerElo.swcl, win);
+		let eloGain = await getEloGain(playerElo, win);
 		playerElo.swcl = eloGain;
 
 		players.push({ displayname: player.displayname, eloGain, playerElo });
 				
 	}
 
-	if (players.length > 0) message.channel.send(`**CONFIRMATION** - About to make the following changes: \n**${players.map(p => `${p.displayname}: add ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**\n. Reply with 'yes' to confirm, anything else to cancel.`);
+	if (players.length > 0) message.channel.send(`**CONFIRMATION** - About to make the following changes: \n**${players.map(p => `${p.displayname}: add ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**\nReply with 'yes' to confirm, anything else to cancel.`);
 
 	let confirmation = await message.channel.awaitMessages((msg) => msg.author.id == message.author.id, { max: 1, time: 120000, errors: ['time'] })
 		.catch(() => message.channel.send('Aborting stats insert. Time ran out'));
@@ -54,7 +54,7 @@ exports.run = async (client, message, args) => {
 			message.channel.send("Something went wrong saving to the DB. Ping Snow .o.");
 		});
 	}
-	message.channel.send(`Successfully adjusted: \n**${players.map(p => `${p.displayname}: added ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**.\nUse !player to see total stats`);
+	message.channel.send(`Successfully adjusted: \n**${players.map(p => `${p.displayname}: added ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**\nUse !player to see total stats`);
 }
 
 exports.help = (client, message, args) => {
