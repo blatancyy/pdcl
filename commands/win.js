@@ -14,21 +14,19 @@ exports.run = async (client, message, args) => {
 	
 	for (const req of reqPlayers) {
 		
-		// // Find player: 
-		// let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase() === req);
-		// if (!player) player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(req));
-		// if (!player) {
-		// 	message.channel.send(`WARNING: Didn't find player ${req} (double check spelling). Continuing...`);
-		// 	continue;
-		// }
+		// Find player: 
+		let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase() === req);
+		if (!player) player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(req));
+		if (!player) {
+			message.channel.send(`WARNING: Didn't find player ${req} (double check spelling). Continuing...`);
+			continue;
+		}
 
-		// let playerElo = client.playerElos.get(player.displayname);
-		// if (!playerElo) {
-		// 	message.channel.send(`Couldn't find ranked elo for ${player.displayname}, check the case-sensitivity.`);
-		// 	continue;
-		// }
-		let player = { displayname: req }
-		let playerElo = {swcl: 0}
+		let playerElo = client.playerElos.get(player.displayname);
+		if (!playerElo) {
+			message.channel.send(`Couldn't find ranked elo for ${player.displayname}, check the case-sensitivity.`);
+			continue;
+		}
 
 		let eloGain = await getEloGain(playerElo, win);
 
@@ -72,6 +70,7 @@ exports.help = (client, message, args) => {
 }
 
 const getEloGain = async (playerElo, win = true) => {
+
 
 	if (!playerElo.swcl) playerElo.swcl = 0;
 	if (!!win)
