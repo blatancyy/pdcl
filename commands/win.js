@@ -61,6 +61,7 @@ exports.help = (client, message, args) => {
 }
 
 const getEloGain = async (playerElo, win = true) => {
+	console.log('2 ' +win)
 	if (!playerElo.swcl) playerElo.swcl = 0;
 	if (!!win)
 		return playerElo.swcl >= 900 ? 10 : playerElo.swcl >= 750 ? 15 : playerElo.swcl >= 550 ? 20 : playerElo.swcl >= 350 ? 25 : 30;
