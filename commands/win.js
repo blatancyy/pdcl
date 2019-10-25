@@ -15,8 +15,8 @@ exports.run = async (client, message, args) => {
 	for (const req of reqPlayers) {
 		
 		// Find player: 
-		let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase() === req);
-		if (!player) player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(req));
+		let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase() === req.toLowerCase());
+		if (!player) player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(req.toLowerCase()));
 		if (!player) {
 			message.channel.send(`WARNING: Didn't find player ${req} (double check spelling). Continuing...`);
 			continue;
