@@ -75,5 +75,5 @@ const getEloGain = async (playerElo, win = true) => {
 	if (!!win)
 		return playerElo.swcl >= 900 ? 10 : playerElo.swcl >= 750 ? 15 : playerElo.swcl >= 550 ? 20 : playerElo.swcl >= 350 ? 25 : 30;
 	else
-		return playerElo.swcl >= 750 ? -20 : playerElo.swcl >= 550 ? -15 : playerElo.swcl >= 350 ? -15 : playerElo.swcl >= 150 ? -10 : 0;
+		return playerElo.swcl >= 750 ? -20 : playerElo.swcl >= 550 ? -15 : playerElo.swcl >= 350 ? -15 : playerElo.swcl >= 100 ? -10 : 0;
 }
