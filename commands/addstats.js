@@ -1,4 +1,4 @@
-exports.aliases = ['as'];
+exports.aliases = ['as']
 exports.run = async (client, message, args) => {
 	let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
 	if (!league.config.ranked.status) return;
@@ -7,36 +7,51 @@ exports.run = async (client, message, args) => {
 	let table = league.config.ranked.table;
 	const db = client.databases.get(message.league);
 
-	let player = args[0];
-	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
-	let playerElo = client.playerElos.get(player);
-	if (!playerElo) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
-
-	let elo = args[1];
-	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
-	if (isNaN(elo)) return message.channel.send("Please provide a number.");
-
-	let wins = args[2];
-	if (!wins) wins = "+0";
-	if (isNaN(wins)) return message.channel.send("Please provide a number.");
-
-	let losses = args[3];
-	if (!losses) losses = "+0";
-	if (isNaN(losses)) return message.channel.send("Please provide a number.");
-
-	// Using +(elo) to make sure it's a number.
-	let newElo = playerElo.swcl + (+elo); 
-	playerElo.swcl = newElo;
-	client.playerElos.set(player, playerElo);
-
-	var e = false;
-	await db.execute(`UPDATE ${table} SET elo = ${newElo}, wins = wins + ${wins}, losses = losses + ${losses}, games_played = wins + losses WHERE displayname = "${player}";`).catch((e) => {
-		console.log(`Error whilst updating someone's elo: ${e}.`);
-		message.channel.send("Something went wrong. Error has been logged to the console.");
-		e = true;
-	});
+	const reqPlayers = args.slice(1, args.length);
+	const win = ['win', 'won', 'w'].some(e => args[0].toLowerCase() === e);
+	let players = [];
 	
-	if (!e)	message.channel.send(`Successfully adjusted ${player}'s stats by: ${newElo} elo, ${wins} wins, ${losses} losses.\nuse !player ${player} to check full stats.`);	
+	for (const req of reqPlayers) {
+		
+		// Find player: 
+		let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase() === req.toLowerCase());
+		if (!player) player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(req.toLowerCase()));
+		if (!player) {
+			message.channel.send(`WARNING: Didn't find player ${req} (double check spelling). Continuing...`);
+			continue;
+		}
+
+		let playerElo = client.playerElos.get(player.displayname);
+		if (!playerElo) {
+			message.channel.send(`Couldn't find ranked elo for ${player.displayname}, check the case-sensitivity.`);
+			continue;
+		}
+
+		let eloGain = await getEloGain(playerElo, win);
+
+		players.push({ displayname: player.displayname, eloGain, playerElo });
+				
+	}
+
+	if (players.length > 0) message.channel.send(`**CONFIRMATION** - About to make the following changes: \n**${players.map(p => `${p.displayname}: add ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**\nReply with 'yes' to confirm, anything else to cancel.`);
+
+	let confirmation = await message.channel.awaitMessages((msg) => msg.author.id == message.author.id, { max: 1, time: 120000, errors: ['time'] })
+		.catch(() => message.channel.send('Aborting stats insert. Time ran out'));
+	
+    if (!confirmation) return;
+	if (confirmation.first().content.toLowerCase() != 'yes') return message.channel.send('Aborting stats insert. User cancelled.');
+	
+	for (const toAdd of players) {
+
+		toAdd.playerElo.swcl += toAdd.eloGain;
+		client.playerElos.set(toAdd.displayname, toAdd.playerElo);
+
+		await db.execute(`UPDATE ${table} SET elo = elo + ${toAdd.eloGain}${win ? `, wins = wins + 1` : `, losses = losses + 1`}, games_played = wins + losses WHERE displayname = "${toAdd.displayname}";`).catch((e) => {
+			console.log(`Error whilst updating ${toAdd.displayname}'s elo: ${e}.`);
+			message.channel.send("Something went wrong saving to the DB. Ping Snow .o.");
+		});
+	}
+	message.channel.send(`Successfully adjusted: \n**${players.map(p => `${p.displayname}: added ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**\nUse !player to see total stats`);
 }
 
 exports.help = (client, message, args) => {
@@ -51,4 +66,14 @@ exports.help = (client, message, args) => {
     .setTimestamp();
 
     message.channel.send({embed: helpEmbed});
+}
+
+const getEloGain = async (playerElo, win = true) => {
+
+
+	if (!playerElo.swcl) playerElo.swcl = 0;
+	if (!!win)
+		return playerElo.swcl >= 900 ? 10 : playerElo.swcl >= 750 ? 15 : playerElo.swcl >= 550 ? 20 : playerElo.swcl >= 350 ? 25 : 30;
+	else
+		return playerElo.swcl >= 750 ? -20 : playerElo.swcl >= 550 ? -15 : playerElo.swcl >= 350 ? -15 : playerElo.swcl >= 150 ? -10 : 0;
 }
