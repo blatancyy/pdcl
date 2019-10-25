@@ -5,13 +5,14 @@ exports.run = async(client, message, args) => {
 	if (!league.config.ranked.status) return;
 	if (!league.config.ranked.stats.includes(message.author.id)) return;
 
+	const leagueName = league.config.name;
 	let table = league.config.ranked.table;
 	const db = client.databases.get(message.league);
 
 	let player = args[0];
 	if (!player) return message.channel.send("Please provide a player name, case-sensitive.");
 	let playerElo = client.playerElos.get(player);
-	if (!playerElo.mscl && playerElo.mscl !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
+	if (!playerElo[leagueName] && playerElo[leagueName] !== 0) return message.channel.send(`Couldn't find player: ${player}, check the case-sensitivity.`);
 
 	let elo = args[1];
 	if (!elo) return message.channel.send("Please provide +/-(elo) e.g +50, -30.");
@@ -20,8 +21,8 @@ exports.run = async(client, message, args) => {
 	if (isNaN(elo)) return message.channel.send("Please provide a number.");
 
 	// Using +(elo) to make sure it's a number.
-	let newElo = playerElo.mscl + (+elo); 
-	playerElo.mscl = newElo;
+	let newElo = playerElo[leagueName] + (+elo); 
+	playerElo[leagueName] = newElo;
 	client.playerElos.set(player, playerElo);
 
 	var e = false;
