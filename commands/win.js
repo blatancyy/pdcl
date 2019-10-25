@@ -9,7 +9,8 @@ exports.run = async (client, message, args) => {
 	const db = client.databases.get(message.league);
 
 	const reqPlayers = args.slice(1, args.length);
-	const win = ['win', 'won', 'w'].some(e => args[0].toLowerCase() === e) ? true : false;
+	const win = ['win', 'won', 'w'].some(e => args[0].toLowerCase() === e);
+	console.log(win)
 	let players = [];
 	
 	for (const req of reqPlayers) {
@@ -61,7 +62,7 @@ exports.help = (client, message, args) => {
 
 const getEloGain = async (playerElo, win = true) => {
 	if (!playerElo.swcl) playerElo.swcl = 0;
-	if (win)
+	if (!!win)
 		return playerElo.swcl >= 900 ? 10 : playerElo.swcl >= 750 ? 15 : playerElo.swcl >= 550 ? 20 : playerElo.swcl >= 350 ? 25 : 30;
 	else
 		return playerElo.swcl >= 750 ? -20 : playerElo.swcl >= 550 ? -15 : playerElo.swcl >= 350 ? -15 : playerElo.swcl >= 150 ? -10 : 0;
