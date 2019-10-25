@@ -10,7 +10,6 @@ exports.run = async (client, message, args) => {
 
 	const reqPlayers = args.slice(1, args.length);
 	const win = ['win', 'won', 'w'].some(e => args[0].toLowerCase() === e);
-	console.log(win)
 	let players = [];
 	
 	for (const req of reqPlayers) {
@@ -32,7 +31,6 @@ exports.run = async (client, message, args) => {
 
 		let eloGain = await getEloGain(playerElo.swcl, win);
 		playerElo.swcl = eloGain;
-		if (eloGain == 0) continue;
 		client.playerElos.set(player.displayname, playerElo);
 
 		players.push({ displayname: player.displayname, eloGain });
@@ -61,7 +59,7 @@ exports.help = (client, message, args) => {
 }
 
 const getEloGain = async (playerElo, win = true) => {
-	console.log('2 ' +win)
+
 	if (!playerElo.swcl) playerElo.swcl = 0;
 	if (!!win)
 		return playerElo.swcl >= 900 ? 10 : playerElo.swcl >= 750 ? 15 : playerElo.swcl >= 550 ? 20 : playerElo.swcl >= 350 ? 25 : 30;
