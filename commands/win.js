@@ -44,7 +44,7 @@ exports.run = async (client, message, args) => {
 	
 	for (const toAdd of players) {
 
-		toAdd.playerElo.swcl += eloGain;
+		toAdd.playerElo.swcl += toAdd.eloGain;
 		client.playerElos.set(toAdd.displayname, toAdd.playerElo);
 
 		await db.execute(`UPDATE ${table} SET elo = elo + ${toAdd.eloGain}${win ? `, wins = wins + 1` : `, losses = losses + 1`}, games_played = wins + losses WHERE displayname = "${toAdd.displayname}";`).catch((e) => {
