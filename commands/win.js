@@ -29,7 +29,7 @@ exports.run = async (client, message, args) => {
 		let player = { displayname: req }
 		let playerElo = {swcl: 0}
 
-		let eloGain = getEloGain(playerElo.swcl, win);
+		let eloGain = await getEloGain(playerElo.swcl, win);
 		playerElo.swcl = eloGain;
 		if (eloGain == 0) continue;
 		client.playerElos.set(player.displayname, playerElo);
