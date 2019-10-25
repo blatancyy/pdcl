@@ -31,7 +31,6 @@ exports.run = async (client, message, args) => {
 		let playerElo = {swcl: 0}
 
 		let eloGain = await getEloGain(playerElo, win);
-		playerElo.swcl = eloGain;
 
 		players.push({ displayname: player.displayname, eloGain, playerElo });
 				
@@ -47,7 +46,8 @@ exports.run = async (client, message, args) => {
 	
 	for (const toAdd of players) {
 
-		client.playerElos.set(toAdd.displayname, toAdd.playerElo[league.config.name]);
+		toAdd.playerElo.swcl += eloGain;
+		client.playerElos.set(toAdd.displayname, toAdd.playerElo);
 
 		await db.execute(`UPDATE ${table} SET elo = elo + ${toAdd.eloGain}${win ? `, wins = wins + 1` : `, losses = losses + 1`}, games_played = wins + losses WHERE displayname = "${toAdd.displayname}";`).catch((e) => {
 			console.log(`Error whilst updating ${toAdd.displayname}'s elo: ${e}.`);
