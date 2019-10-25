@@ -13,35 +13,48 @@ exports.run = async (client, message, args) => {
 	let players = [];
 	
 	for (const req of reqPlayers) {
-		// Find player: 
+		
+		// // Find player: 
 		// let player = client.players[league.config.name].find((p) => p.displayname.toLowerCase() === req);
 		// if (!player) player = client.players[league.config.name].find((p) => p.displayname.toLowerCase().includes(req));
 		// if (!player) {
-	// 	message.channel.send(`WARNING: Didn't find player ${req} (double check spelling). Continuing...`);
-	// 	continue;
-	// }
+		// 	message.channel.send(`WARNING: Didn't find player ${req} (double check spelling). Continuing...`);
+		// 	continue;
+		// }
 
 		// let playerElo = client.playerElos.get(player.displayname);
 		// if (!playerElo) {
-	// 	message.channel.send(`Couldn't find ranked elo for ${player.displayname}, check the case-sensitivity.`);
-	// 	continue;
-	// }
+		// 	message.channel.send(`Couldn't find ranked elo for ${player.displayname}, check the case-sensitivity.`);
+		// 	continue;
+		// }
 		let player = { displayname: req }
 		let playerElo = {swcl: 0}
 
 		let eloGain = await getEloGain(playerElo.swcl, win);
 		playerElo.swcl = eloGain;
-		client.playerElos.set(player.displayname, playerElo);
 
-		players.push({ displayname: player.displayname, eloGain });
-				// ***TEMP TABLE: REPLACE WITH ${table}***
-		await db.execute(`UPDATE ranked_test SET elo = elo + ${eloGain}${win ? `, wins = wins + 1` : `, losses = losses + 1`}, games_played = wins + losses WHERE displayname = "${player.displayname}";`).catch((e) => {
-			console.log(`Error whilst updating someone's elo: ${e}.`);
+		players.push({ displayname: player.displayname, eloGain, playerElo });
+				
+	}
+
+	if (players.length > 0) message.channel.send(`**CONFIRMATION** - About to make the following changes: \n**${players.map(p => `${p.displayname}: add ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**\n. Reply with 'yes' to confirm, anything else to cancel.`);
+
+	let confirmation = await message.channel.awaitMessages((msg) => msg.author.id == message.author.id, { max: 1, time: 120000, errors: ['time'] })
+		.catch(() => message.channel.send('Aborting stats insert. Time ran out'));
+	
+    if (!confirmation) return;
+	if (confirmation.first().content.toLowerCase() != 'yes') return message.channel.send('Aborting stats insert. User cancelled.');
+	
+	for (const toAdd of players) {
+
+		client.playerElos.set(toAdd.displayname, toAdd.playerElo[league.config.name]);
+
+		await db.execute(`UPDATE ${table} SET elo = elo + ${toAdd.eloGain}${win ? `, wins = wins + 1` : `, losses = losses + 1`}, games_played = wins + losses WHERE displayname = "${toAdd.displayname}";`).catch((e) => {
+			console.log(`Error whilst updating ${toAdd.displayname}'s elo: ${e}.`);
 			message.channel.send("Something went wrong saving to the DB. Ping Snow .o.");
 		});
 	}
-
-	if (players.length > 0) message.channel.send(`Successfully adjusted [${players.map(p => `${p.displayname}: added ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join(', ')}].\nUse !player to see total stats`);
+	message.channel.send(`Successfully adjusted: \n**${players.map(p => `${p.displayname}: added ${p.eloGain} elo, +1 ${win ? 'win': 'loss'}`).join('\n')}**.\nUse !player to see total stats`);
 }
 
 exports.help = (client, message, args) => {
