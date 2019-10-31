@@ -24,7 +24,7 @@ exports.run = async(client, message, args) => {
     let table = league.config.ranked.table;
 	await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
 
-	if (!client.players[league.config.name].some(p => p.displayname.toLowerCase().includes(username))) {
+	if (!client.players[league.config.name].some(p => p.displayname.toLowerCase().includes(username.toLowerCase()))) {
 		await db.execute(`INSERT INTO players (displayname, uuid, team_id) VALUES ("${username}", "${uuid}", 0);`);
 		client.players[league.config.name].push({ displayname: username, uuid, region: 0, team_id: 0, teamrank: 0, leaguerank: 0, kills: 0, deaths: 0, rating: 0, blacklisted: 0, token: null, games_played: 0 });	
 	}
