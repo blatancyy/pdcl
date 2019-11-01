@@ -130,7 +130,7 @@ class Bot extends Client {
 
 	async loadDatabase (name, database) {		
 		const connection = await this.mysql.createPool({
-			connectionLimit: 50,
+			connectionLimit: 40,
 			host: "localhost", 
 			user: this.config.credentials.mysql.username,
 			password: this.config.credentials.mysql.password,

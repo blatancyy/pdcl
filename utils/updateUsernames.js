@@ -1,5 +1,5 @@
 module.exports = async(client, players, dbInfo) => {
-    let db = await createNewConnection(client, dbInfo.db);
+	let db = client.databases.get(dbInfo.db);
     if (!db) return console.log(`Failed to create a new connection with db name: ${dbInfo.db}`);
 
     players.forEach((player) => {
@@ -26,17 +26,4 @@ module.exports = async(client, players, dbInfo) => {
 const clean = (uuid) => {
     if (typeof(uuid) !== "string") return false;
     return uuid.replace(/-/g, "");
-}
-
-const createNewConnection = async(client, database) => {
-	const connection = await client.mysql.createPool({
-		connectionLimit: 100,
-		host: "localhost", 
-		user: client.config.credentials.mysql.username,
-		password: client.config.credentials.mysql.password,
-		database: database
-	});
-
-	await connection.getConnection().catch(e => console.log(`[PDCL v3][UPDATE USERNAMES] Failed to establish new connection: \n${e}`));
-	return Promise.resolve(connection);
 }
