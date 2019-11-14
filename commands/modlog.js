@@ -26,8 +26,8 @@ exports.run = async (client, message, args) => {
     const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(message.author.tag, message.author.displayAvatarURL)
 		.setDescription(user.tag)
-		.addField("Current Mutes", `In no particular order: ${logs.filter(log => parseInt(log.expiry) > Date.now()).map(log => `${await client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
-		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => parseInt(log.expiry) < Date.now()).map(log => `${await client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
+		.addField("Current Mutes", `In no particular order: ${logs.filter(log => parseInt(log.expiry) > Date.now()).map(log => `${client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
+		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => parseInt(log.expiry) < Date.now()).map(log => `${client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.setColor("ORANGE")
 		.setTimestamp();
 	message.channel.send({embed: logEmbed});
