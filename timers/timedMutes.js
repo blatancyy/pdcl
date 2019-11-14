@@ -14,20 +14,20 @@ exports.run = async (client) => {
 				let league = client.guilds.get(id);
 				if (!league) return console.log(`[PDCL v3] Something went wrong: Failed to find guild in unmute timer.`);
 
-				unmute(client, league, entry.discord);
+				unmute(client, league, entry.target_id);
 			});
 		} else {
-			let league = client.guilds.get(entry.league);
+			let league = client.guilds.get(entry.league_id);
 			if (!league) return console.log(`[PDCL v3] Something went wrong: Failed to find guild in unmute timer.`);
 
-			unmute(client, league, entry.discord);
-			log(client, league, entry.discord);
+			unmute(client, league, entry.target_id);
+			log(client, league, entry.target_id);
 		}
 
 		// Remove row.
 		// db.execute(`DELETE FROM mute_data WHERE id = ${entry.id}`);
 
-		let guild = client.guilds.get(entry.league);
+		let guild = client.guilds.get(entry.league_id);
 
 		const dmEmbed = new client.djs.RichEmbed()
 			.setAuthor(client.user.tag, client.user.displayAvatarURL)
@@ -38,10 +38,10 @@ exports.run = async (client) => {
 			.setFooter("PDCL Bot v2.0")
 			.setTimestamp();
 
-		let user = await client.fetchUser(entry.discord);
+		let user = await client.fetchUser(entry.target_id);
 		user.send({ embed: dmEmbed }).catch(console.error);
 
-		if (global) log(client, guild, entry.discord, true);
+		if (global) log(client, guild, entry.target_id, true);
 	});
 }
 
