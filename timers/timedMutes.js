@@ -5,9 +5,10 @@ exports.run = async (client) => {
 	if (!rows.length) return console.log("[PDCL v3] Did not find any entries for mute timers.");
 
 	rows.forEach(async (entry) => {
-		let userObj = await client.fetchUser(entry.target_id);
 		let guild = client.guilds.get(entry.league_id);
-		let member = await guild.fetchMember(userObj);
+
+		let userObj = await client.fetchUser(entry.target_id).catch(e => console.log(`Couldn't get user ${entry.target_id} from ${guild.name}: ${e}`));
+		let member = await guild.fetchMember(userObj).catch(e => console.log(`Couldn't get member ${userObj.tag} from ${guild.name}: ${e}`));
 		if (!member) return;
 
 		if (Date.now() > entry.expiry && entry.has_expired == 0) return;
