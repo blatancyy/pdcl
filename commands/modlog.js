@@ -19,7 +19,7 @@ exports.run = async (client, message, args) => {
     if (!user) return message.channel.send(`Did not find a user with the id: ${args[0]}.`);
 
 	const db = client.databases.get('discord');
-	const logs = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}";`);
+	const logs = await db.execute(`SELECT * FROM mute_data WHERE target_id = "${args[0]}";`);
 
     // Logging and DM's:
     const logEmbed = new client.djs.RichEmbed()
