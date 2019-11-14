@@ -6,7 +6,7 @@ exports.run = async (client) => {
 
 	rows.forEach(async (entry) => {
 		let guild = client.guilds.get(entry.league_id);
-		let member = await guild.fetchMember(userObj);
+		let member = await guild.fetchMember(entry.target_id);
 		if (!member) return;
 
 		let expired = entry.expiry > Date.now() && member.roles.some(r => r.name.toLowerCase() === 'muted');
