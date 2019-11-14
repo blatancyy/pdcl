@@ -25,8 +25,8 @@ exports.run = async (client, message, args) => {
     const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(message.author.tag, message.author.displayAvatarURL)
 		.setDescription(target.user.tag)
-		.addField("Current Mutes", logs.filter(log => log.expiry > Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n'), true)
-		.addField("Previous Mutes", logs.filter(log => log.expiry < Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n'), true)
+		.addField("Current Mutes", `In no particular order: ${logs.filter(log => log.expiry > Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
+		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => log.expiry < Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.setColor("ORANGE")
 		.setTimestamp();
 	message.channel.embed(logEmbed);
