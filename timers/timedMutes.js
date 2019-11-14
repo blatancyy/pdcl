@@ -9,7 +9,7 @@ exports.run = async (client) => {
 		let member = await guild.fetchMember(entry.target_id);
 		if (!member) return;
 
-		let expired = (entry.expiry > Date.now() && !member.roles.some(r => r.name.toLowerCase() == 'muted'));
+		let expired = (entry.expiry > Date.now() && member.roles.some(r => r.name.toLowerCase() == 'muted'));
 		if (expired == true) return;
 
 		console.log(member.roles.some(r => r.name.toLowerCase() == 'muted'));
@@ -45,7 +45,7 @@ exports.run = async (client) => {
 			.setTimestamp();
 
 		let user = await client.fetchUser(entry.target_id);
-		user.send({ embed: dmEmbed }).catch(console.error);
+		if (user.id == '254728052070678529') user.send({ embed: dmEmbed }).catch(console.error);
 
 		if (global) log(client, guild, entry.target_id, true);
 	});
