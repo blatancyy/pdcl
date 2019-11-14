@@ -1,4 +1,4 @@
-exports.aliases = ['m']
+
 exports.run = async (client, message, args) => {
     if (!message.home) return;
     
@@ -21,12 +21,13 @@ exports.run = async (client, message, args) => {
 	const db = client.databases.get('discord');
 	const logs = await db.execute(`SELECT * FROM mute_data WHERE target_id = "${args[0]}";`);
 
+	console.log(logs);
     // Logging and DM's:
     const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(message.author.tag, message.author.displayAvatarURL)
 		.setDescription(user.tag)
-		.addField("Current Mutes", `In no particular order: ${logs.filter(log => log.expiry > Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
-		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => log.expiry < Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
+		.addField("Current Mutes", `In no particular order: ${logs.filter(log => log.expiry > Date.now()).map(log => `${client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
+		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => log.expiry < Date.now()).map(log => `${client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.setColor("ORANGE")
 		.setTimestamp();
 	message.channel.send({embed: logEmbed});
