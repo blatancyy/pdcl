@@ -58,7 +58,7 @@ const unmute = async (client, guild, target_id, staff_id) => {
 	let userObj = await client.fetchUser(target_id);
 	let foundMember = await guild.fetchMember(userObj);
 	if (!foundMember) return;
-	console.log(!!member)
+	console.log(!!foundMember)
 	if (!foundMember.roles.has(role.id)) return;
 	foundMember.removeRole(role).catch(console.error);
 	
