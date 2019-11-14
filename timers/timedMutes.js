@@ -9,9 +9,9 @@ exports.run = async (client) => {
 
 		let userObj = await client.fetchUser(entry.target_id).catch(e => console.log(`Couldn't get user ${entry.target_id} from ${guild.name}: ${e}`));
 		console.log('USER:')
-		console.log(userObj)
+		console.log(!!userObj)
 		let member = await guild.fetchMember(userObj).catch(e => console.log(`Couldn't get member ${userObj.tag} from ${guild.name}: ${e}`));
-		console.log(member)
+		console.log(!!member)
 		if (!member) return;
 
 		if (Date.now() > entry.expiry && entry.has_expired == 0) return;
