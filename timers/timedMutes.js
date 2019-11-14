@@ -5,7 +5,11 @@ exports.run = async (client) => {
 	if (!rows.length) return console.log("[PDCL v3] Did not find any entries for mute timers.");
 
 	rows.forEach(async (entry) => {
-		let expired = entry.expiry > Date.now();
+		let guild = client.guilds.get(entry.league_id);
+		let member = await guild.fetchMember(userObj);
+		if (!member) return;
+
+		let expired = entry.expiry > Date.now() && member.roles.some(r => r.name.toLowerCase() === 'muted');
 		if (expired == true) return;
 
 		let global = entry.global == 1 ? true : false;
@@ -27,7 +31,7 @@ exports.run = async (client) => {
 		// Remove row.
 		// db.execute(`DELETE FROM mute_data WHERE id = ${entry.id}`);
 
-		let guild = client.guilds.get(entry.league_id);
+		
 
 		const dmEmbed = new client.djs.RichEmbed()
 			.setAuthor(client.user.tag, client.user.displayAvatarURL)

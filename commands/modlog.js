@@ -25,7 +25,7 @@ exports.run = async (client, message, args) => {
     const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(user.tag, user.displayAvatarURL)
 		.addField("Current Mutes", `In no particular order:\n${logs.filter(log => parseInt(log.expiry) > Date.now())
-			.map(log => `${log.staff_id == '' ? 'Staff member unspecified.' : `${client.fetchUser(log.staff_id).tag}/${log.staff_id}`} - Reason: ${log.reason} - Expires: ${client.time(parseInt(log.expiry)-Date.now())}`).join('\n')}`, true)
+			.map(log => `${log.staff_id == '' ? 'Staff member unspecified.' : `${client.fetchUser(log.staff_id).tag}/${log.staff_id}`} - Reason: ${log.reason} - Expires in: ${client.time(parseInt(log.expiry)-Date.now())}`).join('\n')}`, true)
 		.addField("Previous Mutes", `In no particular order:\n${logs.filter(log => parseInt(log.expiry) < Date.now())
 			.map(log => `${log.staff_id == '' ? 'Staff member unspecified.' : `${client.fetchUser(log.staff_id).tag}/${log.staff_id}`} - Reason: ${log.reason} - Expired: ${client.time(Date.now()-parseInt(log.expiry))} ago`).join('\n')}`, true)
 		.setColor("ORANGE")
