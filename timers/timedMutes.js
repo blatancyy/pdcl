@@ -49,7 +49,7 @@ const unmute = async (client, guild, target_id, staff_id) => {
 	if (!role) return console.log(`Failed to unmute user: did not find 'Muted' role in ${guild.name}.`);
 
 	let userObj = await client.fetchUser(target_id);
-	let foundMember = await guild.fetchMember(userObj);
+	let foundMember = await guild.fetchMember(userObj).catch(() => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
 	if (!foundMember) return;
 
 	if (!foundMember.roles.has(role.id)) return;
@@ -63,7 +63,7 @@ const unmute = async (client, guild, target_id, staff_id) => {
 
 const log = async (client, guild, id, global) => {
 	let user = await client.fetchUser(id);
-	let foundMember = await guild.fetchMember(user).catch((e) => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
+	let foundMember = await guild.fetchMember(user).catch(() => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
 	if (!foundMember) return;
 
 	console.log('here log()')
