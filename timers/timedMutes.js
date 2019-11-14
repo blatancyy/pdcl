@@ -5,12 +5,13 @@ exports.run = async (client) => {
 	if (!rows.length) return console.log("[PDCL v3] Did not find any entries for mute timers.");
 
 	rows.forEach(async (entry) => {
+		let userObj = await client.fetchUser(entry.target_id);
 		let guild = client.guilds.get(entry.league_id);
-		let member = await guild.fetchMember(entry.target_id);
+		let member = await guild.fetchMember(userObj);
 		if (!member) return;
 
-		let expired = (entry.expiry > Date.now() && member.roles.some(r => r.name.toLowerCase() == 'muted'));
-		if (expired == true) return;
+		let expired = (Date.now() > entry.expiry && member.roles.some(r => r.name.toLowerCase() == 'muted'));
+		if (expired == false) return;
 
 		console.log(member.roles.some(r => r.name.toLowerCase() == 'muted'));
 
