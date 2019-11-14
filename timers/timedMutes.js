@@ -28,8 +28,6 @@ exports.run = async (client) => {
 		// Remove row.
 		// db.execute(`DELETE FROM mute_data WHERE id = ${entry.id}`);
 
-		
-
 		const dmEmbed = new client.djs.RichEmbed()
 			.setAuthor(client.user.tag, client.user.displayAvatarURL)
 			.setDescription(`You have been **unmuted** in **${guild.name}**.`)
@@ -53,10 +51,10 @@ const unmute = async (client, guild, target_id, staff_id) => {
 	let userObj = await client.fetchUser(target_id);
 	let foundMember = await guild.fetchMember(userObj);
 	if (!foundMember) return;
-	console.log(!!foundMember)
+
 	if (!foundMember.roles.has(role.id)) return;
 	foundMember.removeRole(role).catch(console.error);
-	
+	console.log('here unmute()')
 	const db = client.databases.get("discord");
 	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${foundMember.id}" AND has_expired = 0 AND league_id = ${guild.id} AND staff_id = "${staff_id}";`)
 
@@ -68,6 +66,7 @@ const log = async (client, guild, id, global) => {
 	let foundMember = await guild.fetchMember(user).catch((e) => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
 	if (!foundMember) return;
 
+	console.log('here log()')
 	let channel = global ? client.channels.get("548965999961964555") : guild.channels.find((c) => c.name == "mutelog");
 	if (!channel) return console.log("[PDCL v3] Didn't find channel when logging timed unmute.")
 

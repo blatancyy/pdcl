@@ -9,9 +9,9 @@ exports.run = async(client, message, args) => {
         let role = message.guild.roles.find((r) => r.name.toLowerCase() == name);
         if (role !== null && message.member.roles.has(role.id)) hasPerms = true;
 	});
-	
+
 	const db = client.databases.get('discord');
-	const [rows, fields] = db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND expiry < ${Date.now()}`);
+	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND expiry < ${Date.now()}`);
 
     if (!hasPerms && rows[0].staff_id != message.author.id) return;
 
