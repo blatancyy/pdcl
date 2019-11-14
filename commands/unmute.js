@@ -11,7 +11,7 @@ exports.run = async(client, message, args) => {
 	});
 	
 	const db = client.databases.get('discord');
-	const rows = db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND expiry < ${Date.now()}`);
+	const [rows, fields] = db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND expiry < ${Date.now()}`);
 
     if (!hasPerms && rows[0].staff_id != message.author.id) return;
 

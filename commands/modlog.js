@@ -19,13 +19,12 @@ exports.run = async (client, message, args) => {
     if (!user) return message.channel.send(`Did not find a user with the id: ${args[0]}.`);
 
 	const db = client.databases.get('discord');
-	const logs = await db.execute(`SELECT * FROM mute_data WHERE target_id = "${args[0]}";`);
+	const [logs, fields] = await db.execute(`SELECT * FROM mute_data WHERE target_id = "${args[0]}";`);
 
 	console.log(logs);
     // Logging and DM's:
     const logEmbed = new client.djs.RichEmbed()
-		.setAuthor(message.author.tag, message.author.displayAvatarURL)
-		.setDescription(user.tag)
+		.setAuthor(user.tag, user.displayAvatarURL)
 		.addField("Current Mutes", `In no particular order: ${logs.filter(log => parseInt(log.expiry) > Date.now()).map(log => `${client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => parseInt(log.expiry) < Date.now()).map(log => `${client.fetchUser(log.staff_id).tag}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.setColor("ORANGE")
