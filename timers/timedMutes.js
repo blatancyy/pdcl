@@ -7,11 +7,6 @@ exports.run = async (client) => {
 	rows.forEach(async (entry) => {
 		let guild = client.guilds.get(entry.league_id);
 
-		let userObj = await client.fetchUser(entry.target_id).catch(e => console.log(`Couldn't get user ${entry.target_id} from ${guild.name}: ${e}`));
-		let member = await guild.fetchMember(userObj).catch(e => console.log(`Couldn't get member ${userObj.tag} from ${guild.name}: ${e}`));
-		
-		if (!member) return;
-
 		if (Date.now() > entry.expiry && entry.has_expired == 0) return;
 
 		let global = entry.global == 1 ? true : false;
