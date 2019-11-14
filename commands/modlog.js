@@ -24,7 +24,7 @@ exports.run = async (client, message, args) => {
     // Logging and DM's:
     const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(message.author.tag, message.author.displayAvatarURL)
-		.setDescription(target.user.tag)
+		.setDescription(user.tag)
 		.addField("Current Mutes", `In no particular order: ${logs.filter(log => log.expiry > Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.addField("Previous Mutes", `In no particular order: ${logs.filter(log => log.expiry < Date.now()).map(log => `${client.fetchUser(log.staff_id)}/${log.staff_id} - ${log.reason} - ${client.time(log.expiry)}`).join('\n')}`, true)
 		.setColor("ORANGE")
