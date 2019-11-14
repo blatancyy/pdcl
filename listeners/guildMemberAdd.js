@@ -9,10 +9,12 @@ module.exports = async (client, member) => {
 	let user = member.user;
 	let sameDay = compareDays(createdAt, joinedAt);
 
+	let muteRole = guild.roles.find((r) => r.name.toLowerCase() == "muted");
+	if (!muteRole) return console.log(`[PDCL v3] Failed to find the 'Muted' role in ${guild.name}.`);
+
 	if (sameDay) {
-		let role = guild.roles.find((r) => r.name.toLowerCase() == "muted");
-		if (!role) return console.log(`[PDCL v3] Didn't find a muted role in ${guild.name}.`);
-		member.addRole(role.id).catch((e) => console.log(`Error whilst adding muted role: ${e}`));
+		
+		member.addRole(muteRole.id).catch((e) => console.log(`Error whilst adding muted role: ${e}`));
 
 		// Log:
 		const joinMutedEmbed = new client.djs.RichEmbed()
@@ -55,15 +57,12 @@ module.exports = async (client, member) => {
 
 	// Now check to see if they have existing mute information:
 	let db = client.databases.get("discord");
-	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league = "${guild.id}" AND discord = "${user.id}"`)
+	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${guild.id}" AND target_id = "${user.id}" AND expiry > ${Date.now()}`)
 		.catch(e => console.log(`[PDCL v3] Error whilst querying for mute data: ${e}.`));
 
 	if (!rows.length) return;
 
-	let role = guild.roles.find((r) => r.name.toLowerCase() == "muted");
-	if (!role) return console.log(`[PDCL v3] Failed to find the 'Muted' role in ${guild.name}.`);
-
-	member.addRole(role.id).catch((e) => console.log(`Error whilst adding role: ${e}.`));
+	member.addRole(muteRole.id).catch((e) => console.log(`Error whilst adding role: ${e}.`));
 
 	// Logging and DM's:
 	const logEmbed = new client.djs.RichEmbed()

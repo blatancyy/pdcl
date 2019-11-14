@@ -55,9 +55,9 @@ module.exports = async (client, message) => {
 			member.addRole(role).catch(console.error);
 		});
 
-		const query = `INSERT INTO mute_data (discord, league, expiry, global) VALUES ("${message.author.id}", "${message.guild.id}", "${Date.now() + 86400000}", 1);`;
 		const db = client.databases.get("discord");
-		db.execute(query).catch(e => console.log(`[PDCL v3] Error whilst querying mute information: \n${e}`));
+		db.execute(`INSERT INTO mute_data (target_id, staff_id, league_id, reason, expiry, global) VALUES ("${message.author.id}", "${client.user.id}", "${message.guild.id}", "Auto-detected slur", "${Date.now() + 86400000}", 1);`)
+			.catch(e => console.log(`[PDCL v3] Error inserting auto mute entry to DB: \n${e}`));
 
 		// const logEmbed = new client.djs.RichEmbed()
 		// 	.setAuthor(client.user.tag, client.user.displayAvatarURL)

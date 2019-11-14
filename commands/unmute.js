@@ -2,15 +2,18 @@ exports.run = async(client, message, args) => {
     if (!message.home) return;
     
     // Check permissions using role names, too lazy to use id:
-    const muteRoles = ["developer", "referee", "management", "director", "global", "leadership", "trial referee", "chat moderator"];
+	const muteRoles = ["developer", "management", "director", "global", "leadership"];
 
     var hasPerms = false;
     muteRoles.forEach((name) => {
         let role = message.guild.roles.find((r) => r.name.toLowerCase() == name);
         if (role !== null && message.member.roles.has(role.id)) hasPerms = true;
-    });
+	});
+	
+	const db = client.databases.get('discord');
+	const rows = db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND expiry < ${Date.now()}`);
 
-    if (!hasPerms) return;
+    if (!hasPerms && rows[0].staff_id != message.author.id) return;
 
     // Input validation: !unmute id 2h reason
     if (!args.length > 0) return message.channel.send("Please provide a discord id.");

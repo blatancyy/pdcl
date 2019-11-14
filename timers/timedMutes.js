@@ -25,7 +25,7 @@ exports.run = async (client) => {
 		}
 
 		// Remove row.
-		db.execute(`DELETE FROM mute_data WHERE id = ${entry.id}`);
+		// db.execute(`DELETE FROM mute_data WHERE id = ${entry.id}`);
 
 		let guild = client.guilds.get(entry.league);
 
