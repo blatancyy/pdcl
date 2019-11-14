@@ -12,6 +12,8 @@ exports.run = async (client) => {
 		let expired = (entry.expiry > Date.now() && member.roles.some(r => r.name.toLowerCase() == 'muted'));
 		if (expired == true) return;
 
+		console.log(member.roles.some(r => r.name.toLowerCase() == 'muted'));
+
 		let global = entry.global == 1 ? true : false;
 		if (global) {
 			client.config.homeGuilds.forEach((id) => {
