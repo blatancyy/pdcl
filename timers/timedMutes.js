@@ -10,10 +10,7 @@ exports.run = async (client) => {
 		let member = await guild.fetchMember(userObj);
 		if (!member) return;
 
-		let expired = (Date.now() > entry.expiry && member.roles.some(r => r.name.toLowerCase() == 'muted'));
-		if (expired == false) return;
-
-		console.log(member.roles.some(r => r.name.toLowerCase() == 'muted'));
+		if (Date.now() > entry.expiry && entry.has_expired == 0) return;
 
 		let global = entry.global == 1 ? true : false;
 		if (global) {
@@ -21,13 +18,13 @@ exports.run = async (client) => {
 				let league = client.guilds.get(id);
 				if (!league) return console.log(`[PDCL v3] Something went wrong: Failed to find guild in unmute timer.`);
 
-				unmute(client, league, entry.target_id);
+				unmute(client, league, entry.target_id, entry.staff_id);
 			});
 		} else {
 			let league = client.guilds.get(entry.league_id);
 			if (!league) return console.log(`[PDCL v3] Something went wrong: Failed to find guild in unmute timer.`);
 
-			unmute(client, league, entry.target_id);
+			unmute(client, league, entry.target_id, entry.staff_id);
 			log(client, league, entry.target_id);
 		}
 
@@ -52,16 +49,20 @@ exports.run = async (client) => {
 	});
 }
 
-const unmute = async (client, guild, id) => {
+const unmute = async (client, guild, target_id, staff_id) => {
 	let role = guild.roles.find((r) => r.name.toLowerCase() == "muted");
 	if (!role) return console.log(`Failed to unmute user: did not find 'Muted' role in ${guild.name}.`);
 
-	let userObj = await client.fetchUser(id);
+	let userObj = await client.fetchUser(target_id);
 	let foundMember = await guild.fetchMember(userObj);
 	if (!foundMember) return;
 
 	if (!foundMember.roles.has(role.id)) return;
 	foundMember.removeRole(role).catch(console.error);
+	
+	const db = client.databases.get("discord");
+	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${foundMember.id}" AND has_expired = 0 AND league_id = ${guild.id} AND staff_id = "${staff_id}";`)
+
 	console.log(`[PDCL v3][Mute Timers] Unmuted ${userObj.tag} in ${foundMember.guild.name}.`);
 }
 

@@ -51,7 +51,8 @@ exports.run = async(client, message, args) => {
 
             member.removeRole(role).catch(console.error);
         });
-    }
+	}
+	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${target.id}" AND has_expired = 0 AND league_id = ${message.guild.id} AND staff_id = "${message.author.id}";`)
 
     global ? message.channel.send("✅ (Global)") : message.channel.send("✅");
 
