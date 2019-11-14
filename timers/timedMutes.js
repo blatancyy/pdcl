@@ -9,7 +9,7 @@ exports.run = async (client) => {
 		let member = await guild.fetchMember(entry.target_id);
 		if (!member) return;
 
-		let expired = (entry.expiry > Date.now() && member.roles.some(r => r.name.toLowerCase() == 'muted'));
+		let expired = (entry.expiry > Date.now() && !member.roles.some(r => r.name.toLowerCase() == 'muted'));
 		if (expired == true) return;
 
 		console.log(member.roles.some(r => r.name.toLowerCase() == 'muted'));
