@@ -11,7 +11,7 @@ exports.run = async(client, message, args) => {
 
     let ranked = league.config.ranked.status;         
     let rankedTable = league.config.ranked.table;
-    let database = league.config.database;
+    let database = league.config.name;
     if (!ranked) return;    
 
     // owo
