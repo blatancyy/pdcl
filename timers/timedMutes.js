@@ -49,7 +49,7 @@ const unmute = async (client, guild, target_id, staff_id) => {
 	if (!role) return console.log(`Failed to unmute user: did not find 'Muted' role in ${guild.name}.`);
 
 	const db = client.databases.get("discord");
-	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${foundMember.id}" AND has_expired = 0 AND league_id = ${guild.id} AND staff_id = "${staff_id}";`)
+	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${target_id}" AND has_expired = 0 AND league_id = ${guild.id} AND staff_id = "${staff_id}";`)
 
 	let userObj = await client.fetchUser(target_id);
 	if (!userObj) console.log(`[PDCL v3][Timed Unmutes] USER NOT FOUND: ${target_id}`)
