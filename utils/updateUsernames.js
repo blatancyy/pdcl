@@ -10,7 +10,10 @@ module.exports = async(client, players, dbInfo) => {
 		client.request.get({ url: `https://api.mojang.com/user/profiles/${uuid}/names`, json: true }, (e, r, b) => {
 			if (e) return console.log(`[PDCL v3][UPDATE USERNAMES] Error on get request resolve: ${e}`)
             if (!b) return console.log(`[PDCL v3][UPDATE USERNAMES] Didn't receive a response w/ UUID: ${uuid}.`);
-            if (b.constructor.name !== "Array") return console.log(`Not an array: ${b}.`);
+			if (b.constructor.name !== "Array") {
+				console.log(`Not an array:`)
+				return console.log(b);
+			}
 
             let updated = b.pop().name;
             if (current == updated) return;

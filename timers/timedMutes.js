@@ -49,6 +49,7 @@ const unmute = async (client, guild, target_id, staff_id) => {
 	if (!role) return console.log(`Failed to unmute user: did not find 'Muted' role in ${guild.name}.`);
 
 	let userObj = await client.fetchUser(target_id);
+	if (!userObj) console.log(`[PDCL v3][Timed Unmutes] USER NOT FOUND: ${target_id}`)
 	let foundMember = await guild.fetchMember(userObj).catch(() => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
 	if (!foundMember) return;
 
@@ -63,11 +64,12 @@ const unmute = async (client, guild, target_id, staff_id) => {
 
 const log = async (client, guild, id, global) => {
 	let user = await client.fetchUser(id);
+	if (!user) console.log(`[PDCL v3][Timed Unmutes] USER NOT FOUND: ${target_id}`)
 	let foundMember = await guild.fetchMember(user).catch(() => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
 	if (!foundMember) return;
 
-	let channel = global ? client.channels.get("548965999961964555") : guild.channels.find((c) => c.name == "mutelog");
-	if (!channel) return console.log("[PDCL v3] Didn't find channel when logging timed unmute.")
+	// let channel = global ? client.channels.get("548965999961964555") : guild.channels.find((c) => c.name == "mutelog");
+	// if (!channel) return console.log("[PDCL v3] Didn't find channel when logging timed unmute.")
 
 	// const logEmbed = new client.djs.RichEmbed()
 	// 	.setAuthor(client.user.tag, client.user.displayAvatarURL)

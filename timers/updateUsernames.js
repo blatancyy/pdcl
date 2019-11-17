@@ -2,7 +2,7 @@ exports.time = 60000 * 60 * 2;
 exports.run = async(client) => {
 	for (const league of client.config.leagues) {
         let ranked = league.config.ranked.status;        
-        let database = league.config.database;
+        let database = league.config.name;
 		
 		client.updateUsernames(client, client.players[league.config.name], { db: database, table: "players"});
         console.log(`Successfully updated player usernames for ${league.config.name.toUpperCase()}.`);
