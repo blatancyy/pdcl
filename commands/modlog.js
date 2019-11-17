@@ -22,11 +22,11 @@ exports.run = async (client, message, args) => {
 	const [logs, fields] = await db.execute(`SELECT * FROM mute_data WHERE target_id = "${args[0]}";`);
 
     // Logging and DM's:
-    const logEmbed = new client.djs.RichEmbed()
+	const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(user.tag, user.displayAvatarURL)
-		.addField("Current Mutes", `In no particular order:\n${logs.filter(log => parseInt(log.expiry) > Date.now())
+		.addField("Current Mutes", `In no particular order:\n${logs.filter(log => log.has_expired == 0)
 			.map(log => `${log.global == 1 ? 'Global' : 'Local'} Mute:\n${log.staff_id == '' ? 'Staff member unspecified.' : `${client.users.find(u => u.id == log.staff_id).tag}/${log.staff_id}`}\nReason: ${log.reason}\nExpires in: ${client.time(parseInt(log.expiry)-Date.now())}`).join('\n**---**\n')}`, true)
-		.addField("Previous Mutes", `In no particular order:\n${logs.filter(log => parseInt(log.expiry) < Date.now())
+		.addField("Previous Mutes", `In no particular order:\n${logs.filter(log => log.has_expired == 1)
 			.map(log => `${log.global == 1 ? 'Global' : 'Local'} Mute:\n${log.staff_id == '' ? 'Staff member unspecified.' : `${client.users.find(u => u.id == log.staff_id).tag}/${log.staff_id}`}\nReason: ${log.reason}\nExpired: ${client.time(Date.now()-parseInt(log.expiry))} ago`).join('\n**---**\n')}`, true)
 		.setColor("ORANGE")
 		.setTimestamp();

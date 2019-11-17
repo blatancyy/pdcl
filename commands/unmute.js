@@ -61,7 +61,7 @@ exports.run = async(client, message, args) => {
     .setAuthor(message.author.tag, message.author.displayAvatarURL)
     .setDescription("A member has been unmuted.")
     .addField("Target:", target.user.tag, true)
-    .addField("Reason:", reason, true)
+    .addField("Reason:", reason ? reason : 'No reason provided.', true)
     .setColor("GREEN")
     .setFooter("PDCL Bot v2.0")
     .setTimestamp();
@@ -69,7 +69,7 @@ exports.run = async(client, message, args) => {
     const dmEmbed = new client.djs.RichEmbed()
     .setAuthor(client.user.tag, client.user.displayAvatarURL)
     .setDescription(`You have been **unmuted** in **${message.guild.name}**.`)
-    .addField("Reason:", reason, true)
+    .addField("Reason:", reason ? reason : 'No reason provided.', true)
     .addField("Global ?", global ? "True" : "False", true)
     .setColor("GREEN")
     .setFooter("PDCL Bot v2.0")

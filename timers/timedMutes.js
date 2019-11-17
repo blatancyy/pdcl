@@ -48,6 +48,9 @@ const unmute = async (client, guild, target_id, staff_id) => {
 	let role = guild.roles.find((r) => r.name.toLowerCase() == "muted");
 	if (!role) return console.log(`Failed to unmute user: did not find 'Muted' role in ${guild.name}.`);
 
+	const db = client.databases.get("discord");
+	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${foundMember.id}" AND has_expired = 0 AND league_id = ${guild.id} AND staff_id = "${staff_id}";`)
+
 	let userObj = await client.fetchUser(target_id);
 	if (!userObj) console.log(`[PDCL v3][Timed Unmutes] USER NOT FOUND: ${target_id}`)
 	let foundMember = await guild.fetchMember(userObj).catch(() => console.log("[PDCL v3][Timed Unmutes] Member is no longer in guild."));
@@ -55,9 +58,6 @@ const unmute = async (client, guild, target_id, staff_id) => {
 
 	if (!foundMember.roles.has(role.id)) return;
 	foundMember.removeRole(role).catch(console.error);
-
-	const db = client.databases.get("discord");
-	await db.execute(`UPDATE mute_data SET has_expired = 1 WHERE target_id = "${foundMember.id}" AND has_expired = 0 AND league_id = ${guild.id} AND staff_id = "${staff_id}";`)
 
 	console.log(`[PDCL v3][Mute Timers] Unmuted ${userObj.tag} in ${foundMember.guild.name}.`);
 }
