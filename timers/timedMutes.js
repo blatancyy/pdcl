@@ -43,7 +43,7 @@ exports.run = async (client) => {
 		if (global) log(client, guild, entry.target_id, true);
 	});
 }
-asdfasdf
+
 const unmute = async (client, guild, target_id, staff_id) => {
 	let role = guild.roles.find((r) => r.name.toLowerCase() == "muted");
 	if (!role) return console.log(`Failed to unmute user: did not find 'Muted' role in ${guild.name}.`);
