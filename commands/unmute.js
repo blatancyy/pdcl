@@ -11,7 +11,7 @@ exports.run = async(client, message, args) => {
 	});
 
 	const db = client.databases.get('discord');
-	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND has_expired = 0 AND staff_id = "${message.author.id}";`);
+	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND has_expired = 0;`);
 	if (rows.length == 0) return message.channel.send(`Couldn't find any record for their mute.`); // check for role and remove
     if (!hasPerms && rows[0].staff_id != message.author.id) return;
 
