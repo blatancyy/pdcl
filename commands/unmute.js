@@ -1,6 +1,9 @@
 exports.run = async(client, message, args) => {
     if (!message.home) return;
-    
+	
+	// Input validation: !unmute id 2h reason
+	if (!args.length > 0) return message.channel.send("Please provide a discord id.");
+	
     // Check permissions using role names, too lazy to use id:
 	const muteRoles = ["developer", "management", "director", "global", "leadership"];
 
@@ -9,27 +12,28 @@ exports.run = async(client, message, args) => {
         let role = message.guild.roles.find((r) => r.name.toLowerCase() == name);
         if (role !== null && message.member.roles.has(role.id)) hasPerms = true;
 	});
-
-	const db = client.databases.get('discord');
-	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND has_expired = 0;`);
-	if (rows.length == 0) return message.channel.send(`Couldn't find any record for their mute.`); // check for role and remove
-    if (!hasPerms && rows[0].staff_id != message.author.id) return;
-
-    // Input validation: !unmute id 2h reason
-    if (!args.length > 0) return message.channel.send("Please provide a discord id.");
+    
     let user = await client.fetchUser(args[0]).catch((e) => console.log("Someone provided an invalid id in moderation."));
     if (!user) return message.channel.send(`Did not find a user with the id: ${args[0]}.`);
 
     let target = await message.guild.fetchMember(user).catch((e) => console.log("Failed to find member when unmuting."));
-    if (!target) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
+	if (!target) return message.channel.send("Successfully found user, but failed to fetch the guildMember.");
+	
+	let role = message.guild.roles.find((r) => r.name.toLowerCase() == "muted");
+    if (!role) return console.log(`[PDCL v3] Could not find 'Muted' role in ${message.guild.name}.`);
+    if (!target.roles.has(role.id)) return message.channel.send("This member is not muted.");
+
+	const db = client.databases.get('discord');
+	const [rows, fields] = await db.execute(`SELECT * FROM mute_data WHERE league_id = "${message.guild.id}" AND target_id = "${args[0]}" AND has_expired = 0;`);
+	if (rows.length == 0) {
+		target.removeRole(role).catch(console.error);
+		return message.channel.send(`Couldn't find any record for their mute. (Removing Mute role)`); // check for role and remove
+	}
+	if (!hasPerms && rows[0].staff_id != message.author.id) return;
 
     let time = args[1] ? client.time(args[1]) : "0";
     let reason = args[2] ? args[2].replace("--g", "") : "None Provided.";
     let global = message.content.endsWith("--g") ? true : false;
-
-    let role = message.guild.roles.find((r) => r.name.toLowerCase() == "muted");
-    if (!role) return console.log(`[PDCL v3] Could not find 'Muted' role in ${message.guild.name}.`);
-    if (!target.roles.has(role.id)) return message.channel.send("This member is not muted.");
 
     target.removeRole(role).catch(console.error);
 
