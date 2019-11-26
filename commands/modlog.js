@@ -25,9 +25,9 @@ exports.run = async (client, message, args) => {
 	const logEmbed = new client.djs.RichEmbed()
 		.setAuthor(user.tag, user.displayAvatarURL)
 		.addField("Current Mutes", `In no particular order:\n${logs.filter(log => log.has_expired == 0)
-			.map(log => `${log.global == 1 ? 'Global' : 'Local'} Mute:\n${log.staff_id == '' ? 'Staff member unspecified.' : `${client.users.find(u => u.id == log.staff_id).tag}/${log.staff_id}`}\nReason: ${log.reason}\nExpires in: ${client.time(parseInt(log.expiry)-Date.now())}`).join('\n**---**\n')}`.slice(0, 1024), true)
+			.map(log => `${log.global == 1 ? 'Global' : 'Local'} Mute in ${client.guilds.get(log.league_id).name}:\n${log.staff_id == '' ? 'Staff member unspecified.' : `${client.users.find(u => u.id == log.staff_id).tag}/${log.staff_id}`}\nReason: ${log.reason}\nExpires in: ${client.time(parseInt(log.expiry)-Date.now())}`).join('\n**---**\n')}`.slice(0, 1024), true)
 		.addField("Previous Mutes", `In no particular order:\n${logs.filter(log => log.has_expired == 1)
-			.map(log => `${log.global == 1 ? 'Global' : 'Local'} Mute:\n${log.staff_id == '' ? 'Staff member unspecified.' : `${client.users.find(u => u.id == log.staff_id).tag}/${log.staff_id}`}\nReason: ${log.reason}\n${Date.now()-parseInt(log.expiry) >= 0 ? `Expired: ${client.time(Date.now()-parseInt(log.expiry))} ago` : `Original expiration in: ${client.time(parseInt(log.expiry)-Date.now())}`}`).join('\n**---**\n')}`.slice(0, 1024), true)
+			.map(log => `${log.global == 1 ? 'Global' : 'Local'} Mute in ${client.guilds.get(log.league_id).name}:\n${log.staff_id == '' ? 'Staff member unspecified.' : `${client.users.find(u => u.id == log.staff_id).tag}/${log.staff_id}`}\nReason: ${log.reason}\n${Date.now()-parseInt(log.expiry) >= 0 ? `Expired: ${client.time(Date.now()-parseInt(log.expiry))} ago` : `Original expiration in: ${client.time(parseInt(log.expiry)-Date.now())}`}`).join('\n**---**\n')}`.slice(0, 1024), true)
 		.setColor("ORANGE")
 		.setTimestamp();
 	message.channel.send({embed: logEmbed});
