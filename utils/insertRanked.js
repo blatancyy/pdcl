@@ -11,9 +11,9 @@ module.exports = async(client, content) => {
         let uuid = args[1];
         let elo = args[2];
 
-        await db.execute(`INSERT INTO ranked_s8 (displayname, uuid, elo) VALUES ("${ign}", "${uuid}", ${elo});`)
+        await db.execute(`INSERT INTO ranked_s9 (displayname, uuid, elo) VALUES ("${ign}", "${uuid}", ${elo});`)
             .catch(console.error);
 
-        console.log(`Successfully added player ${ign} to the ranked_s8 table with elo: ${elo}, and uuid: ${uuid}.`);
+        console.log(`Successfully added player ${ign} to the ranked_s9 table with elo: ${elo}, and uuid: ${uuid}.`);
     });
 }
