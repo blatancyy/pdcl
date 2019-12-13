@@ -2,10 +2,10 @@ exports.run = async(client, message, args) => {
     if (!message.home) return console.log('is not a home guild');
 	if (message.hub) return console.log('is a hub channel');
 	
-	// const discordDB = client.databases.get('discord');
-	// const [signups, fields] = await discordDB.execute(`SELECT * FROM ranked_signups WHERE discord_id = "${message.author.id}" AND season = "${league.config.ranked.table}" AND league = "${message.league.id}";`)
-	// 	.catch(e => console.error(e));
-	// if (signups.length > 0) return message.channel.send(`You've already signed up an account for ranked this season.`);
+	const discordDB = client.databases.get('discord');
+	const [signups, fields] = await discordDB.execute(`SELECT * FROM ranked_signups WHERE discord_id = "${message.author.id}" AND season = "${league.config.ranked.table}" AND league_id = "${message.league.id}";`)
+		.catch(e => console.error(e));
+	if (signups.length > 0) return message.channel.send(`You've already signed up an account for ranked this season.`);
 
     let league = client.config.leagues.find((l) => l.config.id == message.guild.id);
 	if (!league.config.ranked.status) return console.log('not ranked : ' + league.config.name);
