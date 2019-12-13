@@ -6,7 +6,7 @@ exports.run = async(client, message, args) => {
 	if (!league.config.ranked.status) return console.log('not ranked : ' + league.config.name);
 
 	const discordDB = client.databases.get('discord');
-	const [signups, fields_signup] = await discordDB.execute(`SELECT * FROM ranked_signups WHERE discord_id = "${message.author.id}" AND season = "${league.config.ranked.table}" AND league_id = "${message.league.id}";`)
+	const [signups, fields_signup] = await discordDB.execute(`SELECT * FROM ranked_signups WHERE discord_id = "${message.author.id}" AND season = "${league.config.ranked.table}" AND league_id = "${message.guild.id}";`)
 		.catch(e => console.error(e));
 	if (signups.length > 0) return message.channel.send(`You've already signed up an account for ranked this season.`);
 
