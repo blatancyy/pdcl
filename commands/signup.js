@@ -29,7 +29,7 @@ exports.run = async(client, message, args) => {
     let table = league.config.ranked.table;
 	await db.execute(`INSERT INTO ${table} (displayname, uuid, elo) VALUES ("${username}", "${uuid}", ${startingElo});`).catch(console.error);
 	
-	await discordDB.execute(`INSERT INTO ranked_signups (discord_id, season, league_id) VALUES ("${message.author.id}", "${league.config.ranked.table}", "${message.league.id}");`)
+	await discordDB.execute(`INSERT INTO ranked_signups (discord_id, season, league_id) VALUES ("${message.author.id}", "${league.config.ranked.table}", "${message.guild.id}");`)
 		.catch(e => console.error(e));
 	if (!client.players[league.config.name].some(p => p.displayname.toLowerCase().includes(username.toLowerCase()))) {
 		await db.execute(`INSERT INTO players (displayname, uuid, team_id) VALUES ("${username}", "${uuid}", 0);`);
